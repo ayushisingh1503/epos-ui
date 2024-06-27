@@ -1,4 +1,5 @@
 import { StyleSheet,Platform } from 'react-native';
+import styled from 'styled-components';
 
 export const styles = StyleSheet.create({
     appContainer: {
@@ -27,7 +28,6 @@ export const styles = StyleSheet.create({
       marginLeft: 170,
       paddingTop: 230,
       justifyContent: 'center',
-    //   alignItems: 'center',
       fontFamily: Platform.select({
       android: 'sans-serif',
       }),
@@ -39,7 +39,6 @@ export const styles = StyleSheet.create({
       fontSize: 15,
       marginLeft: 260,
       justifyContent: 'center',
-    //   alignItem: 'center',
       fontFamily: Platform.select({
       android: 'sans-serif',
       }),
@@ -60,8 +59,8 @@ export const styles = StyleSheet.create({
       }),
     },
     userinput:{
-      flex: 0.5,
-      backgroundColor: 'rgba(0, 0, 0, 0)',
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.0)',
       paddingHorizontal: 20,
     },
     inputContainer:{
@@ -86,11 +85,12 @@ export const styles = StyleSheet.create({
       height: 40,
       borderColor: '#000000',
       borderBottomWidth: 1,
-      marginBottom: 3,
+      marginBottom: 2,
+      marginTop: 5,
     },
     password: {
       fontSize: 20,
-      marginBottom: 5,
+      marginBottom: 10,
       marginVertical: 40, 
     },
     submit :{
@@ -100,6 +100,8 @@ export const styles = StyleSheet.create({
       flexDirection: 'column',
       justifyContent: 'space-between',
       borderRadius: 50,
+      backgroundColor: 'rgba(0, 0, 0, 0.0)'
+
     },
     button: {
       backgroundColor: 'rgba(77, 83, 233, 1)',
@@ -111,5 +113,15 @@ export const styles = StyleSheet.create({
       color: 'white',
       fontSize: 20,
       fontWeight: '600',
+    }, 
+    errorText: {
+      color: 'red',
+      marginTop: 15,
+    },
+    icon: {
+      left : 15,
+      top: 38,
+      position: 'absolute',
+      zIndex: 1,
     }
   });
