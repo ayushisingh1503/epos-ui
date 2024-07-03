@@ -1,7 +1,7 @@
-import { Text, View, ImageBackground, Platform, TextInput, KeyboardAvoidingView, ScrollView, Keyboard, Alert,
+import { Text, View, ImageBackground, Platform, TextInput, KeyboardAvoidingView, ScrollView, Keyboard,
          TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { styles } from '../components/loginstyle'
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';

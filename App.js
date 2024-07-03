@@ -1,7 +1,8 @@
 import RootStack from './navigators/rootstack';
-import User from './screens/User';
+import UserList from './screens/UserList';
 
 export default function App() {
   return <RootStack />
-  // return <User />
+  // return <UserList />
+
 };

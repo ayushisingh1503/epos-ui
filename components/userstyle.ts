@@ -1,7 +1,5 @@
-import { Dimensions, Pressable, View, Text , Platform, StyleSheet, Button, } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
-import {LinearGradient} from 'expo-linear-gradient';
-
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -23,9 +21,13 @@ export const ViewContainer = styled.View`
 
 export const styles = StyleSheet.create({
   containerOne: {
-    flex : 0.3,
+    flex : 0.2,
     backgroundColor: 'transparent',
     flexDirection : 'row',
+    alignItems : 'center',
+    justifyContent : 'flex-end',
+    paddingBottom: 30,
+    paddingTop : 50,
   },
   containerTwo: {
   flex : 0.17,
@@ -33,10 +35,11 @@ export const styles = StyleSheet.create({
   flexDirection : 'row',
   alignContent : 'center',
   justifyContent : 'center',
-  paddingBottom : 30,
+  paddingBottom : 40,
+  paddingTop : 40,
   },
   containerThree: {
-    flex : 0.5,
+    flex : 0.6,
     backgroundColor: 'transparent',
     flexDirection : 'column',
     alignContent : 'center',
@@ -44,7 +47,7 @@ export const styles = StyleSheet.create({
     // paddingBottom : 150,
     },
   containerFour: {
-    flex : 0.10,
+    flex : 0.13,
     backgroundColor: 'rgba(211, 130, 225, 0.75)',
     flexDirection: 'row',
     width: '100%',
