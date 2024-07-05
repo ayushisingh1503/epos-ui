@@ -3,13 +3,8 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-, "models/gridItem.js"  ]
+  "include": ["**/*.ts", "**/*.tsx"]
 }
