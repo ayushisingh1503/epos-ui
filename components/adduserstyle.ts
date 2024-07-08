@@ -11,27 +11,33 @@ export const ImageContainer = styled.ImageBackground.attrs({
   height: ${windowHeight}px;
 `;
 
-export const styless = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
+    flexDirection: "column",
   },
+  // centeredView: {
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   backgroundColor: "rgba(0,0,0,0)",
+  // },
   modalOverlay: {
     flex: 1,
     flexDirection: "column",
     padding: 30,
     width: "90%",
-    backgroundColor: "rgba(0, 0, 0, 0.20)",
-    borderRadius: 15,
-    marginLeft: 60,
+    backgroundColor: "rgba(212, 171, 231, 0.95)",
+    borderRadius: 25,
+    marginLeft: 15,
     marginBottom: 30,
   },
   heading: {
     flex: 0.1,
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: "column",
+    justifyContent: "flex-start",
   },
   titleText: {
     fontSize: 30,
@@ -41,10 +47,12 @@ export const styless = StyleSheet.create({
   body: {
     flex: 0.9,
     flexDirection: "row",
+    // backgroundColor: "grey",
   },
   userinput: {
     flex: 0.5,
     flexDirection: "column",
+    // backgroundColor: "red",
   },
   userid: {
     flex: 0.2,
@@ -64,7 +72,6 @@ export const styless = StyleSheet.create({
   },
   access: {
     flex: 0.2,
-    backgroundColor: "grey",
     padding: 30,
   },
   footerbuttons: {
@@ -97,7 +104,61 @@ export const styless = StyleSheet.create({
   },
   numberpad: {
     flex: 0.5,
-    backgroundColor: "green",
     flexDirection: "column",
+    // backgroundColor: "green",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  userpinheading: {
+    flex: 0.1,
+    padding: 30,
+  },
+  userpin: {
+    flex: 0.1,
+  },
+  pinstyle: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "300",
+    justifyContent: "center",
+  },
+  pininput: {
+    height: 40,
+    marginTop: 15,
+    padding: 10,
+    width: 150,
+    backgroundColor: "white",
+    borderRadius: 9,
+    marginLeft: 140,
+  },
+  pad: {
+    flex: 0.8,
+    padding: 50,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    width: "80%",
+    marginBottom: 120,
+  },
+  numberbutton: {
+    backgroundColor: "#555",
+    padding: 10,
+    margin: 5,
+    borderRadius: 15,
+    width: "25%",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "30%",
+  },
+  numberbuttonText: {
+    color: "white",
+    fontSize: 20,
+  },
+  dropdown: {
+    height: 40,
+    marginTop: 15,
+    padding: 10,
+    borderRadius: 9,
+    borderColor: "white",
   },
 });

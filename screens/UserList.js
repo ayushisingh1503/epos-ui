@@ -39,8 +39,6 @@ const UserList = ({ navigation }) => {
   const deleteUser = () => {};
   const userRole = () => {};
   const [modalVisible, setModalVisible] = useState(false);
-  const [email, onChangeText] = React.useState("");
-
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       <View style={styles.container}>

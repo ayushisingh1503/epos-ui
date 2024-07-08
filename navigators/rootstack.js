@@ -6,6 +6,8 @@ import Login from "../screens/Login";
 import User from "../screens/User";
 import AddUser from "../Modal/AddUser";
 import UserList from "../screens/UserList";
+import Menu from "../screens/Menu";
+import Inventory from "../screens/Inventory";
 
 const Stack = createNativeStackNavigator();
 const RootStack = () => {
@@ -36,6 +38,16 @@ const RootStack = () => {
           name="UserList"
           component={UserList}
         />
+        {/* <Stack.Screen
+          options={{ headerTintColor: "white" }}
+          name="Menu"
+          component={Menu}
+        />
+        <Stack.Screen
+          options={{ headerTintColor: "white" }}
+          name="Inventory"
+          component={Inventory}
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
