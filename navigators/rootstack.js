@@ -3,11 +3,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Login from "../screens/Login";
-import User from "../screens/User";
+import Admin from "../screens/Admin";
 import AddUser from "../Modal/AddUser";
 import UserList from "../screens/UserList";
 import Menu from "../screens/Menu";
 import Inventory from "../screens/Inventory";
+import OrderList from "../screens/OrderList";
 
 const Stack = createNativeStackNavigator();
 const RootStack = () => {
@@ -25,8 +26,8 @@ const RootStack = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen
           options={{ headerTintColor: "white" }}
-          name="User"
-          component={User}
+          name="Admin"
+          component={Admin}
         />
         <Stack.Screen
           options={{ headerTintColor: "white" }}
@@ -38,16 +39,16 @@ const RootStack = () => {
           name="UserList"
           component={UserList}
         />
-        {/* <Stack.Screen
-          options={{ headerTintColor: "white" }}
-          name="Menu"
-          component={Menu}
-        />
         <Stack.Screen
+          options={{ headerTintColor: "white" }}
+          name="OrderList"
+          component={OrderList}
+        />
+        {/* <Stack.Screen
           options={{ headerTintColor: "white" }}
           name="Inventory"
           component={Inventory}
-        /> */}
+        />  */}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,7 +1,7 @@
 import RootStack from "./navigators/rootstack";
-import UserList from "./screens/UserList";
+import OrderList from "./screens/OrderList";
 
 export default function App() {
-  return <RootStack />;
-  // return <UserList />;
+  // return <RootStack />;
+  return <OrderList />;
 }

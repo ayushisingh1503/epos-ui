@@ -66,7 +66,7 @@ const Login = ({ navigation }) => {
                     onSubmit={(values, { setSubmitting }) => {
                       console.log(values);
                       setSubmitting(false);
-                      navigation.navigate("User");
+                      navigation.navigate("Admin");
                     }}
                   >
                     {({
