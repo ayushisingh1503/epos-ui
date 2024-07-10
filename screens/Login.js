@@ -15,14 +15,27 @@ import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { setCreds } from "../helpers/setCreds";
+import { axiosWrapper } from "../helpers/axiosWrapper";
 
 const Login = ({ navigation }) => {
-  const handleLogin = () => {
-    const url = "/api/auth/login";
-    axios.post(url, [email, password]).then((res) => {
-      const response = res.data;
-      console.log(res);
-    });
+  const handleLogin = async ({ email, password }, { setSubmitting }) => {
+    try {
+      const instance = await axiosWrapper();
+      const response = await instance.post("/auth/login", {
+        emailId: email,
+        password,
+      });
+
+      const payload = response.data.payload;
+      await setCreds(payload);
+
+      setSubmitting(false);
+      navigation.navigate("Admin");
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
   };
 
   return (
@@ -63,11 +76,7 @@ const Login = ({ navigation }) => {
                         .min(6, "Must be 6 characters or more")
                         .required("Required"),
                     })}
-                    onSubmit={(values, { setSubmitting }) => {
-                      console.log(values);
-                      setSubmitting(false);
-                      navigation.navigate("Admin");
-                    }}
+                    onSubmit={handleLogin}
                   >
                     {({
                       handleChange,

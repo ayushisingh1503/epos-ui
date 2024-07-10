@@ -1,11 +1,22 @@
 import { Container, ImageContainer, styles } from "../components/userstyle";
 import { View, Image, TouchableOpacity, Alert, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useEffect } from "react";
+import { axiosWrapper } from "../helpers/axiosWrapper";
 
 const Admin = ({ navigation }) => {
   const handlePress = () => {
     Alert.alert("Image Pressed!", "You pressed the image.");
   };
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const instance = await axiosWrapper();
+  //     const res = await instance.get("/menu");
+  //     console.log(res.data.message);
+  //   })();
+  // }, []);
+
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       <Container>

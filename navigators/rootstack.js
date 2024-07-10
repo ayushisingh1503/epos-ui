@@ -39,11 +39,11 @@ const RootStack = () => {
           name="UserList"
           component={UserList}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           options={{ headerTintColor: "white" }}
           name="OrderList"
           component={OrderList}
-        />
+        /> */}
         {/* <Stack.Screen
           options={{ headerTintColor: "white" }}
           name="Inventory"
