@@ -6,9 +6,9 @@ import Login from "../screens/Login";
 import Admin from "../screens/Admin";
 import AddUser from "../Modal/AddUser";
 import UserList from "../screens/UserList";
-import Menu from "../screens/Menu";
 import Inventory from "../screens/Inventory";
 import OrderList from "../screens/OrderList";
+import NewOrder from "../screens/NewOrder";
 
 const Stack = createNativeStackNavigator();
 const RootStack = () => {
@@ -39,16 +39,26 @@ const RootStack = () => {
           name="UserList"
           component={UserList}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           options={{ headerTintColor: "white" }}
           name="OrderList"
           component={OrderList}
-        /> */}
+        />
+        <Stack.Screen
+          options={{ headerTintColor: "white" }}
+          name="NewOrder"
+          component={NewOrder}
+        />
         {/* <Stack.Screen
+          options={{ headerTintColor: "white" }}
+          name="Menu"
+          component={Menu}
+        /> */}
+        <Stack.Screen
           options={{ headerTintColor: "white" }}
           name="Inventory"
           component={Inventory}
-        />  */}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

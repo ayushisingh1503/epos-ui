@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { GradientBackground, styles } from "../components/userliststyle";
-import { ImageContainer } from "../components/userstyle";
+import { ImageContainer } from "../components/adminstyle";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-virtualized-view";
 import AddUser from "../Modal/AddUser";

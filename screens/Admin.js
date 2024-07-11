@@ -1,4 +1,4 @@
-import { Container, ImageContainer, styles } from "../components/userstyle";
+import { Container, ImageContainer, styles } from "../components/adminstyle";
 import { View, Image, TouchableOpacity, Alert, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect } from "react";
@@ -49,7 +49,7 @@ const Admin = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate("OrderList")}
+            onPress={() => navigation.navigate("NewOrder")}
           >
             <LinearGradient
               colors={["#180564", "#745B93"]}
@@ -92,7 +92,10 @@ const Admin = ({ navigation }) => {
                 <Text style={styles.buttonText}>User</Text>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handlePress}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("OrderList")}
+            >
               <LinearGradient
                 colors={["#180564", "#745B93"]}
                 style={styles.button}
@@ -101,7 +104,7 @@ const Admin = ({ navigation }) => {
                   source={require("../assets/Bar Chart.png")}
                   style={styles.buttonImage}
                 />
-                <Text style={styles.buttonText}>Reports</Text>
+                <Text style={styles.buttonText}>Order History</Text>
               </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={handlePress}>

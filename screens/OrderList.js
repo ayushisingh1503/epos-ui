@@ -1,8 +1,14 @@
-import { View, Text, TouchableOpacity, Alert, FlatList } from "react-native";
-import { ImageContainer } from "../components/userstyle";
-import { styles } from "../components/orderliststyle";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  FlatList,
+  Pressable,
+} from "react-native";
+import { ImageContainer } from "../components/adminstyle";
+import { GradientBackground, styles } from "../components/orderliststyle";
 import { LinearGradient } from "expo-linear-gradient";
-import { GradientBackground } from "../components/userliststyle";
 import { ScrollView } from "react-native-virtualized-view";
 import React, { useState } from "react";
 
@@ -20,18 +26,26 @@ export default OrderList = ({ navigation }) => {
 
   return (
     <ImageContainer source={require("../assets/layout.png")}>
-      {/* <View style={styles.container}> */}
-      <View style={styles.heading}>
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
-          <LinearGradient colors={["#180564", "#745B93"]} style={styles.button}>
-            <Text style={styles.buttonText}>Log Out</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+      <View style={styles.header}>
+        <View style={styles.title}>
+          <Text style={styles.titleText}>Order List</Text>
+        </View>
+        <View style={styles.logout}>
+          <TouchableOpacity onPress={() => navigation.navigate("")}>
+            <LinearGradient
+              colors={["#180564", "#745B93"]}
+              style={styles.logoutButton}
+            >
+              <Text style={styles.buttonText}>Log Out</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.body}>
         <View style={styles.translucentRectangle}>
           <View style={styles.translucentRectangleHeader}>
-            <Text style={styles.text}>Order List</Text>
+            <Text style={styles.orderNumber}>Order Number</Text>
+            <Text style={styles.status}>Stauts</Text>
           </View>
           <ScrollView style={styles.scrollview}>
             <FlatList
@@ -39,16 +53,22 @@ export default OrderList = ({ navigation }) => {
               keyExtractor={(item) => item.ordernumber}
               renderItem={({ item }) => (
                 <GradientBackground style={styles.orderRow}>
-                  <Text style={styles.label}> Hello</Text>
-                  <Text style={styles.ordernumber}>World</Text>
-                  <Text style={styles.status}>!</Text>
+                  <Text style={styles.order}>
+                    {item.label} {item.ordernumber}
+                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      Alert.alert("pressed");
+                    }}
+                  >
+                    <Text style={styles.orderStatus}>{item.status}</Text>
+                  </Pressable>
                 </GradientBackground>
               )}
             />
           </ScrollView>
         </View>
       </View>
-      {/* </View> */}
     </ImageContainer>
   );
 };
