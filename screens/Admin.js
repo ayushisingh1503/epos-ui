@@ -3,10 +3,16 @@ import { View, Image, TouchableOpacity, Alert, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect } from "react";
 import { axiosWrapper } from "../helpers/axiosWrapper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Admin = ({ navigation }) => {
   const handlePress = () => {
     Alert.alert("Image Pressed!", "You pressed the image.");
+  };
+
+  const logout = async () => {
+    await AsyncStorage.clear();
+    navigation.navigate("Login");
   };
 
   // useEffect(() => {
@@ -21,7 +27,7 @@ const Admin = ({ navigation }) => {
     <ImageContainer source={require("../assets/layout.png")}>
       <Container>
         <View style={styles.containerOne}>
-          <TouchableOpacity style={styles.button} onPress={handlePress}>
+          <TouchableOpacity style={styles.button} onPress={logout}>
             <LinearGradient
               colors={["#180564", "#745B93"]}
               style={styles.button}

@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setCreds } from "./setCreds";
 
 export const axiosWrapper = async () => {
-  const baseUrl = "http://192.168.0.175:8080/";
+  const baseUrl = "https://1d21-31-205-114-110.ngrok-free.app";
 
   // Creating an axios instance
   const instance = axios.create({
@@ -35,6 +35,7 @@ export const axiosWrapper = async () => {
     }
 
     console.log("Access token expired");
+    console.log(_user);
     if (!_user) {
       return config;
     }
@@ -48,6 +49,7 @@ export const axiosWrapper = async () => {
       },
       { baseURL: baseUrl }
     );
+    console.log(response);
 
     const payload = response.data.payload;
 
