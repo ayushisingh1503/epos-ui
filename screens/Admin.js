@@ -1,11 +1,24 @@
 import { Container, ImageContainer, styles } from "../components/adminstyle";
 import { View, Image, TouchableOpacity, Alert, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect } from "react";
-import { axiosWrapper } from "../helpers/axiosWrapper";
+import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getLoggedInUser } from "../helpers/getLoggedInUser";
 
 const Admin = ({ navigation }) => {
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const loggedInUser = await getLoggedInUser();
+      setRole(loggedInUser.role);
+    })();
+
+    return () => {
+      setRole("");
+    };
+  }, []);
+
   const handlePress = () => {
     Alert.alert("Image Pressed!", "You pressed the image.");
   };
@@ -35,21 +48,6 @@ const Admin = ({ navigation }) => {
         <View style={styles.containerTwo}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate("MenuLayout")}
-          >
-            <LinearGradient
-              colors={["#180564", "#745B93"]}
-              style={styles.button}
-            >
-              <Image
-                source={require("../assets/Restaurant Menu.png")}
-                style={styles.buttonImage}
-              />
-              <Text style={styles.buttonText}>Menu</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
             onPress={() => navigation.navigate("NewOrder")}
           >
             <LinearGradient
@@ -63,6 +61,35 @@ const Admin = ({ navigation }) => {
               <Text style={styles.buttonText}>New Order</Text>
             </LinearGradient>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("OrderList")}
+          >
+            <LinearGradient
+              colors={["#180564", "#745B93"]}
+              style={styles.button}
+            >
+              <Image
+                source={require("../assets/Bar Chart.png")}
+                style={styles.buttonImage}
+              />
+              <Text style={styles.buttonText}>Order History</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handlePress}>
+            <LinearGradient
+              colors={["#180564", "#745B93"]}
+              style={styles.button}
+            >
+              <Image
+                source={require("../assets/iMac.png")}
+                style={styles.buttonImage}
+              />
+              <Text style={styles.buttonText}>Back Office</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.containerThreeI}>
           <TouchableOpacity style={styles.button} onPress={handlePress}>
             <LinearGradient
               colors={["#180564", "#745B93"]}
@@ -75,9 +102,24 @@ const Admin = ({ navigation }) => {
               <Text style={styles.buttonText}>Inventory</Text>
             </LinearGradient>
           </TouchableOpacity>
-        </View>
-        <View style={styles.containerThree}>
-          <View style={styles.containerThreeI}>
+          {(role === "manager" || role === "admin") && (
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("MenuLayout")}
+            >
+              <LinearGradient
+                colors={["#180564", "#745B93"]}
+                style={styles.button}
+              >
+                <Image
+                  source={require("../assets/Restaurant Menu.png")}
+                  style={styles.buttonImage}
+                />
+                <Text style={styles.buttonText}>Menu</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+          {role === "admin" && (
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate("UserList")}
@@ -90,80 +132,15 @@ const Admin = ({ navigation }) => {
                   source={require("../assets/User.png")}
                   style={styles.buttonImage}
                 />
-                <Text style={styles.buttonText}>User</Text>
+                <Text style={styles.buttonText}>Users</Text>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate("OrderList")}
-            >
-              <LinearGradient
-                colors={["#180564", "#745B93"]}
-                style={styles.button}
-              >
-                <Image
-                  source={require("../assets/Bar Chart.png")}
-                  style={styles.buttonImage}
-                />
-                <Text style={styles.buttonText}>Order History</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handlePress}>
-              <LinearGradient
-                colors={["#180564", "#745B93"]}
-                style={styles.button}
-              >
-                <Image
-                  source={require("../assets/Help.png")}
-                  style={styles.buttonImage}
-                />
-                <Text style={styles.buttonText}>User Guide</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.containerThreeII}>
-            <TouchableOpacity style={styles.button} onPress={handlePress}>
-              <LinearGradient
-                colors={["#180564", "#745B93"]}
-                style={styles.button}
-              >
-                <Image
-                  source={require("../assets/iMac.png")}
-                  style={styles.buttonImage}
-                />
-                <Text style={styles.buttonText}>Back Office</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handlePress}>
-              <LinearGradient
-                colors={["#180564", "#745B93"]}
-                style={styles.button}
-              >
-                <Image
-                  source={require("../assets/Finish Flag.png")}
-                  style={styles.buttonImage}
-                />
-                <Text style={styles.buttonText}> End of the day </Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
+          )}
         </View>
         <View style={styles.containerFour}>
           <TouchableOpacity onPress={handlePress}>
             <Image
-              source={require("../assets/Bread and Rolling Pin.png")}
-              style={styles.imageStyle}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handlePress}>
-            <Image
-              source={require("../assets/Letter.png")}
-              style={styles.imageStyle}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handlePress}>
-            <Image
-              source={require("../assets/Wrench.png")}
+              source={require("../assets/Help.png")}
               style={styles.imageStyle}
             />
           </TouchableOpacity>

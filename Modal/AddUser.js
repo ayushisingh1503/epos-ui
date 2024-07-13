@@ -14,7 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/adduserstyle";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DropDownPicker from "react-native-dropdown-picker";
-import { getStoreId } from "../helpers/getStoreId";
+import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 
 export default AddUser = ({
@@ -72,9 +72,9 @@ export default AddUser = ({
   const createUser = async () => {
     try {
       const instance = await axiosWrapper();
-      const storeId = await getStoreId();
+      const { store_id } = await getLoggedInUser();
       const reqBody = { emailId: email, pin, accessRole: value, name };
-      await instance.post(`/user/${storeId}`, reqBody);
+      await instance.post(`/user/${store_id}`, reqBody);
       setModalVisible(!modalVisible);
       refreshComponent();
       //@todo: show success toast message

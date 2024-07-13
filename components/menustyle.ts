@@ -97,16 +97,6 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-end",
     flexGrow: 1,
   },
-  // tableCell: {
-  //   padding: 10,
-  //   textAlign: "center",
-  //   flex: 0.3,
-  //   color: "white",
-  //   fontSize: 18,
-  //   fontWeight: "300",
-  //   marginRight: 40,
-  //   flexGrow: 0.5,
-  // },
   tabBarLabel: {
     fontSize: 14,
   },

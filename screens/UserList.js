@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-virtualized-view";
 import AddUser from "../Modal/AddUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
-import { getStoreId } from "../helpers/getStoreId";
+import { getLoggedInUser } from "../helpers/getLoggedInUser";
 
 const UserList = ({ navigation }) => {
   // const navigation = Props.navigation
@@ -21,10 +21,10 @@ const UserList = ({ navigation }) => {
   };
   useEffect(() => {
     (async () => {
-      const storeId = await getStoreId();
+      const { store_id } = await getLoggedInUser();
       try {
         const instance = await axiosWrapper();
-        const response = await instance.get(`/users/${storeId}`);
+        const response = await instance.get(`/users/${store_id}`);
         const payload = response.data.payload;
         setUserList(payload.users);
       } catch (err) {
