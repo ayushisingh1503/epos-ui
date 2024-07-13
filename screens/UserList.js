@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { GradientBackground, styles } from "../components/userliststyle";
@@ -6,24 +6,39 @@ import { ImageContainer } from "../components/adminstyle";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-virtualized-view";
 import AddUser from "../Modal/AddUser";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { axiosWrapper } from "../helpers/axiosWrapper";
 
 const UserList = ({ navigation }) => {
   // const navigation = Props.navigation
   // const {navigation} = Props
 
-  const [userList, setUserList] = useState([
-    { id: "1", name: "Ayushi", role: "kitchen" },
-    { id: "2", name: "Shruti", role: "Manager" },
-    { id: "3", name: "Nikita", role: "Supervisor" },
-    { id: "4", name: "Gungun", role: "Front of House" },
-    { id: "5", name: "Neenad", role: "Kitchen" },
-    { id: "6", name: "Gungun", role: "Front of House" },
-    { id: "7", name: "Neenad", role: "Kitchen" },
-  ]);
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const _user = await AsyncStorage.getItem("user");
+      const user = JSON.parse(_user);
+      const storeId = user.store_id;
+
+      try {
+        const instance = await axiosWrapper();
+        const response = await instance.get(`/users/${storeId}`);
+        console.log("Response", response);
+        const payload = response.data.payload;
+        setUserList(payload.users);
+      } catch (err) {
+        console.error("User fetch error", err);
+        //@todo: add error toast
+      }
+    })();
+  }, []);
 
   const deleteUser = () => {};
-  const userRole = () => {};
+  const updateUser = () => {};
+  const patchUser = () => {};
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(false);
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       <View style={styles.container}>
@@ -35,15 +50,17 @@ const UserList = ({ navigation }) => {
             <TouchableOpacity onPress={() => setModalVisible(true)}>
               <LinearGradient
                 colors={["#180564", "#745B93"]}
-                style={styles.addButtonStyle}
+                style={styles.addNewButton}
               >
                 <Text style={styles.buttonText}>Add New</Text>
               </LinearGradient>
             </TouchableOpacity>
             {modalVisible && (
               <AddUser
+                // selectedUser={""}
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
+                // setSelectedUser={""}
               />
             )}
           </View>
@@ -51,17 +68,33 @@ const UserList = ({ navigation }) => {
         <View style={styles.body}>
           <View style={styles.translucentRectangle}>
             <View style={styles.translucentRectangleHeader}>
-              <Text style={styles.textName}>Name</Text>
+              <Text style={styles.textName}>Email</Text>
               <Text style={styles.textRole}>Role</Text>
               <Text style={styles.textAction}>Action</Text>
             </View>
             <ScrollView style={styles.scrollview}>
               <FlatList
                 data={userList}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.user_id}
                 renderItem={({ item }) => (
                   <GradientBackground style={styles.userRow}>
-                    <Text style={styles.userName}>{item.name}</Text>
+                    <TouchableOpacity
+                      style={styles.userName}
+                      onPress={() => {
+                        setModalVisible(true);
+                        setSelectedUser(true);
+                      }}
+                    >
+                      {modalVisible && selectedUser && (
+                        <AddUser
+                          selectedUser={selectedUser}
+                          modalVisible={modalVisible}
+                          setModalVisible={setModalVisible}
+                          setSelectedUser={setSelectedUser}
+                        />
+                      )}
+                      <Text style={styles.email}>{item.email}</Text>
+                    </TouchableOpacity>
                     <Text style={styles.role}>{item.role}</Text>
                     <Icon
                       name="delete"
@@ -77,7 +110,7 @@ const UserList = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.footer}>
-          <TouchableOpacity onPress={() => navigation.navigate("User")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Admin")}>
             <LinearGradient
               colors={["#180564", "#745B93"]}
               style={styles.footerButton}

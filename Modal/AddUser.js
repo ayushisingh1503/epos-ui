@@ -15,7 +15,12 @@ import { styles } from "../components/adduserstyle";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DropDownPicker from "react-native-dropdown-picker";
 
-export default AddUser = ({ modalVisible, setModalVisible }) => {
+export default AddUser = ({
+  modalVisible,
+  setModalVisible,
+  selcetedUser,
+  setSelectedUser,
+}) => {
   const [email, onChangeText] = useState("");
   const [pin, setPin] = useState("");
   const buttons = [
@@ -35,10 +40,9 @@ export default AddUser = ({ modalVisible, setModalVisible }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: "Kitchen", value: "Kitchen" },
-    { label: "Front House", value: "Front House" },
+    { label: "Admin", value: "Admin" },
+    { label: "Staff", value: "Staff" },
     { label: "Manager", value: "Manager" },
-    { label: "Supervisor", value: "Supervisor" },
   ]);
 
   const onPress = (value) => {

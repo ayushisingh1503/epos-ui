@@ -72,7 +72,6 @@ export const styles = StyleSheet.create({
     marginStart: 10,
     paddingBottom: 70,
   },
-
   imageStyle: {
     marginLeft: 50,
     marginRight: 50,

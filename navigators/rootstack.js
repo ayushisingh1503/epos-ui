@@ -10,6 +10,7 @@ import UserList from "../screens/UserList";
 import Inventory from "../screens/Inventory";
 import OrderList from "../screens/OrderList";
 import NewOrder from "../screens/NewOrder";
+import MenuLayout from "../screens/MenuLayout";
 
 const Stack = createNativeStackNavigator();
 const RootStack = () => {
@@ -23,10 +24,8 @@ const RootStack = () => {
       ]);
 
       if (credsResult[1] && userResult[1]) {
-        console.log(credsResult, userResult);
         setLoggedIn(true);
       }
-      // console.log(res.data.message);
     })();
 
     return () => {};
@@ -54,16 +53,11 @@ const RootStack = () => {
         name="NewOrder"
         component={NewOrder}
       />
-      {/* <Stack.Screen
-        options={{ headerTintColor: "white" }}
-        name="Menu"
-        component={Menu}
-      />
       <Stack.Screen
         options={{ headerTintColor: "white" }}
-        name="Inventory"
-        component={Inventory}
-      /> */}
+        name="MyTabs"
+        component={MenuLayout}
+      />
     </>
   );
 

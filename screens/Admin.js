@@ -15,14 +15,6 @@ const Admin = ({ navigation }) => {
     navigation.navigate("Login");
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const instance = await axiosWrapper();
-  //     const res = await instance.get("/menu");
-  //     console.log(res.data.message);
-  //   })();
-  // }, []);
-
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       <Container>
@@ -41,7 +33,10 @@ const Admin = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.containerTwo}>
-          <TouchableOpacity style={styles.button} onPress={handlePress}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("MenuLayout")}
+          >
             <LinearGradient
               colors={["#180564", "#745B93"]}
               style={styles.button}

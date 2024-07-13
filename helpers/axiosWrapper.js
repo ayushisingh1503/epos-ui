@@ -35,7 +35,6 @@ export const axiosWrapper = async () => {
     }
 
     console.log("Access token expired");
-    console.log(_user);
     if (!_user) {
       return config;
     }

@@ -1,5 +1,5 @@
 import RootStack from "./navigators/rootstack";
-import MenuLayout from "./layout/MenuLayout";
+import MenuLayout from "./screens/MenuLayout";
 
 export default function App() {
   return <RootStack />;
