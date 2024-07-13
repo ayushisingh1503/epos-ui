@@ -14,14 +14,19 @@ import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/adduserstyle";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DropDownPicker from "react-native-dropdown-picker";
+import { getStoreId } from "../helpers/getStoreId";
+import { axiosWrapper } from "../helpers/axiosWrapper";
 
 export default AddUser = ({
   modalVisible,
   setModalVisible,
   selectedUser,
   setSelectedUser,
+  editModalVisible,
+  setEditModalVisible,
+  refreshComponent,
 }) => {
-  const [email, onChangeText] = useState(selectedUser?.email);
+  const [email, setEmail] = useState(selectedUser?.email);
   const [pin, setPin] = useState("");
   const buttons = [
     { value: "1" },
@@ -33,10 +38,11 @@ export default AddUser = ({
     { value: "7" },
     { value: "8" },
     { value: "9" },
-    { value: "Clear" },
+    { value: "<--" },
     { value: "0" },
+    { value: "Clear" },
   ];
-  console.log(selectedUser);
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(selectedUser?.role);
   const [name, setName] = useState(selectedUser?.name);
@@ -47,8 +53,39 @@ export default AddUser = ({
     { label: "Manager", value: "manager" },
   ]);
 
+  const updateUser = async () => {
+    try {
+      const instance = await axiosWrapper();
+      const userId = selectedUser.user_id;
+      const reqBody = { email, pin, role: value, name };
+      await instance.put(`/user/${userId}`, reqBody);
+      setSelectedUser(undefined);
+      setEditModalVisible(!editModalVisible);
+      refreshComponent();
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  };
+
+  const createUser = async () => {
+    try {
+      const instance = await axiosWrapper();
+      const storeId = await getStoreId();
+      const reqBody = { emailId: email, pin, accessRole: value, name };
+      await instance.post(`/user/${storeId}`, reqBody);
+      setModalVisible(!modalVisible);
+      refreshComponent();
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  };
+
   const onPress = (value) => {
-    if (value === "Clear") {
+    if (value === "<--") {
       setPin((prevPin) => prevPin.slice(0, -1));
     } else if (value === "Clear") {
       setPin("");
@@ -86,7 +123,7 @@ export default AddUser = ({
                       <TextInput
                         placeholder="Enter Email"
                         style={styles.textInput}
-                        onChangeText={onChangeText}
+                        onChangeText={setEmail}
                         value={email}
                       />
                     </View>
@@ -95,7 +132,7 @@ export default AddUser = ({
                       <TextInput
                         placeholder="Enter Name"
                         style={styles.textInput}
-                        onChangeText={onChangeText}
+                        onChangeText={setName}
                         value={name}
                       />
                     </View>
@@ -114,7 +151,11 @@ export default AddUser = ({
                     <View style={styles.footerbuttons}>
                       <TouchableOpacity
                         style={styles.closebutton}
-                        onPress={() => setModalVisible(!modalVisible)}
+                        onPress={() =>
+                          editModalVisible
+                            ? setEditModalVisible(!editModalVisible)
+                            : setModalVisible(!modalVisible)
+                        }
                       >
                         <LinearGradient
                           colors={["#180564", "#745B93"]}
@@ -125,7 +166,13 @@ export default AddUser = ({
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.savebutton}
-                        onPress={() => setModalVisible(!modalVisible)}
+                        onPress={() => {
+                          if (editModalVisible) {
+                            updateUser();
+                          } else {
+                            createUser();
+                          }
+                        }}
                       >
                         <LinearGradient
                           colors={["#180564", "#745B93"]}
@@ -154,6 +201,7 @@ export default AddUser = ({
                           <LinearGradient
                             colors={["#180564", "#745B93"]}
                             style={styles.numberbutton}
+                            key={index}
                           >
                             <TouchableOpacity
                               key={index}

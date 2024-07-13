@@ -6,21 +6,22 @@ import { ImageContainer } from "../components/adminstyle";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-virtualized-view";
 import AddUser from "../Modal/AddUser";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { axiosWrapper } from "../helpers/axiosWrapper";
+import { getStoreId } from "../helpers/getStoreId";
 
 const UserList = ({ navigation }) => {
   // const navigation = Props.navigation
   // const {navigation} = Props
 
   const [userList, setUserList] = useState([]);
+  const [refresh, setRefresh] = useState(true);
 
+  const refreshComponent = () => {
+    setRefresh((currentValue) => !currentValue);
+  };
   useEffect(() => {
     (async () => {
-      const _user = await AsyncStorage.getItem("user");
-      const user = JSON.parse(_user);
-      const storeId = user.store_id;
-
+      const storeId = await getStoreId();
       try {
         const instance = await axiosWrapper();
         const response = await instance.get(`/users/${storeId}`);
@@ -31,22 +32,36 @@ const UserList = ({ navigation }) => {
         //@todo: add error toast
       }
     })();
-  }, []);
+  }, [refresh]);
 
-  const deleteUser = () => {};
-  const updateUser = () => {};
-  const patchUser = () => {};
+  const deleteUser = async ({ userId }) => {
+    try {
+      const instance = await axiosWrapper();
+      await instance.delete(`/user/${userId}`);
+
+      const filteredUsers = userList.filter((user) => user.user_id !== userId);
+      setUserList(filteredUsers);
+
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  };
+
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(undefined);
+
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       {editModalVisible && selectedUser && (
         <AddUser
           selectedUser={selectedUser}
-          modalVisible={editModalVisible}
-          setModalVisible={setEditModalVisible}
           setSelectedUser={setSelectedUser}
+          refreshComponent={refreshComponent}
+          editModalVisible={editModalVisible}
+          setEditModalVisible={setEditModalVisible}
         />
       )}
       {modalVisible && (
@@ -55,6 +70,7 @@ const UserList = ({ navigation }) => {
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           setSelectedUser={undefined}
+          refreshComponent={refreshComponent}
         />
       )}
       <View style={styles.container}>
@@ -86,7 +102,7 @@ const UserList = ({ navigation }) => {
                 data={userList}
                 keyExtractor={(item) => item.user_id}
                 renderItem={({ item }) => (
-                  <GradientBackground style={styles.userRow}>
+                  <GradientBackground style={styles.userRow} key={item.user_id}>
                     <TouchableOpacity
                       style={styles.userName}
                       onPress={() => {
@@ -103,7 +119,9 @@ const UserList = ({ navigation }) => {
                       name="delete"
                       size={30}
                       style={styles.icon}
-                      onPress={() => alert("Delete this user")}
+                      onPress={() => {
+                        deleteUser({ userId: item.user_id });
+                      }}
                     ></Icon>
                   </GradientBackground>
                 )}
