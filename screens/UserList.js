@@ -24,7 +24,6 @@ const UserList = ({ navigation }) => {
       try {
         const instance = await axiosWrapper();
         const response = await instance.get(`/users/${storeId}`);
-        console.log("Response", response);
         const payload = response.data.payload;
         setUserList(payload.users);
       } catch (err) {
@@ -37,16 +36,33 @@ const UserList = ({ navigation }) => {
   const deleteUser = () => {};
   const updateUser = () => {};
   const patchUser = () => {};
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(undefined);
   return (
     <ImageContainer source={require("../assets/layout.png")}>
+      {editModalVisible && selectedUser && (
+        <AddUser
+          selectedUser={selectedUser}
+          modalVisible={editModalVisible}
+          setModalVisible={setEditModalVisible}
+          setSelectedUser={setSelectedUser}
+        />
+      )}
+      {modalVisible && (
+        <AddUser
+          selectedUser={undefined}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          setSelectedUser={undefined}
+        />
+      )}
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.title}>
             <Text style={styles.titleText}>User List</Text>
           </View>
-          <View style={styles.addNewButton}>
+          <View style={styles.add}>
             <TouchableOpacity onPress={() => setModalVisible(true)}>
               <LinearGradient
                 colors={["#180564", "#745B93"]}
@@ -55,20 +71,13 @@ const UserList = ({ navigation }) => {
                 <Text style={styles.buttonText}>Add New</Text>
               </LinearGradient>
             </TouchableOpacity>
-            {modalVisible && (
-              <AddUser
-                // selectedUser={""}
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
-                // setSelectedUser={""}
-              />
-            )}
           </View>
         </View>
         <View style={styles.body}>
           <View style={styles.translucentRectangle}>
             <View style={styles.translucentRectangleHeader}>
               <Text style={styles.textName}>Email</Text>
+              <Text style={styles.textRole}>Name</Text>
               <Text style={styles.textRole}>Role</Text>
               <Text style={styles.textAction}>Action</Text>
             </View>
@@ -81,25 +90,18 @@ const UserList = ({ navigation }) => {
                     <TouchableOpacity
                       style={styles.userName}
                       onPress={() => {
-                        setModalVisible(true);
-                        setSelectedUser(true);
+                        console.log("userlist:", item);
+                        setSelectedUser(item);
+                        setEditModalVisible(true);
                       }}
                     >
-                      {modalVisible && selectedUser && (
-                        <AddUser
-                          selectedUser={selectedUser}
-                          modalVisible={modalVisible}
-                          setModalVisible={setModalVisible}
-                          setSelectedUser={setSelectedUser}
-                        />
-                      )}
                       <Text style={styles.email}>{item.email}</Text>
                     </TouchableOpacity>
+                    <Text style={styles.role}>{item.name}</Text>
                     <Text style={styles.role}>{item.role}</Text>
                     <Icon
                       name="delete"
                       size={30}
-                      color="white"
                       style={styles.icon}
                       onPress={() => alert("Delete this user")}
                     ></Icon>

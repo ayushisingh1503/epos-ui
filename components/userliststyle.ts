@@ -9,8 +9,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   header: {
-    flex: 0.2,
-    backgroundColor: "transparent",
+    flex: 0.25,
     flexDirection: "row",
   },
   title: {
@@ -25,18 +24,23 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     color: "white",
   },
-  addNewButton: {
-    flex: 0.8,
-    backgroundColor: "transparent",
+  add: {
+    flex: 0.5,
     flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  addNewButton: {
     borderRadius: 15,
-    marginTop: 20,
+    marginTop: 50,
     alignItems: "center",
     paddingLeft: 40,
     paddingRight: 40,
     paddingTop: 10,
     paddingBottom: 10,
-    justifyContent: "flex-end",
+    flex: 0.5,
+    justifyContent: "center",
+    marginRight: 60,
+    padding: 15,
   },
   buttonText: {
     fontSize: 18,
@@ -44,7 +48,7 @@ export const styles = StyleSheet.create({
     fontWeight: "500",
   },
   body: {
-    flex: 0.7,
+    flex: 0.65,
     flexDirection: "column",
     alignItems: "center",
     flexGrow: 1,
@@ -79,7 +83,7 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
-    paddingRight: 60,
+    paddingRight: 90,
     flexGrow: 0.5,
   },
   textAction: {
@@ -122,7 +126,7 @@ export const styles = StyleSheet.create({
   },
   icon: {
     flex: 0.1,
-    color: "white",
+    color: "#E93C3C",
     marginRight: 40,
   },
   footer: {

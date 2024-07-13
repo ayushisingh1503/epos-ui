@@ -48,7 +48,6 @@ export const axiosWrapper = async () => {
       },
       { baseURL: baseUrl }
     );
-    console.log(response);
 
     const payload = response.data.payload;
 

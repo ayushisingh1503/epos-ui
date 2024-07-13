@@ -55,7 +55,7 @@ const RootStack = () => {
       />
       <Stack.Screen
         options={{ headerTintColor: "white" }}
-        name="MyTabs"
+        name="MenuLayout"
         component={MenuLayout}
       />
     </>

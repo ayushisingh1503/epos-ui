@@ -18,10 +18,10 @@ import DropDownPicker from "react-native-dropdown-picker";
 export default AddUser = ({
   modalVisible,
   setModalVisible,
-  selcetedUser,
+  selectedUser,
   setSelectedUser,
 }) => {
-  const [email, onChangeText] = useState("");
+  const [email, onChangeText] = useState(selectedUser?.email);
   const [pin, setPin] = useState("");
   const buttons = [
     { value: "1" },
@@ -36,13 +36,15 @@ export default AddUser = ({
     { value: "Clear" },
     { value: "0" },
   ];
-
+  console.log(selectedUser);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(selectedUser?.role);
+  const [name, setName] = useState(selectedUser?.name);
+
   const [items, setItems] = useState([
-    { label: "Admin", value: "Admin" },
-    { label: "Staff", value: "Staff" },
-    { label: "Manager", value: "Manager" },
+    { label: "Admin", value: "admin" },
+    { label: "Staff", value: "staff" },
+    { label: "Manager", value: "manager" },
   ]);
 
   const onPress = (value) => {
@@ -80,12 +82,21 @@ export default AddUser = ({
                 <View style={styles.body}>
                   <View style={styles.userinput}>
                     <View style={styles.userid}>
-                      <Text style={styles.textstyle}>User ID</Text>
+                      <Text style={styles.textstyle}>Email</Text>
                       <TextInput
-                        placeholder="Enter User ID"
+                        placeholder="Enter Email"
                         style={styles.textInput}
                         onChangeText={onChangeText}
                         value={email}
+                      />
+                    </View>
+                    <View style={styles.userid}>
+                      <Text style={styles.textstyle}>Name</Text>
+                      <TextInput
+                        placeholder="Enter Name"
+                        style={styles.textInput}
+                        onChangeText={onChangeText}
+                        value={name}
                       />
                     </View>
                     <View style={styles.access}>
