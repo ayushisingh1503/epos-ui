@@ -1,17 +1,22 @@
 import React, { useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { styles } from "../components/menustyle";
 import { LinearGradient } from "expo-linear-gradient";
 import CategoryScreen from "./MenuCategory";
 import ItemsScreen from "./MenuItems";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
+const logout = async () => {
+  await AsyncStorage.clear();
+  navigation.navigate("Login");
+};
+
 const screenOptions = () => ({
   headerRight: () => (
-    <TouchableOpacity onPress={() => navigation.navigate("")}>
+    <TouchableOpacity onPress={logout}>
       <LinearGradient
         colors={["#180564", "#745B93"]}
         style={styles.logoutButton}
@@ -73,7 +78,6 @@ const MyTabBar = ({ state, descriptors, navigation }) => {
 };
 
 const MenuLayout = () => {
-  const [tab, setTab] = useState("items");
   return (
     <View style={styles.container}>
       <Tab.Navigator
@@ -88,16 +92,26 @@ const MenuLayout = () => {
               backgroundColor: "rgba(211, 130, 225, 0.75)",
             },
             headerTintColor: "#fff",
-            headerTitleStyle: { fontWeight: "bold" },
+            headerTitleStyle: {
+              paddingLeft: 50,
+              fontWeight: 700,
+            },
+            headerStatusBarHeight: 25,
+            headerTitleAlign: "center",
           }}
         />
         <Tab.Screen
           name="Items"
           component={ItemsScreen}
           options={{
-            headerStyle: { backgroundColor: "rgba(211, 130, 225, 0.75)" }, // Change header color here
-            headerTintColor: "#fff", // Change header text color here
-            headerTitleStyle: { fontWeight: "bold" },
+            headerStyle: { backgroundColor: "rgba(211, 130, 225, 0.75)" },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              paddingLeft: 50,
+              fontWeight: 700,
+            },
+            headerStatusBarHeight: 30,
+            headerTitleAlign: "center",
           }}
         />
       </Tab.Navigator>

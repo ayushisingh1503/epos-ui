@@ -106,7 +106,7 @@ const UserList = ({ navigation }) => {
                     <TouchableOpacity
                       style={styles.userName}
                       onPress={() => {
-                        console.log("userlist:", item);
+                        // console.log("userlist:", item);
                         setSelectedUser(item);
                         setEditModalVisible(true);
                       }}

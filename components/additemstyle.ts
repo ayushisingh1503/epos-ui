@@ -42,12 +42,22 @@ export const styles = StyleSheet.create({
   itemname: {
     flex: 0.2,
     justifyContent: "flex-start",
-    marginRight: 60,
+    marginRight: 90,
     marginLeft: 20,
     paddingBottom: 30,
   },
-  price: {
+  outer: {
     flex: 0.2,
+    flexDirection: "row",
+  },
+  inner: {
+    flex: 0.2,
+  },
+  tax: {
+    flex: 0.5,
+  },
+  price: {
+    flex: 0.4,
     justifyContent: "flex-start",
     marginRight: 60,
     marginLeft: 20,
@@ -57,9 +67,9 @@ export const styles = StyleSheet.create({
     flex: 0.2,
     flexDirection: "column",
     justifyContent: "flex-start",
-    marginRight: 60,
     marginLeft: 20,
-    paddingBottom: 30,
+    paddingBottom: 50,
+    paddingRight: 140,
   },
   dropdown: {
     height: 40,
@@ -80,10 +90,17 @@ export const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 9,
     alignContent: "center",
-    marginRight: 200,
+    marginRight: 50,
+  },
+  taxTag: {
+    flex: 0.2,
+    justifyContent: "flex-start",
+    marginRight: 60,
+    marginLeft: 20,
+    paddingBottom: 30,
   },
   footerbuttons: {
-    flex: 0.2,
+    flex: 0.1,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingLeft: 50,

@@ -1,0 +1,158 @@
+import { Dimensions, StyleSheet } from "react-native";
+import styled from "styled-components/native";
+import { LinearGradient } from "expo-linear-gradient";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
+export const ImageContainer = styled.ImageBackground.attrs({
+  resizeMode: "cover",
+})`
+  width: ${windowWidth}px;
+  height: ${windowHeight}px;
+`;
+
+export const GradientBackground = styled(LinearGradient).attrs({
+  colors: ["#180564", "#745B93"],
+})`
+  flex: 1;
+  flex-direction: "row";
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  header: {
+    flex: 0.08,
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  body: {
+    flex: 0.9,
+    flexDirection: "column",
+    alignItems: "center",
+    flexGrow: 1,
+  },
+  add: {
+    flex: 0.2,
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  linearGradient: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: "white",
+    fontWeight: "400",
+  },
+  translucentRectangle: {
+    flex: 1,
+    width: "80%",
+    backgroundColor: "rgba(0, 0, 0, 0.09)",
+    borderRadius: 15,
+    padding: 20,
+    flexGrow: 1,
+    overflow: "hidden",
+    marginBottom: 160,
+  },
+  translucentRectangleHeader: {
+    flex: 0.07,
+    padding: 10,
+    marginBottom: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "rgba(211, 130, 225, 2)",
+  },
+  textCategory: {
+    flex: 0.7,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+    paddingRight: 120,
+    flexGrow: 0.5,
+    paddingLeft: 40,
+  },
+  textAction: {
+    flex: 0.3,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  categoryRow: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+    padding: 10,
+    borderRadius: 5,
+    width: "100%",
+    flexGrow: 1,
+    backgroundColor: "white",
+  },
+  categoryName: {
+    flex: 0.7,
+    fontSize: 16,
+    fontWeight: "400",
+    paddingLeft: 60,
+  },
+  icon: {
+    flex: 0.3,
+    paddingLeft: 150,
+  },
+  logoutButton: {
+    borderRadius: 15,
+    marginRight: 60,
+    marginBottom: 10,
+    alignSelf: "flex-end",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  translucentRectangleItemHeader: {
+    flex: 0.1,
+    padding: 10,
+    marginBottom: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "rgba(211, 130, 225, 2)",
+  },
+  textItem: {
+    flex: 0.3,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  textItemAction: {
+    flex: 0.1,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  textItemCategory: {
+    flex: 0.2,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  textPrice: {
+    flex: 0.2,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  textTax: {
+    flex: 0.2,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+});

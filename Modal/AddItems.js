@@ -55,25 +55,37 @@ export default AddItems = ({ modalVisible, setModalVisible }) => {
                   onChangeText={onChangeText}
                 />
               </View>
-              <View style={styles.price}>
-                <Text style={styles.textstyle}>Price</Text>
-                <TextInput
-                  placeholder="Enter Item Price"
-                  style={styles.textInput}
-                  onChangeText={onChangeText}
-                />
+              <View style={styles.outer}>
+                <View style={styles.price}>
+                  <Text style={styles.textstyle}>Price</Text>
+                  <TextInput
+                    placeholder="Enter Item Price"
+                    style={styles.textInput}
+                    onChangeText={onChangeText}
+                  />
+                </View>
+                <View style={styles.tax}>
+                  <Text style={styles.textstyle}>Tax Rate</Text>
+                  <TextInput
+                    placeholder="Enter Tax Rate"
+                    style={styles.textInput}
+                    onChangeText={onChangeText}
+                  />
+                </View>
               </View>
-              <View style={styles.category}>
-                <Text style={styles.textstyle}>Category</Text>
-                <DropDownPicker
-                  open={open}
-                  value={value}
-                  items={items}
-                  setOpen={setOpen}
-                  setValue={setValue}
-                  setItems={setItems}
-                  style={styles.dropdown}
-                />
+              <View style={styles.inner}>
+                <View style={styles.category}>
+                  <Text style={styles.textstyle}>Category</Text>
+                  <DropDownPicker
+                    open={open}
+                    value={value}
+                    items={items}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    setItems={setItems}
+                    style={styles.dropdown}
+                  />
+                </View>
               </View>
               <View style={styles.footerbuttons}>
                 <TouchableOpacity
