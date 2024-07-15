@@ -10,33 +10,37 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 const CategoryScreen = () => {
   const [categoryList, setCategoryList] = useState([]);
+  const [refresh, setRefresh] = useState(true);
+
+  const refreshComponent = () => {
+    setRefresh((currentValue) => !currentValue);
+  };
 
   useEffect(() => {
     (async () => {
       const { store_id } = await getLoggedInUser();
-      console.log(store_id);
       try {
         const instance = await axiosWrapper();
         const response = await instance.get(`/menu/category/${store_id}`);
         const payload = response.data.payload;
-        console.log(payload);
         setCategoryList(payload.categories);
       } catch (err) {
         console.error("User fetch error", err);
         //@todo: add error toast
       }
     })();
-  }, []);
+  }, [refresh]);
 
   const deleteCategory = async ({ categoryId }) => {
     try {
       const instance = await axiosWrapper();
-      await instance.delete(`/menu/category/${categoryId}`);
+      const { store_id } = await getLoggedInUser();
+      await instance.delete(`/menu/${store_id}/category/${categoryId}`);
 
-      const filteredCategories = userList.filter(
+      const filteredCategories = categoryList.filter(
         (category) => category.category_id !== categoryId
       );
-      setUserList(filteredCategories);
+      setCategoryList(filteredCategories);
 
       //@todo: show success toast message
     } catch (err) {
@@ -53,6 +57,7 @@ const CategoryScreen = () => {
         <AddCategory
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
+          refreshComponent={refreshComponent}
         />
       )}
       <View style={styles.container}>
@@ -86,7 +91,7 @@ const CategoryScreen = () => {
                       size={30}
                       style={styles.icon}
                       onPress={() => {
-                        deleteCategory({ userId: item.catgory_id });
+                        deleteCategory({ categoryId: item.category_id });
                       }}
                     ></Icon>
                   </View>

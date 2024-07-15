@@ -13,9 +13,27 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/addcategorystyle";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { axiosWrapper } from "../helpers/axiosWrapper";
+import { getLoggedInUser } from "../helpers/getLoggedInUser";
 
 export default AddCategory = ({ modalVisible, setModalVisible }) => {
-  const [email, onChangeText] = useState("");
+  const [name, setName] = useState("");
+
+  const createCategory = async () => {
+    try {
+      const instance = await axiosWrapper();
+      const { store_id } = await getLoggedInUser();
+      const reqBody = { name: name };
+      console.log(reqBody);
+      await instance.post(`/menu/category/${store_id}`, reqBody);
+      setModalVisible(!modalVisible);
+      refreshComponent();
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  };
 
   return (
     <Modal
@@ -43,7 +61,7 @@ export default AddCategory = ({ modalVisible, setModalVisible }) => {
                 <TextInput
                   placeholder="Enter Category Name"
                   style={styles.textInput}
-                  onChangeText={onChangeText}
+                  onChangeText={setName}
                 />
               </View>
               <View style={styles.footerbuttons}>
@@ -60,7 +78,7 @@ export default AddCategory = ({ modalVisible, setModalVisible }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.savebutton}
-                  onPress={() => setModalVisible(!modalVisible)}
+                  onPress={createCategory}
                 >
                   <LinearGradient
                     colors={["#180564", "#745B93"]}

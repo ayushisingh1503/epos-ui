@@ -70,23 +70,21 @@ export const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     backgroundColor: "rgba(211, 130, 225, 2)",
   },
   textCategory: {
-    flex: 0.7,
     color: "white",
     fontSize: 16,
     fontWeight: "600",
-    paddingRight: 120,
-    flexGrow: 0.5,
-    paddingLeft: 40,
+    marginRight: 530,
+    marginLeft: 50,
   },
   textAction: {
-    flex: 0.3,
     color: "white",
     fontSize: 16,
     fontWeight: "600",
+    marginRight: 180,
   },
   categoryRow: {
     flex: 1,
@@ -154,5 +152,8 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
+  },
+  scrollview: {
+    flex: 0.95,
   },
 });
