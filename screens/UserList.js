@@ -78,16 +78,16 @@ const UserList = ({ navigation }) => {
           <View style={styles.title}>
             <Text style={styles.titleText}>User List</Text>
           </View>
-          <View style={styles.add}>
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <LinearGradient
-                colors={["#180564", "#745B93"]}
-                style={styles.addNewButton}
-              >
-                <Text style={styles.buttonText}>Add New</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
+        </View>
+        <View style={styles.add}>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <LinearGradient
+              colors={["#180564", "#745B93"]}
+              style={styles.linearGradient}
+            >
+              <Text style={styles.buttonText}>Add New</Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
         <View style={styles.body}>
           <View style={styles.translucentRectangle}>
