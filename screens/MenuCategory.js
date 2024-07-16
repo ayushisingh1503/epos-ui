@@ -10,6 +10,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 const CategoryScreen = () => {
   const [categoryList, setCategoryList] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
   const [refresh, setRefresh] = useState(true);
 
   const refreshComponent = () => {
@@ -49,8 +50,6 @@ const CategoryScreen = () => {
     }
   };
 
-  const [modalVisible, setModalVisible] = useState(false);
-
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       {modalVisible && (
@@ -89,7 +88,7 @@ const CategoryScreen = () => {
                     <Icon
                       name="delete"
                       size={30}
-                      style={styles.icon}
+                      style={styles.categoryIcon}
                       onPress={() => {
                         deleteCategory({ categoryId: item.category_id });
                       }}

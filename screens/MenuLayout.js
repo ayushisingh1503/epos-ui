@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { styles } from "../components/menustyle";

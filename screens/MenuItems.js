@@ -1,24 +1,75 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native-virtualized-view";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import AddItems from "../Modal/AddItems";
 import { ImageContainer, styles } from "../components/menucategorystyle";
+import { getLoggedInUser } from "../helpers/getLoggedInUser";
+import { axiosWrapper } from "../helpers/axiosWrapper";
 
 export default ItemsScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [itemList, setitemList] = useState([
-    { SNo: "1", itemname: "Fried Rice", price: "$4" },
-    { SNo: "2", itemname: "Hakka Noodles", price: "$4" },
-    { SNo: "3", itemname: "Samosa Chaat", price: "$4" },
-  ]);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [itemList, setItemList] = useState([]);
+  const [refresh, setRefresh] = useState(true);
+  const [selectedItem, setSelectedItem] = useState(undefined);
+
+  const refreshComponent = () => {
+    setRefresh((currentValue) => !currentValue);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const { store_id } = await getLoggedInUser();
+      try {
+        const instance = await axiosWrapper();
+        const response = await instance.get(`/menu/item/${store_id}`);
+        const payload = response.data.payload;
+        setItemList(payload.items);
+      } catch (err) {
+        console.error("User fetch error", err);
+        //@todo: add error toast
+      }
+    })();
+  }, [refresh]);
+
+  const deleteItem = async ({ itemId }) => {
+    try {
+      const instance = await axiosWrapper();
+      const { store_id } = await getLoggedInUser();
+      await instance.delete(`/menu/${store_id}/item/${itemId}`);
+
+      const filteredCategories = categoryList.filter(
+        (item) => item.item_id !== itemId
+      );
+      setItemList(filteredCategories);
+
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  };
+
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       {modalVisible && (
         <AddItems
+          selectedItem={undefined}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
+          setSelectedItem={undefined}
+          refreshComponent={refreshComponent}
+        />
+      )}
+      {editModalVisible && selectedItem && (
+        <AddItems
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          refreshComponent={refreshComponent}
+          editModalVisible={editModalVisible}
+          setEditModalVisible={setEditModalVisible}
         />
       )}
       <View style={styles.container}>
@@ -48,17 +99,26 @@ export default ItemsScreen = () => {
                 data={itemList}
                 keyExtractor={(item) => item.item_id}
                 renderItem={({ item }) => (
-                  <View style={styles.categoryRow}>
-                    <Text style={styles.categoryName}>{item.name}</Text>
-                    <Text style={styles.categoryName}>{item.category}</Text>
-                    <Text style={styles.categoryName}>{item.price}</Text>
-                    <Text style={styles.categoryName}>{item.tax_rate}</Text>
+                  <View style={styles.itemRow}>
+                    <TouchableOpacity
+                      style={styles.itemName}
+                      onPress={() => {
+                        // console.log("itemlist:", item);
+                        setSelectedItem(item);
+                        setEditModalVisible(true);
+                      }}
+                    >
+                      <Text style={styles.itemNameText}>{item.name}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.itemCategory}>{item.category}</Text>
+                    <Text style={styles.itemPrice}>${item.price}</Text>
+                    <Text style={styles.itemTax}>{item.tax_rate}</Text>
                     <Icon
                       name="delete"
                       size={30}
-                      style={styles.icon}
+                      style={styles.itemIcon}
                       onPress={() => {
-                        deleteCategory({ userId: item.catgory_id });
+                        deleteItem({ itemId: item.item_id });
                       }}
                     ></Icon>
                   </View>

@@ -16,7 +16,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 
-export default AddCategory = ({ modalVisible, setModalVisible }) => {
+export default AddCategory = ({
+  modalVisible,
+  setModalVisible,
+  refreshComponent,
+}) => {
   const [name, setName] = useState("");
 
   const createCategory = async () => {

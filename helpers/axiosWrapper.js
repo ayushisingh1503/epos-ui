@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setCreds } from "./setCreds";
 
 export const axiosWrapper = async () => {
-  const baseUrl = "https://1d21-31-205-114-110.ngrok-free.app";
+  const baseUrl = "https://0083-31-205-114-110.ngrok-free.app";
 
   // Creating an axios instance
   const instance = axios.create({

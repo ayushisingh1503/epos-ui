@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -51,6 +51,7 @@ export default AddUser = ({
     { label: "Admin", value: "admin" },
     { label: "Staff", value: "staff" },
     { label: "Manager", value: "manager" },
+    { label: "Kitchen", value: "Kitchen" },
   ]);
 
   const updateUser = async () => {

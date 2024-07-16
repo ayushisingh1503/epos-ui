@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,17 +14,82 @@ import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/additemstyle";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DropDownPicker from "react-native-dropdown-picker";
+import { getLoggedInUser } from "../helpers/getLoggedInUser";
+import { axiosWrapper } from "../helpers/axiosWrapper";
 
-export default AddItems = ({ modalVisible, setModalVisible }) => {
-  const [email, onChangeText] = useState("");
+export default AddItems = ({
+  modalVisible,
+  setModalVisible,
+  refreshComponent,
+  selectedItem,
+  setSelectedItem,
+  setEditModalVisible,
+  editModalVisible,
+}) => {
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [taxRate, setTaxRate] = useState("");
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Starter", value: "Starter" },
-    { label: "Main Course", value: "Main Course" },
-    { label: "Dessert", value: "Dessert" },
-  ]);
+  const [category, setCategory] = useState([]);
+
+  const fetchCategories = async () => {
+    try {
+      const instance = await axiosWrapper();
+      const { store_id } = await getLoggedInUser();
+      const response = await instance.get(`/menu/category/${store_id}`);
+      const payload = response.data.payload;
+      const formattedList = payload.categories.map((item) => {
+        return {
+          label: item.name,
+          value: item.name,
+        };
+      });
+      return formattedList;
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const categories = await fetchCategories();
+      setCategory(categories);
+    })();
+  }, []);
+
+  const createItem = async () => {
+    try {
+      const instance = await axiosWrapper();
+      const { store_id } = await getLoggedInUser();
+      const reqBody = { itemName: name, price, taxRate, category: value };
+      await instance.post(`/menu/item/${store_id}`, reqBody);
+      setModalVisible(!modalVisible);
+      refreshComponent();
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  };
+
+  const updateItem = async () => {
+    try {
+      const instance = await axiosWrapper();
+      const { store_id } = await getLoggedInUser();
+      const itemId = selectedItem.item_id;
+      const reqBody = { category: value, name, taxRate, price };
+      await instance.put(`/menu/${store_id}/item/${itemId}`, reqBody);
+      setSelectedItem(undefined);
+      setEditModalVisible(!editModalVisible);
+      refreshComponent();
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  };
 
   return (
     <Modal
@@ -52,7 +117,7 @@ export default AddItems = ({ modalVisible, setModalVisible }) => {
                 <TextInput
                   placeholder="Enter Item Name"
                   style={styles.textInput}
-                  onChangeText={onChangeText}
+                  onChangeText={setName}
                 />
               </View>
               <View style={styles.outer}>
@@ -61,7 +126,7 @@ export default AddItems = ({ modalVisible, setModalVisible }) => {
                   <TextInput
                     placeholder="Enter Item Price"
                     style={styles.textInput}
-                    onChangeText={onChangeText}
+                    onChangeText={setPrice}
                   />
                 </View>
                 <View style={styles.tax}>
@@ -69,7 +134,7 @@ export default AddItems = ({ modalVisible, setModalVisible }) => {
                   <TextInput
                     placeholder="Enter Tax Rate"
                     style={styles.textInput}
-                    onChangeText={onChangeText}
+                    onChangeText={setTaxRate}
                   />
                 </View>
               </View>
@@ -79,10 +144,10 @@ export default AddItems = ({ modalVisible, setModalVisible }) => {
                   <DropDownPicker
                     open={open}
                     value={value}
-                    items={items}
+                    items={category}
                     setOpen={setOpen}
                     setValue={setValue}
-                    setItems={setItems}
+                    setItems={setCategory}
                     style={styles.dropdown}
                   />
                 </View>
@@ -90,7 +155,11 @@ export default AddItems = ({ modalVisible, setModalVisible }) => {
               <View style={styles.footerbuttons}>
                 <TouchableOpacity
                   style={styles.closebutton}
-                  onPress={() => setModalVisible(!modalVisible)}
+                  onPress={() =>
+                    editModalVisible
+                      ? setEditModalVisible(!editModalVisible)
+                      : setModalVisible(!modalVisible)
+                  }
                 >
                   <LinearGradient
                     colors={["#EE1414", "#880B0B"]}
@@ -101,7 +170,13 @@ export default AddItems = ({ modalVisible, setModalVisible }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.savebutton}
-                  onPress={() => setModalVisible(!modalVisible)}
+                  onPress={() => {
+                    if (editModalVisible) {
+                      updateItem();
+                    } else {
+                      createItem();
+                    }
+                  }}
                 >
                   <LinearGradient
                     colors={["#180564", "#745B93"]}

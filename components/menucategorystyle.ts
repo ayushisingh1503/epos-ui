@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
     fontWeight: "400",
     paddingLeft: 60,
   },
-  icon: {
+  categoryIcon: {
     flex: 0.3,
     paddingLeft: 150,
   },
@@ -116,11 +116,11 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   translucentRectangleItemHeader: {
-    flex: 0.1,
+    flex: 0.05,
     padding: 10,
     marginBottom: 15,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     backgroundColor: "rgba(211, 130, 225, 2)",
   },
   textItem: {
@@ -128,6 +128,7 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
+    paddingLeft: 60,
   },
   textItemAction: {
     flex: 0.1,
@@ -136,10 +137,12 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
   },
   textItemCategory: {
-    flex: 0.2,
+    flex: 0.3,
     color: "white",
     fontSize: 16,
     fontWeight: "600",
+    paddingLeft: 10,
+    paddingRight: 20,
   },
   textPrice: {
     flex: 0.2,
@@ -152,8 +155,48 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
+    paddingLeft: 40,
   },
   scrollview: {
     flex: 0.95,
+  },
+  itemRow: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 13,
+    padding: 7,
+    borderRadius: 5,
+    flexGrow: 1,
+    backgroundColor: "white",
+  },
+  itemName: {
+    flex: 0.3,
+    paddingLeft: 60,
+  },
+  itemNameText: {
+    fontSize: 16,
+    fontWeight: "400",
+  },
+  itemCategory: {
+    flex: 0.3,
+    fontSize: 16,
+    fontWeight: "400",
+    paddingLeft: 25,
+  },
+  itemPrice: {
+    flex: 0.2,
+    fontSize: 16,
+    fontWeight: "400",
+    paddingLeft: 25,
+  },
+  itemTax: {
+    flex: 0.2,
+    fontSize: 16,
+    fontWeight: "400",
+    paddingLeft: 60,
+  },
+  itemIcon: {
+    flex: 0.1,
   },
 });
