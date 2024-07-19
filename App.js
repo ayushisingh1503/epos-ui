@@ -1,7 +1,9 @@
 import RootStack from "./navigators/rootstack";
-import MenuLayout from "./screens/MenuLayout";
+import Inventory from "./screens/Inventory";
+import SearchBar from "./helpers/searchBar";
 
 export default function App() {
-  return <RootStack />;
-  // return <MenuLayout />;
+  // return <RootStack />;
+
+  return <Inventory />;
 }

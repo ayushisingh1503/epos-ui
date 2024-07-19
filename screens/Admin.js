@@ -90,7 +90,10 @@ const Admin = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.containerThreeI}>
-          <TouchableOpacity style={styles.button} onPress={handlePress}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Inventory")}
+          >
             <LinearGradient
               colors={["#180564", "#745B93"]}
               style={styles.button}

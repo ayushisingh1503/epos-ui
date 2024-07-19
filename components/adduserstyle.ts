@@ -18,12 +18,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "column",
   },
-  // centeredView: {
-  //   flex: 1,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   backgroundColor: "rgba(0,0,0,0)",
-  // },
   modalOverlay: {
     flex: 1,
     flexDirection: "column",
@@ -105,7 +99,6 @@ export const styles = StyleSheet.create({
   numberpad: {
     flex: 0.5,
     flexDirection: "column",
-    // backgroundColor: "green",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -124,12 +117,10 @@ export const styles = StyleSheet.create({
   },
   pininput: {
     height: 40,
-    marginTop: 15,
     padding: 10,
-    width: 150,
+    width: 200,
     backgroundColor: "white",
     borderRadius: 9,
-    marginLeft: 140,
   },
   pad: {
     flex: 0.8,

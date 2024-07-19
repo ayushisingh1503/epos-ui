@@ -197,24 +197,24 @@ export default AddUser = ({
                         editable={false}
                         showSoftInputOnFocus={false}
                       />
-                      <View style={styles.pad}>
-                        {buttons.map((button, index) => (
-                          <LinearGradient
-                            colors={["#180564", "#745B93"]}
-                            style={styles.numberbutton}
+                    </View>
+                    <View style={styles.pad}>
+                      {buttons.map((button, index) => (
+                        <LinearGradient
+                          colors={["#180564", "#745B93"]}
+                          style={styles.numberbutton}
+                          key={index}
+                        >
+                          <TouchableOpacity
                             key={index}
+                            onPress={() => onPress(button.value)}
                           >
-                            <TouchableOpacity
-                              key={index}
-                              onPress={() => onPress(button.value)}
-                            >
-                              <Text style={styles.numberbuttonText}>
-                                {button.value}
-                              </Text>
-                            </TouchableOpacity>
-                          </LinearGradient>
-                        ))}
-                      </View>
+                            <Text style={styles.numberbuttonText}>
+                              {button.value}
+                            </Text>
+                          </TouchableOpacity>
+                        </LinearGradient>
+                      ))}
                     </View>
                   </View>
                 </View>
