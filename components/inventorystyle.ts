@@ -79,12 +79,14 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
+    alignItems: "flex-start",
   },
   textItemQuantity: {
     flex: 0.5,
     color: "white",
     fontSize: 16,
     fontWeight: "600",
+    paddingLeft: 120,
   },
   scrollview: {
     flex: 0.95,
@@ -92,21 +94,41 @@ export const styles = StyleSheet.create({
   itemRow: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "center",
     marginBottom: 13,
     padding: 7,
     borderRadius: 5,
-    flexGrow: 1,
     backgroundColor: "white",
+    justifyContent: "center",
   },
   itemName: {
-    flex: 0.3,
-    paddingLeft: 60,
+    flex: 0.5,
+    alignItems: "flex-start",
+    paddingLeft: 50,
+    alignContent: "center",
+    justifyContent: "center",
+    flexGrow: 1,
+  },
+  quantityContainer: {
+    flex: 0.5,
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
   },
   itemQuantity: {
-    flex: 0.3,
     fontSize: 16,
     fontWeight: "400",
-    paddingLeft: 25,
+  },
+
+  button: {
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ddd",
+    borderRadius: 15,
+    marginHorizontal: 10,
+  },
+  quantityText: {
+    fontSize: 18,
   },
 });

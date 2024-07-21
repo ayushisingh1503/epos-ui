@@ -64,7 +64,12 @@ export default AddItems = ({
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
       const reqBody = { itemName: name, price, taxRate, category: value };
-      await instance.post(`/menu/item/${store_id}`, reqBody);
+      const { payload } = await instance.post(
+        `/menu/item/${store_id}`,
+        reqBody
+      );
+      const inventoryReq = { itemId: payload.itemId, quantity: 0 };
+      await instance.post(`/inventory/${store_id}`, inventoryReq);
       setModalVisible(!modalVisible);
       refreshComponent();
       //@todo: show success toast message

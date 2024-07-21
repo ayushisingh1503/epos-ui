@@ -12,6 +12,7 @@ export default Inventory = () => {
   const [searchQuery, setSearchQuery] = useState(false);
   const [clicked, setClicked] = useState("");
   const [itemList, setItemList] = useState();
+  const [disableButton, setDisableButton] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -22,15 +23,72 @@ export default Inventory = () => {
         const inventory = await instance.get(`/inventory/${store_id}`);
         const itemsPayload = items.data.payload;
         const inventoryPayload = inventory.data.payload;
-        console.log(itemsPayload);
-        console.log(inventoryPayload);
-        setItemList(itemsPayload.items);
+        const list = itemsPayload.items
+          .filter((i) =>
+            inventoryPayload.items.some((iItem) => i.item_id === iItem.item_id)
+          )
+          .map((item) => {
+            const inventoryItem = inventoryPayload.items.find(
+              (i) => i.item_id === item.item_id
+            );
+            return {
+              ...item,
+              quantity: inventoryItem?.quantity ?? 0,
+            };
+          });
+        setItemList(list);
       } catch (err) {
         console.error("User fetch error", err);
         //@todo: add error toast
       }
     })();
   }, []);
+
+  const incrementQuantity = async ({ itemId, quantity }) => {
+    try {
+      // setDisableButton(true);
+      const instance = await axiosWrapper();
+      const { store_id } = await getLoggedInUser();
+      const reqBody = { itemId, quantity };
+      await instance.patch(`/inventory/${store_id}`, reqBody);
+
+      // to check the immediate value of the state
+      setItemList(
+        itemList.map((item) =>
+          item.item_id === itemId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+      // setDisableButton(false);
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+      // setDisableButton(true);
+    }
+  };
+  const decrementQuantity = async ({ itemId, quantity }) => {
+    try {
+      // setDisableButton(true);
+      const instance = await axiosWrapper();
+      const { store_id } = await getLoggedInUser();
+      const reqBody = { itemId, quantity };
+      await instance.patch(`/inventory/${store_id}`, reqBody);
+
+      setItemList((prevItems) =>
+        prevItems.map((item) =>
+          item.item_id === itemId && item.quantity > 0
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+      );
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+      // setDisableButton(true);
+    }
+  };
 
   return (
     <ImageContainer source={require("../assets/layout.png")}>
@@ -48,10 +106,10 @@ export default Inventory = () => {
         </View>
         <View style={styles.search}>
           <SearchBar
-            searchQuery={undefined}
-            setSearchQuery={undefined}
-            clicked={undefined}
-            setClicked={undefined}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            clicked={clicked}
+            setClicked={setClicked}
           />
           {/* <List searchQuery={searchQuery} data={List} setClicked={setClicked} /> */}
         </View>
@@ -59,7 +117,7 @@ export default Inventory = () => {
           <View style={styles.translucentRectangle}>
             <View style={styles.translucentRectangleHeader}>
               <Text style={styles.textItem}>Item</Text>
-              <Text style={styles.textItemQuantity}>Qunatity</Text>
+              <Text style={styles.textItemQuantity}>Quantity</Text>
             </View>
             <ScrollView style={styles.scrollview}>
               <FlatList
@@ -67,7 +125,36 @@ export default Inventory = () => {
                 keyExtractor={(item) => item.item_id}
                 renderItem={({ item }) => (
                   <View style={styles.itemRow}>
-                    <Text style={styles.itemName}>{item.name}</Text>
+                    <View style={styles.itemName}>
+                      <Text>{item.name}</Text>
+                    </View>
+                    <View style={styles.quantityContainer}>
+                      <TouchableOpacity
+                        style={styles.button}
+                        onPress={() =>
+                          decrementQuantity({
+                            itemId: item.item_id,
+                            quantity: item.quantity,
+                          })
+                        }
+                        // disabled={disableButton}
+                      >
+                        <Text style={styles.buttonText}>-</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.itemQuantity}>{item.quantity}</Text>
+                      <TouchableOpacity
+                        style={styles.button}
+                        onPress={() =>
+                          incrementQuantity({
+                            itemId: item.item_id,
+                            quantity: item.quantity,
+                          })
+                        }
+                        // disabled={disableButton}
+                      >
+                        <Text style={styles.buttonText}>+</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 )}
               />
