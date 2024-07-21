@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    margin: 15,
     justifyContent: "center",
     width: "70%",
     paddingLeft: 50,
@@ -11,7 +10,6 @@ export const styles = StyleSheet.create({
     padding: 10,
     flexDirection: "row",
     width: "95%",
-    // backgroundColor: "rgba(110, 126, 208, 0.43)",
     backgroundColor: "white",
     borderRadius: 10,
     alignItems: "center",
@@ -21,7 +19,7 @@ export const styles = StyleSheet.create({
   searchBar__clicked: {
     padding: 10,
     flexDirection: "row",
-    width: "80%",
+    width: "95%",
     backgroundColor: "#d9dbda",
     borderRadius: 15,
     alignItems: "center",
@@ -33,5 +31,9 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
     width: "90%",
+  },
+  icon: {
+    backgroundColor: "rgba(211, 130, 225, 2)",
+    padding: 5,
   },
 });

@@ -40,7 +40,7 @@ export default ItemsScreen = () => {
       const { store_id } = await getLoggedInUser();
       await instance.delete(`/menu/${store_id}/item/${itemId}`);
 
-      const filteredCategories = categoryList.filter(
+      const filteredCategories = itemList.filter(
         (item) => item.item_id !== itemId
       );
       setItemList(filteredCategories);

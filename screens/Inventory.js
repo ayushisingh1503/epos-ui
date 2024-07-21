@@ -3,15 +3,15 @@ import react, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import SearchBar from "../helpers/searchBar";
-import List from "../helpers/filter";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { ScrollView } from "react-native-virtualized-view";
 
 export default Inventory = () => {
-  const [searchQuery, setSearchQuery] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [clicked, setClicked] = useState("");
-  const [itemList, setItemList] = useState();
+  const [itemList, setItemList] = useState([]);
+  const [searchList, setSearchList] = useState([]);
   const [disableButton, setDisableButton] = useState(false);
 
   useEffect(() => {
@@ -44,12 +44,24 @@ export default Inventory = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (searchList === "") {
+      setSearchList([]);
+    }
+
+    const tempList = itemList.filter((item) => {
+      return item.name.startsWith(searchQuery);
+    });
+
+    setSearchList(tempList);
+  }, [searchQuery, itemList]);
+
   const incrementQuantity = async ({ itemId, quantity }) => {
     try {
-      // setDisableButton(true);
+      setDisableButton(true);
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
-      const reqBody = { itemId, quantity };
+      const reqBody = { itemId, quantity: quantity + 1 };
       await instance.patch(`/inventory/${store_id}`, reqBody);
 
       // to check the immediate value of the state
@@ -60,12 +72,12 @@ export default Inventory = () => {
             : item
         )
       );
-      // setDisableButton(false);
+      setDisableButton(false);
       //@todo: show success toast message
     } catch (err) {
       //@todo: show toast message
       console.log("Error", err);
-      // setDisableButton(true);
+      setDisableButton(true);
     }
   };
   const decrementQuantity = async ({ itemId, quantity }) => {
@@ -73,7 +85,7 @@ export default Inventory = () => {
       // setDisableButton(true);
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
-      const reqBody = { itemId, quantity };
+      const reqBody = { itemId, quantity: quantity - 1 };
       await instance.patch(`/inventory/${store_id}`, reqBody);
 
       setItemList((prevItems) =>
@@ -104,6 +116,7 @@ export default Inventory = () => {
             </LinearGradient>
           </TouchableOpacity>
         </View>
+
         <View style={styles.search}>
           <SearchBar
             searchQuery={searchQuery}
@@ -111,8 +124,8 @@ export default Inventory = () => {
             clicked={clicked}
             setClicked={setClicked}
           />
-          {/* <List searchQuery={searchQuery} data={List} setClicked={setClicked} /> */}
         </View>
+
         <View style={styles.body}>
           <View style={styles.translucentRectangle}>
             <View style={styles.translucentRectangleHeader}>
@@ -121,7 +134,7 @@ export default Inventory = () => {
             </View>
             <ScrollView style={styles.scrollview}>
               <FlatList
-                data={itemList}
+                data={searchQuery.length > 0 ? searchList : itemList}
                 keyExtractor={(item) => item.item_id}
                 renderItem={({ item }) => (
                   <View style={styles.itemRow}>
@@ -137,7 +150,7 @@ export default Inventory = () => {
                             quantity: item.quantity,
                           })
                         }
-                        // disabled={disableButton}
+                        disabled={disableButton}
                       >
                         <Text style={styles.buttonText}>-</Text>
                       </TouchableOpacity>
@@ -150,7 +163,7 @@ export default Inventory = () => {
                             quantity: item.quantity,
                           })
                         }
-                        // disabled={disableButton}
+                        disabled={disableButton}
                       >
                         <Text style={styles.buttonText}>+</Text>
                       </TouchableOpacity>

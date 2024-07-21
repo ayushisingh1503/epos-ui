@@ -26,12 +26,15 @@ export default AddItems = ({
   setEditModalVisible,
   editModalVisible,
 }) => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [taxRate, setTaxRate] = useState("");
+  console.log("Selected Item", selectedItem);
+  const [name, setName] = useState(selectedItem?.name);
+  const [price, setPrice] = useState(selectedItem?.price);
+  const [taxRate, setTaxRate] = useState(selectedItem?.tax_rate);
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(
+    selectedItem?.category
+  );
   const [category, setCategory] = useState([]);
 
   const fetchCategories = async () => {
@@ -63,13 +66,17 @@ export default AddItems = ({
     try {
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
-      const reqBody = { itemName: name, price, taxRate, category: value };
-      const { payload } = await instance.post(
-        `/menu/item/${store_id}`,
-        reqBody
-      );
-      const inventoryReq = { itemId: payload.itemId, quantity: 0 };
+      const reqBody = {
+        itemName: name,
+        price,
+        taxRate,
+        category: selectedCategory,
+      };
+      const response = await instance.post(`/menu/item/${store_id}`, reqBody);
+      const { payload } = response.data;
+      const inventoryReq = { item_id: payload.itemId, quantity: 0 };
       await instance.post(`/inventory/${store_id}`, inventoryReq);
+
       setModalVisible(!modalVisible);
       refreshComponent();
       //@todo: show success toast message
@@ -84,7 +91,7 @@ export default AddItems = ({
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
       const itemId = selectedItem.item_id;
-      const reqBody = { category: value, name, taxRate, price };
+      const reqBody = { category: selectedCategory, name, taxRate, price };
       await instance.put(`/menu/${store_id}/item/${itemId}`, reqBody);
       setSelectedItem(undefined);
       setEditModalVisible(!editModalVisible);
@@ -123,6 +130,7 @@ export default AddItems = ({
                   placeholder="Enter Item Name"
                   style={styles.textInput}
                   onChangeText={setName}
+                  value={name}
                 />
               </View>
               <View style={styles.outer}>
@@ -131,6 +139,7 @@ export default AddItems = ({
                   <TextInput
                     placeholder="Enter Item Price"
                     style={styles.textInput}
+                    value={price}
                     onChangeText={setPrice}
                   />
                 </View>
@@ -140,6 +149,7 @@ export default AddItems = ({
                     placeholder="Enter Tax Rate"
                     style={styles.textInput}
                     onChangeText={setTaxRate}
+                    value={taxRate}
                   />
                 </View>
               </View>
@@ -148,10 +158,10 @@ export default AddItems = ({
                   <Text style={styles.textstyle}>Category</Text>
                   <DropDownPicker
                     open={open}
-                    value={value}
+                    value={selectedCategory}
                     items={category}
                     setOpen={setOpen}
-                    setValue={setValue}
+                    setValue={setSelectedCategory}
                     setItems={setCategory}
                     style={styles.dropdown}
                   />
