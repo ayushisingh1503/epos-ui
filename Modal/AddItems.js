@@ -26,7 +26,6 @@ export default AddItems = ({
   setEditModalVisible,
   editModalVisible,
 }) => {
-  console.log("Selected Item", selectedItem);
   const [name, setName] = useState(selectedItem?.name);
   const [price, setPrice] = useState(selectedItem?.price);
   const [taxRate, setTaxRate] = useState(selectedItem?.tax_rate);

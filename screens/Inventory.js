@@ -143,7 +143,6 @@ export default Inventory = () => {
                     </View>
                     <View style={styles.quantityContainer}>
                       <TouchableOpacity
-                        style={styles.button}
                         onPress={() =>
                           decrementQuantity({
                             itemId: item.item_id,
@@ -152,11 +151,15 @@ export default Inventory = () => {
                         }
                         disabled={disableButton}
                       >
-                        <Text style={styles.buttonText}>-</Text>
+                        <LinearGradient
+                          colors={["#180564", "#745B93"]}
+                          style={styles.decrementGradient}
+                        >
+                          <Text style={styles.buttonText}>-</Text>
+                        </LinearGradient>
                       </TouchableOpacity>
                       <Text style={styles.itemQuantity}>{item.quantity}</Text>
                       <TouchableOpacity
-                        style={styles.button}
                         onPress={() =>
                           incrementQuantity({
                             itemId: item.item_id,
@@ -165,7 +168,12 @@ export default Inventory = () => {
                         }
                         disabled={disableButton}
                       >
-                        <Text style={styles.buttonText}>+</Text>
+                        <LinearGradient
+                          colors={["#180564", "#745B93"]}
+                          style={styles.incrementGradient}
+                        >
+                          <Text style={styles.buttonText}>+</Text>
+                        </LinearGradient>
                       </TouchableOpacity>
                     </View>
                   </View>

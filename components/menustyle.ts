@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoutButton: {
-    borderRadius: 15,
+    borderRadius: 10,
     marginRight: 60,
     marginBottom: 10,
     alignSelf: "flex-end",

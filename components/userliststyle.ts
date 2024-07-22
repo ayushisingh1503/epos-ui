@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   header: {
-    flex: 0.15,
+    flex: 0.14,
     paddingBottom: 5,
     backgroundColor: "rgba(211, 130, 225, 0.75)",
     marginBottom: 20,
@@ -26,11 +26,11 @@ export const styles = StyleSheet.create({
     alignSelf: "flex-start",
     flexDirection: "row",
     justifyContent: "center",
-    paddingLeft: 130,
+    paddingLeft: 70,
   },
   titleText: {
-    fontSize: 30,
-    fontWeight: "600",
+    fontSize: 23,
+    fontWeight: "700",
     color: "white",
   },
   linearGradient: {
@@ -43,29 +43,6 @@ export const styles = StyleSheet.create({
     color: "white",
     fontWeight: "400",
   },
-  // add: {
-  //   flex: 0.5,
-  //   flexDirection: "row",
-  //   justifyContent: "flex-end",
-  // },
-  // addNewButton: {
-  //   borderRadius: 15,
-  //   marginTop: 50,
-  //   alignItems: "center",
-  //   paddingLeft: 40,
-  //   paddingRight: 40,
-  //   paddingTop: 10,
-  //   paddingBottom: 10,
-  //   flex: 0.5,
-  //   justifyContent: "center",
-  //   marginRight: 60,
-  //   padding: 15,
-  // },
-  // buttonText: {
-  //   fontSize: 18,
-  //   color: "white",
-  //   fontWeight: "500",
-  // },
   body: {
     flex: 0.65,
     flexDirection: "column",

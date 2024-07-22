@@ -106,6 +106,7 @@ export const styles = StyleSheet.create({
   categoryIcon: {
     flex: 0.3,
     paddingLeft: 150,
+    color: "#E93C3C",
   },
   logoutButton: {
     borderRadius: 15,
@@ -198,5 +199,6 @@ export const styles = StyleSheet.create({
   },
   itemIcon: {
     flex: 0.1,
+    color: "#E93C3C",
   },
 });

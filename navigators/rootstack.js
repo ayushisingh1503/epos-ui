@@ -33,11 +33,6 @@ const RootStack = () => {
 
   const pages = (
     <>
-      {/* <Stack.Screen
-        options={{ headerTintColor: "white" }}
-        name="AddUser"
-        component={AddUser}
-      /> */}
       <Stack.Screen
         options={{ headerTintColor: "white" }}
         name="UserList"
@@ -57,6 +52,11 @@ const RootStack = () => {
         options={{ headerTintColor: "white" }}
         name="MenuLayout"
         component={MenuLayout}
+      />
+      <Stack.Screen
+        options={{ headerTintColor: "white" }}
+        name="OrderList"
+        component={OrderList}
       />
       <Stack.Screen
         options={{ headerTintColor: "white" }}

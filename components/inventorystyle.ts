@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, Dimensions } from "react-native";
 import { styled } from "styled-components/native";
 
@@ -17,12 +18,13 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
   },
   header: {
-    flex: 0.1,
+    flex: 0.075,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingRight: 60,
-    paddingLeft: 60,
-    paddingTop: 30,
+    paddingLeft: 560,
+    paddingTop: 25,
+    backgroundColor: "rgba(211, 130, 225, 0.75)",
   },
   linearGradient: {
     paddingHorizontal: 20,
@@ -38,7 +40,7 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontWeight: "500",
-    color: "#6213C6",
+    color: "white",
   },
   search: {
     flex: 0.15,
@@ -86,7 +88,7 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
-    paddingLeft: 120,
+    paddingLeft: 140,
   },
   scrollview: {
     flex: 0.95,
@@ -118,14 +120,20 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
   },
-
-  button: {
+  incrementGradient: {
     width: 30,
     height: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ddd",
-    borderRadius: 15,
+    borderRadius: 100,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    marginHorizontal: 10,
+  },
+  decrementGradient: {
+    width: 30,
+    height: 30,
+    borderRadius: 100,
+    paddingHorizontal: 12,
+    paddingVertical: 2,
     marginHorizontal: 10,
   },
   quantityText: {

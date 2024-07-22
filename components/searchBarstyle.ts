@@ -3,8 +3,9 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    width: "70%",
-    paddingLeft: 50,
+    width: "90%",
+    paddingLeft: 170,
+    marginTop: 20,
   },
   searchBar__unclicked: {
     padding: 10,

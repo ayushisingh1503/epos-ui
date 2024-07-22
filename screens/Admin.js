@@ -73,7 +73,7 @@ const Admin = ({ navigation }) => {
                 source={require("../assets/Bar Chart.png")}
                 style={styles.buttonImage}
               />
-              <Text style={styles.buttonText}>Order History</Text>
+              <Text style={styles.buttonText}>Order List</Text>
             </LinearGradient>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handlePress}>
