@@ -14,7 +14,6 @@ import { styles } from "../components/loginstyle";
 import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { setCreds } from "../helpers/setCreds";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 

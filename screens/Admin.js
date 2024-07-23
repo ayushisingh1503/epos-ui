@@ -76,7 +76,10 @@ const Admin = ({ navigation }) => {
               <Text style={styles.buttonText}>Order List</Text>
             </LinearGradient>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handlePress}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("BackOffice")}
+          >
             <LinearGradient
               colors={["#180564", "#745B93"]}
               style={styles.button}

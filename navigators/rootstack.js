@@ -11,6 +11,7 @@ import Inventory from "../screens/Inventory";
 import OrderList from "../screens/OrderList";
 import NewOrder from "../screens/NewOrder";
 import MenuLayout from "../screens/MenuLayout";
+import BackOffice from "../screens/BackOffice";
 
 const Stack = createNativeStackNavigator();
 const RootStack = () => {
@@ -55,13 +56,13 @@ const RootStack = () => {
       />
       <Stack.Screen
         options={{ headerTintColor: "white" }}
-        name="OrderList"
-        component={OrderList}
+        name="Inventory"
+        component={Inventory}
       />
       <Stack.Screen
         options={{ headerTintColor: "white" }}
-        name="Inventory"
-        component={Inventory}
+        name="BackOffice"
+        component={BackOffice}
       />
     </>
   );

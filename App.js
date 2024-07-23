@@ -1,8 +1,7 @@
 import RootStack from "./navigators/rootstack";
-import OrderList from "./screens/OrderList";
+import NewOrder from "./screens/NewOrder";
 
 export default function App() {
   // return <RootStack />;
-
-  return <OrderList />;
+  return <NewOrder />;
 }
