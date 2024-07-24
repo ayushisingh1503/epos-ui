@@ -183,4 +183,18 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  breadcrumbItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  breadText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  separator: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
+  },
 });

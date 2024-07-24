@@ -22,7 +22,7 @@ const List = [
   { id: "3", name: "Dessert", title: "Outline" },
 ];
 
-export default NewOrder = () => {
+export default NewOrder = ({ navigation }) => {
   const [categoryList, setCategoryList] = useState([]);
 
   return (
@@ -75,7 +75,7 @@ export default NewOrder = () => {
         <View style={styles.rightContainer}>
           <View style={styles.rContainerHeader}>
             <View style={styles.rContainerHeaderImage}>
-              <Image source={require("../assets/User.png")} />
+              <Image source={require("../assets/User..png")} />
               <Text style={styles.rContainerHeaderText}> Hi User,</Text>
             </View>
             <View style={styles.orderDetails}>
