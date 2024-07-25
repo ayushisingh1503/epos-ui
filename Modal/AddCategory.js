@@ -22,13 +22,13 @@ export default AddCategory = ({
   refreshComponent,
 }) => {
   const [name, setName] = useState("");
+  const [type, setType] = useState("");
 
   const createCategory = async () => {
     try {
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
-      const reqBody = { name: name };
-      console.log(reqBody);
+      const reqBody = { name: name, type: type };
       await instance.post(`/menu/category/${store_id}`, reqBody);
       setModalVisible(!modalVisible);
       refreshComponent();
@@ -66,6 +66,14 @@ export default AddCategory = ({
                   placeholder="Enter Category Name"
                   style={styles.textInput}
                   onChangeText={setName}
+                />
+              </View>
+              <View style={styles.categorytype}>
+                <Text style={styles.textstyle}>Category Type</Text>
+                <TextInput
+                  placeholder="Enter Category Type"
+                  style={styles.textInput}
+                  onChangeText={setType}
                 />
               </View>
               <View style={styles.footerbuttons}>

@@ -75,7 +75,6 @@ export const styles = StyleSheet.create({
     width: 200,
     backgroundColor: "#6A4CA8",
     marginHorizontal: 20,
-
     justifyContent: "space-between",
     overflow: "hidden",
     borderRadius: 8,

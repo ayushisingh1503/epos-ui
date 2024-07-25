@@ -162,8 +162,24 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "rgba(252, 252, 252, 0.19)",
   },
-  menuIcons: {
-    paddingTop: 30,
+  foodIcon: {
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingLeft: 10,
+  },
+  barIcon: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 10,
+  },
+  messageIcon: {
+    flex: 0.9,
+    justifyContent: "flex-end",
+    paddingBottom: 20,
+    paddingLeft: 10,
+  },
+  logoutIcon: {
+    paddingTop: 10,
     paddingBottom: 30,
     paddingLeft: 10,
   },
@@ -183,18 +199,20 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
-  breadcrumbItem: {
-    flexDirection: "row",
-    alignItems: "center",
+  card: {
+    flex: 1,
+    width: 100,
+    backgroundColor: "#8737C6",
+    overflow: "hidden",
+    borderRadius: 8,
+    marginTop: 20,
+    marginLeft: 10,
+    marginRight: 10,
   },
-  breadText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  separator: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#fff",
+  foodImage: {
+    width: 120,
+    height: 100,
+    alignSelf: "center",
+    marginTop: 10,
   },
 });

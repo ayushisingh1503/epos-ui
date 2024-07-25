@@ -97,6 +97,15 @@ export const styles = StyleSheet.create({
     height: 25,
     paddingHorizontal: 8,
   },
+  selectedTextStyle: {
+    fontSize: 14,
+    color: "black",
+    fontWeight: "bold",
+  },
+  itemTextStyle: {
+    fontSize: 14,
+    color: "black",
+  },
   icon: {
     marginRight: 5,
   },

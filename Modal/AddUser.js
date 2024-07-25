@@ -147,6 +147,7 @@ export default AddUser = ({
                         setValue={setValue}
                         setItems={setItems}
                         style={styles.dropdown}
+                        dropDownContainerStyle={styles.dropdownContainer}
                       />
                     </View>
                     <View style={styles.footerbuttons}>

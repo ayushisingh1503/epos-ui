@@ -9,6 +9,8 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  LogBox,
+  SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/additemstyle";
@@ -58,6 +60,7 @@ export default AddItems = ({
     (async () => {
       const categories = await fetchCategories();
       setCategory(categories);
+      LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     })();
   }, []);
 
@@ -152,7 +155,7 @@ export default AddItems = ({
                   />
                 </View>
               </View>
-              <View style={styles.inner}>
+              <SafeAreaView style={styles.inner}>
                 <View style={styles.category}>
                   <Text style={styles.textstyle}>Category</Text>
                   <DropDownPicker
@@ -163,9 +166,10 @@ export default AddItems = ({
                     setValue={setSelectedCategory}
                     setItems={setCategory}
                     style={styles.dropdown}
+                    dropDownContainerStyle={styles.dropdownContainer}
                   />
                 </View>
-              </View>
+              </SafeAreaView>
               <View style={styles.footerbuttons}>
                 <TouchableOpacity
                   style={styles.closebutton}

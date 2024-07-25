@@ -73,18 +73,24 @@ export const styles = StyleSheet.create({
     justifyContent: "space-around",
     backgroundColor: "rgba(211, 130, 225, 2)",
   },
-  textCategory: {
+  textCategoryName: {
     color: "white",
     fontSize: 16,
     fontWeight: "600",
-    marginRight: 530,
-    marginLeft: 50,
+    marginRight: 250,
+    marginLeft: 60,
+  },
+  textCategoryType: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+    marginRight: 380,
   },
   textAction: {
     color: "white",
     fontSize: 16,
     fontWeight: "600",
-    marginRight: 180,
+    marginRight: 100,
   },
   categoryRow: {
     flex: 1,

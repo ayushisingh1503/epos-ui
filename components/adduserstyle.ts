@@ -152,4 +152,10 @@ export const styles = StyleSheet.create({
     borderRadius: 9,
     borderColor: "white",
   },
+  dropdownContainer: {
+    marginTop: 16,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 8,
+  },
 });

@@ -113,41 +113,6 @@ export default BackOffice = ({ navigation }) => {
           <Icon name="pencil" size={24} color="#fff" />
         </TouchableOpacity>
       </LinearGradient>
-      // <View style={styles.card}>
-      //   <View style={styles.cardheader}>
-      //     <Text style={styles.orderNo}>{order.table}</Text>
-      //     <View style={styles.cardHeaderIcons}>
-      //       <Icon name="clipboard" size={16} color="#fff" />
-      //       <Text style={styles.orderNo}>....</Text>
-      //       <Icon name="clock-o" size={16} color="#fff" />
-      //       <Text style={styles.orderNo}>....</Text>
-      //       <Icon name="cutlery" size={16} color="#fff" />
-      //       <Text style={styles.orderNo}>....</Text>
-      //       <Icon name="check" size={16} color="#fff" />
-      //     </View>
-      //   </View>
-      //   <View style={styles.itemsList}>
-      //     {order.items.map((item) => (
-      //       <Pressable
-      //         key={item.id}
-      //         onPress={() => handleItemPress(item.id)}
-      //         style={() => [
-      //           styles.item,
-      //           {
-      //             backgroundColor: pressedItems[item.id]
-      //               ? "#60D95E"
-      //               : "#6A4CA8",
-      //           },
-      //         ]}
-      //       >
-      //         <Text style={styles.itemText}>{item.name}</Text>
-      //       </Pressable>
-      //     ))}
-      //   </View>
-      //   <TouchableOpacity style={styles.noteIcon}>
-      //     <Icon name="pencil" size={24} color="#fff" />
-      //   </TouchableOpacity>
-      // </View>
     );
   };
 

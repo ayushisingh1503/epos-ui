@@ -24,10 +24,13 @@ const OpenOrder = () => {
             <TouchableOpacity style={styles.orderDateTime}>
               <Dropdown
                 style={styles.dropdown}
+                selectedTextStyle={styles.selectedTextStyle}
+                itemTextStyle={styles.itemTextStyle}
+                containerStyle={styles.dropdownContainer}
                 data={data}
                 value={value}
-                search
-                maxHeight={300}
+                // search
+                maxHeight={200}
                 labelField="label"
                 valueField="value"
                 placeholder={!isFocus ? "Select item" : "..."}

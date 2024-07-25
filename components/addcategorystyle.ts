@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(162, 129, 177, 0.95)",
     borderRadius: 25,
     marginLeft: 10,
-    marginBottom: 70,
+    marginBottom: 10,
     marginTop: 60,
   },
   heading: {
@@ -41,6 +41,12 @@ export const styles = StyleSheet.create({
     color: "white",
   },
   categoryname: {
+    justifyContent: "flex-start",
+    marginRight: 60,
+    marginLeft: 20,
+    paddingBottom: 40,
+  },
+  categorytype: {
     justifyContent: "flex-start",
     marginRight: 60,
     marginLeft: 20,
@@ -65,7 +71,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingLeft: 50,
-    marginTop: 200,
+    marginTop: 100,
     paddingRight: 50,
   },
   closebutton: {

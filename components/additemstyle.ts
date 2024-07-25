@@ -70,6 +70,7 @@ export const styles = StyleSheet.create({
     marginLeft: 20,
     paddingBottom: 50,
     paddingRight: 140,
+    zIndex: 1000,
   },
   dropdown: {
     height: 40,
@@ -77,6 +78,12 @@ export const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 9,
     borderColor: "white",
+  },
+  dropdownContainer: {
+    marginTop: 21,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 8,
   },
   textstyle: {
     color: "white",

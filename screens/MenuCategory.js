@@ -75,7 +75,8 @@ const CategoryScreen = () => {
         <View style={styles.body}>
           <View style={styles.translucentRectangle}>
             <View style={styles.translucentRectangleHeader}>
-              <Text style={styles.textCategory}>Category Name</Text>
+              <Text style={styles.textCategoryName}>Category Name</Text>
+              <Text style={styles.textCategoryType}>Category Type</Text>
               <Text style={styles.textAction}>Action</Text>
             </View>
             <ScrollView style={styles.scrollview}>
@@ -85,6 +86,7 @@ const CategoryScreen = () => {
                 renderItem={({ item }) => (
                   <View style={styles.categoryRow}>
                     <Text style={styles.categoryName}>{item.name}</Text>
+                    <Text style={styles.categoryName}>{item.type}</Text>
                     <Icon
                       name="delete"
                       size={30}

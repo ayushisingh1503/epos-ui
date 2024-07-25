@@ -11,48 +11,75 @@ import {
   FlatList,
   TouchableOpacity,
   Pressable,
+  StatusBar,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-virtualized-view";
 import { LinearGradient } from "expo-linear-gradient";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-const List = [
+
+const list = [
   { id: "1", name: "Starter" },
-  { id: "2", name: "Main Course", title: "Explorer" },
-  { id: "3", name: "Dessert", title: "Outline" },
+  { id: "2", name: "Main Course" },
+  { id: "3", name: "Dessert" },
 ];
 
+const menuList = [
+  { id: "1", name: "Rice" },
+  { id: "2", name: "Ice Tea" },
+  { id: "3", name: "Ice Cream" },
+  { id: "1", name: "Rice" },
+  { id: "2", name: "Ice Tea" },
+  { id: "3", name: "Ice Cream" },
+];
 export default NewOrder = ({ navigation }) => {
-  const [categoryList, setCategoryList] = useState([]);
+  const MenuCard = ({ item }) => {
+    const [pressedItems, setPressedItems] = useState({});
+    const handleItemPress = () => {};
+    return (
+      <View style={styles.card}>
+        <Image
+          source={require("../assets/Screenshot 2024-07-25 041950.png")}
+          style={styles.foodImage}
+        ></Image>
+        <Text></Text>
+      </View>
+    );
+  };
+  const Categories = ({ item }) => {
+    const [pressedItems, setPressedItems] = useState({});
+    const handleItemPress = () => {};
+    return <Text></Text>;
+  };
 
   return (
     <ImageContainer source={require("../assets/layout.png")}>
+      <StatusBar animated={true} backgroundColor="rgba(211, 130, 225, 0.75)" />
       <View style={styles.container}>
         <GradientBackground>
           <View style={styles.leftContainer}>
             <View style={styles.leftSidePanel1}>
-              <Pressable style={styles.menuIcons} onPress={""}>
+              <Pressable style={styles.foodIcon} onPress={""}>
                 <Image
                   source={require("../assets/Dinner.png")}
                   style={styles.image}
                 />
                 <Text style={styles.menuText}>Kitchen Order</Text>
               </Pressable>
-              <Pressable style={styles.menuIcons}>
+              <Pressable style={styles.barIcon}>
                 <Image
                   source={require("../assets/Cocktail.png")}
                   style={styles.image}
                 />
                 <Text style={styles.menuText}>Bar Order</Text>
               </Pressable>
-              <Pressable style={styles.menuIcons}>
+              <Pressable style={styles.messageIcon}>
                 <Image
                   source={require("../assets/Letter.png")}
                   style={styles.image}
                 />
                 <Text style={styles.menuText}>Message</Text>
               </Pressable>
-              <Pressable style={styles.menuIcons}>
+              <Pressable style={styles.logoutIcon}>
                 <Image
                   source={require("../assets/Sports Mode.png")}
                   style={styles.image}
@@ -63,13 +90,23 @@ export default NewOrder = ({ navigation }) => {
             <View style={styles.leftSidePanel2}>
               <ScrollView style={styles.scrollview}>
                 <FlatList
-                  data={categoryList}
-                  renderItem={""}
+                  data={list}
                   keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => <Categories item={item} />}
                 />
               </ScrollView>
             </View>
-            <View style={styles.centerPanel}></View>
+            <View style={styles.centerPanel}>
+              <ScrollView style={styles.scrollview}>
+                <FlatList
+                  data={menuList}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => <MenuCard item={item} />}
+                  vertical={true}
+                  numColumns={4}
+                />
+              </ScrollView>
+            </View>
           </View>
         </GradientBackground>
         <View style={styles.rightContainer}>
