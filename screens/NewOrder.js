@@ -13,13 +13,15 @@ import {
   TouchableOpacity,
   Pressable,
   StatusBar,
+  Modal,
+  TextInput,
+  Button,
 } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-virtualized-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 import { orderStatuses } from "../helpers/constants";
 
 const menuList = [
@@ -37,6 +39,8 @@ export default NewOrder = ({ navigation }) => {
   const [categoryType, setCategoryType] = useState("Kitchen");
   const [orderList, setOrderList] = useState([]);
   const [order, setOrder] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
+  const [note, setNote] = useState("");
 
   const refreshComponent = () => {
     setRefresh((currentValue) => !currentValue);
@@ -61,17 +65,60 @@ export default NewOrder = ({ navigation }) => {
     })();
   }, [refresh, categoryType]);
 
+  const nanoidNumbers = customAlphabet("1234567890", 5);
+  const getFormattedDateTime = () => {
+    const currentDate = new Date();
+
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const day = days[currentDate.getDay()];
+    const date = ("0" + currentDate.getDate()).slice(-2);
+    const month = months[currentDate.getMonth()];
+    const year = currentDate.getFullYear().toString().slice(-2);
+    const hours = ("0" + currentDate.getHours()).slice(-2);
+    const minutes = ("0" + currentDate.getMinutes()).slice(-2);
+    const seconds = ("0" + currentDate.getSeconds()).slice(-2);
+
+    return `${day}, ${date}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+  };
+
   useEffect(() => {
     if (!order.order_number) {
       setOrder((currentOrder) => {
+        const newOrderNumber = nanoidNumbers();
         return {
           ...order,
-          order_number: nanoid(5),
+          order_number: newOrderNumber,
           status: orderStatuses.open,
+          dateTime: getFormattedDateTime(),
         };
       });
     }
-  }, []);
+  }, [order]);
+
+  const orderData = order.order_number ? [order] : [];
 
   const MenuCard = ({ item }) => {
     return (
@@ -159,26 +206,33 @@ export default NewOrder = ({ navigation }) => {
               <Image source={require("../assets/User..png")} />
               <Text style={styles.rContainerHeaderText}> Hi User,</Text>
             </View>
-            <View style={styles.orderDetails}>
-              <View style={styles.orderDetail1}>
-                <Text style={styles.orderNumber}> Order No: {" 23 "}</Text>
-              </View>
-              {/* <View style={styles.orderDetail2}>
-                <Text style={styles.tableNo}> Table No: {1} </Text>
-              </View> */}
-              <View style={styles.orderDetail3}>
-                <Text style={styles.orderStatus}> Status: {"Open"}</Text>
-              </View>
-              <View style={styles.orderDetail4}>
-                <Text style={styles.createdAt}> Date: {"23 Jul 2024"}</Text>
-              </View>
-            </View>
+            <FlatList
+              data={orderData}
+              keyExtractor={(item) => item.order_number}
+              renderItem={({ item }) => (
+                <View style={styles.orderDetails}>
+                  <View style={styles.orderDetail1}>
+                    <Text style={styles.orderNumber}>
+                      Order No: {item.order_number}
+                    </Text>
+                  </View>
+                  <View style={styles.orderDetail3}>
+                    <Text style={styles.orderStatus}>
+                      Status: {item.status}
+                    </Text>
+                  </View>
+                  <View style={styles.orderDetail4}>
+                    <Text style={styles.createdAt}>Date : {item.dateTime}</Text>
+                  </View>
+                </View>
+              )}
+            />
           </View>
           <View style={styles.rContainerBody}>
             <ScrollView style={styles.scrollview}>
               <FlatList data={""} keyExtractor={""} renderItem={""} />
             </ScrollView>
-            <TouchableOpacity onPress={""}>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
               <LinearGradient
                 colors={["#180564", "#745B93"]}
                 style={styles.notesLinearGradient}
@@ -189,6 +243,40 @@ export default NewOrder = ({ navigation }) => {
                 ></Image>
               </LinearGradient>
             </TouchableOpacity>
+            <Modal
+              animationType="none"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => setModalVisible(false)}
+            >
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Add Note</Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Enter your note here"
+                  value={note}
+                  onChangeText={setNote}
+                />
+                <View style={styles.noteButton}>
+                  <TouchableOpacity onPress={""}>
+                    <LinearGradient
+                      colors={["#180564", "#745B93"]}
+                      style={styles.linearGradient}
+                    >
+                      <Text style={styles.buttonText}>Save Note</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setModalVisible(false)}>
+                    <LinearGradient
+                      colors={["#180564", "#745B93"]}
+                      style={styles.linearGradient}
+                    >
+                      <Text style={styles.buttonText}>Close</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
           </View>
           <View style={styles.rContainerFooter}>
             <TouchableOpacity onPress={""}>
