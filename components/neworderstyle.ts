@@ -38,6 +38,8 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "rgba(252, 252, 252, 0.19)",
     marginRight: 10,
+    marginVertical: 10,
+    marginBottom: 30,
   },
   centerPanel: {
     flex: 0.95,
@@ -158,14 +160,31 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   leftSidePanel2: {
-    flex: 0.2,
+    flex: 0.16,
     flexDirection: "column",
     backgroundColor: "rgba(252, 252, 252, 0.19)",
+    marginVertical: 10,
+    marginBottom: 30,
+    paddingTop: 40,
+    paddingLeft: 20,
+    paddingBottom: 40,
+  },
+  categoryList: {
+    fontSize: 16,
+    fontWeight: "400",
+    color: "white",
+    marginVertical: 10,
   },
   foodIcon: {
     paddingTop: 50,
     paddingBottom: 20,
     paddingLeft: 10,
+  },
+  itemDetails: {
+    fontSize: 14,
+    fontWeight: "300",
+    color: "white",
+    alignSelf: "center",
   },
   barIcon: {
     paddingTop: 20,

@@ -101,7 +101,7 @@ export default Inventory = () => {
       // setDisableButton(true);
     }
   };
-
+  console.log(itemList);
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       <View style={styles.container}>
