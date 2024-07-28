@@ -52,7 +52,13 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@eslint/compat": "^1.1.1",
+    "eslint": "^9.8.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-native": "^4.1.0",
+    "globals": "^15.8.0"
   },
   "private": true
 }

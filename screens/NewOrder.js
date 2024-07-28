@@ -1,4 +1,4 @@
-import react, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import "react-native-get-random-values";
 import {
   GradientBackground,
@@ -24,8 +24,9 @@ import { axiosWrapper } from "../helpers/axiosWrapper";
 import { customAlphabet } from "nanoid";
 import { orderStatuses } from "../helpers/constants";
 import AddNote from "../Modal/AddNote";
+import { MenuList } from "./MenuList";
 
-export default NewOrder = ({ navigation }) => {
+export const NewOrder = () => {
   const [refresh, setRefresh] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
   const [categoryType, setCategoryType] = useState("Kitchen");
@@ -108,7 +109,7 @@ export default NewOrder = ({ navigation }) => {
         };
       });
     }
-  }, [order]);
+  }, [nanoidNumbers, order]);
 
   useEffect(() => {
     (async () => {
@@ -122,7 +123,6 @@ export default NewOrder = ({ navigation }) => {
 
         const itemsPayload = items.data.payload;
         const inventoryPayload = inventory.data.payload;
-
         const list = itemsPayload.items
           .filter((i) =>
             inventoryPayload.items.some((iItem) => i.item_id === iItem.item_id)
@@ -148,9 +148,8 @@ export default NewOrder = ({ navigation }) => {
     })();
   }, [refresh, selectedCategory]);
 
-  const create = useCallback(() => {
-    //
-  }, [order]);
+  // const create = useCallback(() => {
+  // }, []);
 
   const incrementQuantity = useCallback(
     async ({ itemId }) => {
@@ -199,7 +198,9 @@ export default NewOrder = ({ navigation }) => {
             return {
               ...item,
               quantity:
-                item.item_id === itemId ? item.quantity + 1 : item.quantity,
+                item.menuItem.item_id === itemId
+                  ? item.quantity + 1
+                  : item.quantity,
             };
             // is the same as
             // if (item.item_id === itemId) {
@@ -224,75 +225,70 @@ export default NewOrder = ({ navigation }) => {
         console.log("Error", err);
       }
     },
-    [order]
+    [inventoryItemList, order.items]
   );
 
-  const decrementQuantity = async ({ itemId, quantity }) => {
-    try {
-      const instance = await axiosWrapper();
-      const { store_id } = await getLoggedInUser();
-      const reqBody = { itemId, quantity: quantity - 1 };
-      // await instance.post(`/neworder/${store_id}`, reqBody);
+  const decrementQuantity = useCallback(
+    async ({ itemId }) => {
+      try {
+        const currentItemInOrder = order.items?.some(
+          (item) => item.menuItem?.item_id === itemId
+        );
 
-      setInventoryItemList((prevItems) =>
-        prevItems.map((item) =>
-          item.item_id === itemId && item.quantity > 0
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
-        )
-      );
-    } catch (err) {
-      //@todo: show toast message
-      console.log("Error", err);
-    }
-  };
+        const currentItemInInventory = inventoryItemList.find(
+          (item) => item.item_id === itemId
+        );
 
-  const MenuList = ({ item }) => {
-    return (
-      <View style={styles.card}>
-        <Image
-          source={require("../assets/Screenshot 2024-07-25 041950.png")}
-          style={styles.foodImage}
-        ></Image>
-        <View style={styles.imagedescription}>
-          <Text style={styles.itemDetails}>{item.name}</Text>
-          <Text style={styles.itemDetails}>$ {item.price}</Text>
-        </View>
-        <View style={styles.quantityContainer}>
-          <TouchableOpacity
-            onPress={() =>
-              decrementQuantity({
-                itemId: item.item_id,
-                quantity: item.quantity,
-              })
-            }
-          >
-            <LinearGradient
-              colors={["#180564", "#745B93"]}
-              style={styles.decrementGradient}
-            >
-              <Text style={styles.buttonText}>-</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          <Text style={styles.itemQuantity}>{item.quantity}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              incrementQuantity({
-                itemId: item.item_id,
-              });
-            }}
-          >
-            <LinearGradient
-              colors={["#180564", "#745B93"]}
-              style={styles.incrementGradient}
-            >
-              <Text style={styles.buttonText}>+</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
+        if (!currentItemInInventory) {
+          //show toast message
+          return;
+        }
+
+        if (!currentItemInOrder) {
+          const orderItems = [
+            ...(order.items ?? []),
+            {
+              menuItem: {
+                category: currentItemInInventory.category,
+                item_id: currentItemInInventory.item_id,
+                name: currentItemInInventory.name,
+                price: currentItemInInventory.price,
+                tax_rate: currentItemInInventory.tax_rate,
+              },
+              quantity: 1,
+            },
+          ];
+          setOrder((currentOrder) => {
+            return {
+              ...currentOrder,
+              items: orderItems,
+            };
+          });
+        } else {
+          const orderItems = order.items.map((item) => {
+            return {
+              ...item,
+              quantity:
+                item.menuItem.item_id === itemId
+                  ? item.quantity - 1
+                  : item.quantity,
+            };
+          });
+
+          setOrder((currentOrder) => {
+            return {
+              ...currentOrder,
+              items: orderItems,
+            };
+          });
+        }
+      } catch (err) {
+        //@todo: show toast message
+        console.log("Error", err);
+      }
+    },
+    [inventoryItemList, order.items]
+  );
 
   const Categories = ({ item }) => {
     return <Text style={styles.categoryList}>{item.name}</Text>;
@@ -369,7 +365,12 @@ export default NewOrder = ({ navigation }) => {
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
                     <View>
-                      <MenuList item={item} />
+                      <MenuList
+                        item={item}
+                        order={order}
+                        incrementQuantity={incrementQuantity}
+                        decrementQuantity={decrementQuantity}
+                      />
                     </View>
                   )}
                   vertical={true}
@@ -469,3 +470,5 @@ export default NewOrder = ({ navigation }) => {
     </ImageContainer>
   );
 };
+
+export default NewOrder;

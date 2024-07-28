@@ -239,7 +239,6 @@ export const styles = StyleSheet.create({
     backgroundColor: "#DBAEFF",
   },
   itemQuantity: {
-    marginRight: 5,
     fontSize: 16,
     fontWeight: "400",
   },
