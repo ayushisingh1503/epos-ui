@@ -1,4 +1,4 @@
-import react, { useState, useRef, useEffect } from "react";
+import react, { useState, useCallback, useEffect } from "react";
 import "react-native-get-random-values";
 import {
   GradientBackground,
@@ -23,24 +23,16 @@ import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { customAlphabet } from "nanoid";
 import { orderStatuses } from "../helpers/constants";
+import AddNote from "../Modal/AddNote";
 
-const menuList = [
-  { id: "1", name: "Rice", price: "$4.00" },
-  { id: "2", name: "Ice Tea", price: "$4.00" },
-  { id: "3", name: "Ice Cream", price: "$4.00" },
-  { id: "4", name: "Rice", price: "$4.00" },
-  { id: "5", name: "Ice Tea", price: "$4.00" },
-  { id: "6", name: "Ice Cream", price: "$4.00" },
-  { id: "7", name: "Rice", price: "$4.00" },
-];
 export default NewOrder = ({ navigation }) => {
   const [refresh, setRefresh] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
   const [categoryType, setCategoryType] = useState("Kitchen");
-  const [orderList, setOrderList] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [order, setOrder] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
-  const [note, setNote] = useState("");
+  const [inventoryItemList, setInventoryItemList] = useState([]);
 
   const refreshComponent = () => {
     setRefresh((currentValue) => !currentValue);
@@ -118,26 +110,202 @@ export default NewOrder = ({ navigation }) => {
     }
   }, [order]);
 
-  const orderData = order.order_number ? [order] : [];
+  useEffect(() => {
+    (async () => {
+      const { store_id } = await getLoggedInUser();
+      try {
+        const instance = await axiosWrapper();
+        const [items, inventory] = await Promise.all([
+          instance.get(`/menu/item/${store_id}`),
+          instance.get(`/inventory/${store_id}`),
+        ]);
 
-  const MenuCard = ({ item }) => {
+        const itemsPayload = items.data.payload;
+        const inventoryPayload = inventory.data.payload;
+
+        const list = itemsPayload.items
+          .filter((i) =>
+            inventoryPayload.items.some((iItem) => i.item_id === iItem.item_id)
+          )
+          .map((item) => {
+            const inventoryItem = inventoryPayload.items.find(
+              (i) => i.item_id === item.item_id
+            );
+            return {
+              ...item,
+              // quantity: inventoryItem?.quantity ?? 0,
+            };
+          });
+        const filteredList = list.filter(
+          (item) => item.category === selectedCategory
+        );
+
+        setInventoryItemList(filteredList);
+      } catch (err) {
+        console.error("User fetch error", err);
+        //@todo: add error toast
+      }
+    })();
+  }, [refresh, selectedCategory]);
+
+  const create = useCallback(() => {
+    //
+  }, [order]);
+
+  const incrementQuantity = useCallback(
+    async ({ itemId }) => {
+      try {
+        //@todo: show success toast message
+        /**
+         * Check if order already has items.
+         * Then we want to find the item with the correct itemId from inventory.
+         * If item is not already there in the order, we add it.
+         * If it is already there, we increment it.
+         */
+        const currentItemInOrder = order.items?.some(
+          (item) => item.menuItem?.item_id === itemId
+        );
+        const currentItemInInventory = inventoryItemList.find(
+          (item) => item.item_id === itemId
+        );
+
+        if (!currentItemInInventory) {
+          //show toast message
+          return;
+        }
+
+        if (!currentItemInOrder) {
+          const orderItems = [
+            ...(order.items ?? []),
+            {
+              menuItem: {
+                category: currentItemInInventory.category,
+                item_id: currentItemInInventory.item_id,
+                name: currentItemInInventory.name,
+                price: currentItemInInventory.price,
+                tax_rate: currentItemInInventory.tax_rate,
+              },
+              quantity: 1,
+            },
+          ];
+          setOrder((currentOrder) => {
+            return {
+              ...currentOrder,
+              items: orderItems,
+            };
+          });
+        } else {
+          const orderItems = order.items.map((item) => {
+            return {
+              ...item,
+              quantity:
+                item.item_id === itemId ? item.quantity + 1 : item.quantity,
+            };
+            // is the same as
+            // if (item.item_id === itemId) {
+            //   return {
+            //     ...item,
+            //     quantity: item.quantity + 1
+            //   }
+            // } else {
+            //   return item;
+            // }
+          });
+
+          setOrder((currentOrder) => {
+            return {
+              ...currentOrder,
+              items: orderItems,
+            };
+          });
+        }
+      } catch (err) {
+        //@todo: show toast message
+        console.log("Error", err);
+      }
+    },
+    [order]
+  );
+
+  const decrementQuantity = async ({ itemId, quantity }) => {
+    try {
+      const instance = await axiosWrapper();
+      const { store_id } = await getLoggedInUser();
+      const reqBody = { itemId, quantity: quantity - 1 };
+      // await instance.post(`/neworder/${store_id}`, reqBody);
+
+      setInventoryItemList((prevItems) =>
+        prevItems.map((item) =>
+          item.item_id === itemId && item.quantity > 0
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+      );
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  };
+
+  const MenuList = ({ item }) => {
     return (
       <View style={styles.card}>
         <Image
           source={require("../assets/Screenshot 2024-07-25 041950.png")}
           style={styles.foodImage}
         ></Image>
-        <Text style={styles.itemDetails}>{item.name}</Text>
-        <Text style={styles.itemDetails}> {item.price}</Text>
+        <View style={styles.imagedescription}>
+          <Text style={styles.itemDetails}>{item.name}</Text>
+          <Text style={styles.itemDetails}>$ {item.price}</Text>
+        </View>
+        <View style={styles.quantityContainer}>
+          <TouchableOpacity
+            onPress={() =>
+              decrementQuantity({
+                itemId: item.item_id,
+                quantity: item.quantity,
+              })
+            }
+          >
+            <LinearGradient
+              colors={["#180564", "#745B93"]}
+              style={styles.decrementGradient}
+            >
+              <Text style={styles.buttonText}>-</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <Text style={styles.itemQuantity}>{item.quantity}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              incrementQuantity({
+                itemId: item.item_id,
+              });
+            }}
+          >
+            <LinearGradient
+              colors={["#180564", "#745B93"]}
+              style={styles.incrementGradient}
+            >
+              <Text style={styles.buttonText}>+</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
+
   const Categories = ({ item }) => {
     return <Text style={styles.categoryList}>{item.name}</Text>;
   };
 
   return (
     <ImageContainer source={require("../assets/layout.png")}>
+      {modalVisible && (
+        <AddNote
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+      )}
       <StatusBar animated={true} backgroundColor="rgba(211, 130, 225, 0.75)" />
       <View style={styles.container}>
         <GradientBackground>
@@ -178,21 +346,32 @@ export default NewOrder = ({ navigation }) => {
                 <Text style={styles.menuText}>LogOut</Text>
               </Pressable>
             </View>
+
             <View style={styles.leftSidePanel2}>
               <ScrollView style={styles.scrollview}>
                 <FlatList
                   data={categoryList}
                   keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => <Categories item={item} />}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() => setSelectedCategory(item.name)}
+                    >
+                      <Categories item={item} />
+                    </TouchableOpacity>
+                  )}
                 />
               </ScrollView>
             </View>
             <View style={styles.centerPanel}>
               <ScrollView style={styles.scrollview}>
                 <FlatList
-                  data={menuList}
+                  data={inventoryItemList}
                   keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => <MenuCard item={item} />}
+                  renderItem={({ item }) => (
+                    <View>
+                      <MenuList item={item} />
+                    </View>
+                  )}
                   vertical={true}
                   numColumns={4}
                 />
@@ -200,6 +379,7 @@ export default NewOrder = ({ navigation }) => {
             </View>
           </View>
         </GradientBackground>
+
         <View style={styles.rightContainer}>
           <View style={styles.rContainerHeader}>
             <View style={styles.rContainerHeaderImage}>
@@ -207,11 +387,11 @@ export default NewOrder = ({ navigation }) => {
               <Text style={styles.rContainerHeaderText}> Hi User,</Text>
             </View>
             <FlatList
-              data={orderData}
+              data={[order]}
               keyExtractor={(item) => item.order_number}
               renderItem={({ item }) => (
                 <View style={styles.orderDetails}>
-                  <View style={styles.orderDetail1}>
+                  {/* <View style={styles.orderDetail1}>
                     <Text style={styles.orderNumber}>
                       Order No: {item.order_number}
                     </Text>
@@ -223,14 +403,36 @@ export default NewOrder = ({ navigation }) => {
                   </View>
                   <View style={styles.orderDetail4}>
                     <Text style={styles.createdAt}>Date : {item.dateTime}</Text>
-                  </View>
+                  </View> */}
                 </View>
               )}
             />
           </View>
           <View style={styles.rContainerBody}>
             <ScrollView style={styles.scrollview}>
-              <FlatList data={""} keyExtractor={""} renderItem={""} />
+              <FlatList
+                data={[order]}
+                keyExtractor={(item) => item.order_number}
+                renderItem={({ item }) => (
+                  <View style={styles.orderDetails}>
+                    <View style={styles.orderDetail1}>
+                      <Text style={styles.orderNumber}>
+                        Order No: {item.order_number}
+                      </Text>
+                    </View>
+                    <View style={styles.orderDetail3}>
+                      <Text style={styles.orderStatus}>
+                        Status: {item.status}
+                      </Text>
+                    </View>
+                    <View style={styles.orderDetail4}>
+                      <Text style={styles.createdAt}>
+                        Date : {item.dateTime}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+              />
             </ScrollView>
             <TouchableOpacity onPress={() => setModalVisible(true)}>
               <LinearGradient
@@ -243,40 +445,6 @@ export default NewOrder = ({ navigation }) => {
                 ></Image>
               </LinearGradient>
             </TouchableOpacity>
-            <Modal
-              animationType="none"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => setModalVisible(false)}
-            >
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Add Note</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Enter your note here"
-                  value={note}
-                  onChangeText={setNote}
-                />
-                <View style={styles.noteButton}>
-                  <TouchableOpacity onPress={""}>
-                    <LinearGradient
-                      colors={["#180564", "#745B93"]}
-                      style={styles.linearGradient}
-                    >
-                      <Text style={styles.buttonText}>Save Note</Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setModalVisible(false)}>
-                    <LinearGradient
-                      colors={["#180564", "#745B93"]}
-                      style={styles.linearGradient}
-                    >
-                      <Text style={styles.buttonText}>Close</Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
           </View>
           <View style={styles.rContainerFooter}>
             <TouchableOpacity onPress={""}>

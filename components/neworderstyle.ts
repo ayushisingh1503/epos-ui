@@ -30,9 +30,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     flexGrow: 1,
   },
-  drawerContainer: {
-    flex: 1,
-  },
   leftSidePanel1: {
     flex: 0.07,
     flexDirection: "column",
@@ -128,6 +125,7 @@ export const styles = StyleSheet.create({
   },
   rContainerBody: {
     flex: 0.7,
+    flexDirection: "column",
   },
   notesLinearGradient: {
     paddingVertical: 10,
@@ -180,7 +178,6 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "300",
     color: "white",
-    alignSelf: "center",
   },
   barIcon: {
     paddingTop: 20,
@@ -216,7 +213,6 @@ export const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    width: 100,
     backgroundColor: "#8737C6",
     overflow: "hidden",
     borderRadius: 8,
@@ -230,32 +226,48 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 10,
   },
-  noteButton: {
+  imagedescription: {
+    flex: 0.3,
     flexDirection: "row",
     justifyContent: "space-evenly",
+    marginBottom: 5,
+    marginTop: 5,
   },
-  modalView: {
-    marginLeft: 200,
-    marginTop: 150,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    width: "60%",
+  quantityContainer: {
+    flexDirection: "row",
+    padding: 5,
+    backgroundColor: "#DBAEFF",
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+  itemQuantity: {
+    marginRight: 5,
+    fontSize: 16,
+    fontWeight: "400",
+  },
+  incrementGradient: {
+    width: 30,
+    height: 30,
+    borderRadius: 100,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    marginHorizontal: 20,
+  },
+  decrementGradient: {
+    width: 30,
+    height: 30,
+    borderRadius: 100,
+    paddingHorizontal: 12,
+    paddingVertical: 2,
+    marginHorizontal: 20,
+  },
+  quantityText: {
     fontSize: 18,
-    fontWeight: "bold",
   },
-  textInput: {
-    width: "100%",
-    height: 80,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingLeft: 10,
-    marginBottom: 20,
-    flexWrap: "wrap",
+  itemLists: {
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "red",
+  },
+  itemdetail: {
+    flexDirection: "row",
   },
 });

@@ -10,8 +10,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   LogBox,
-  SafeAreaView,
 } from "react-native";
+import SafeAreaView from "react-native-safe-area-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/additemstyle";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -76,7 +76,7 @@ export default AddItems = ({
       };
       const response = await instance.post(`/menu/item/${store_id}`, reqBody);
       const { payload } = response.data;
-      const inventoryReq = { item_id: payload.itemId, quantity: 0 };
+      const inventoryReq = { item_id: payload.item_id, quantity: 0 };
       await instance.post(`/inventory/${store_id}`, inventoryReq);
 
       setModalVisible(!modalVisible);
@@ -140,6 +140,7 @@ export default AddItems = ({
                   <Text style={styles.textstyle}>Price</Text>
                   <TextInput
                     placeholder="Enter Item Price"
+                    keyboardType="decimal-pad"
                     style={styles.textInput}
                     value={price}
                     onChangeText={setPrice}
@@ -149,6 +150,7 @@ export default AddItems = ({
                   <Text style={styles.textstyle}>Tax Rate</Text>
                   <TextInput
                     placeholder="Enter Tax Rate"
+                    keyboardType="number-pad"
                     style={styles.textInput}
                     onChangeText={setTaxRate}
                     value={taxRate}

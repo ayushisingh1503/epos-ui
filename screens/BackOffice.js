@@ -127,8 +127,6 @@ export default BackOffice = ({ navigation }) => {
               keyExtractor={(item) => item.id}
               vertical={true}
               numColumns={5}
-              // columnWrapperStyle={styles.row}
-              // showsVerticalScrollIndicator={true}
             />
           </ScrollView>
         </View>

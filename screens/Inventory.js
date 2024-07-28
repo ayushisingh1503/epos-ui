@@ -61,7 +61,7 @@ export default Inventory = () => {
       setDisableButton(true);
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
-      const reqBody = { itemId, quantity: quantity + 1 };
+      const reqBody = { item_id: itemId, quantity: quantity + 1 };
       await instance.patch(`/inventory/${store_id}`, reqBody);
 
       // to check the immediate value of the state
@@ -77,15 +77,15 @@ export default Inventory = () => {
     } catch (err) {
       //@todo: show toast message
       console.log("Error", err);
-      setDisableButton(true);
+      setDisableButton(false);
     }
   };
   const decrementQuantity = async ({ itemId, quantity }) => {
     try {
-      // setDisableButton(true);
+      setDisableButton(true);
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
-      const reqBody = { itemId, quantity: quantity - 1 };
+      const reqBody = { item_id: itemId, quantity: quantity - 1 };
       await instance.patch(`/inventory/${store_id}`, reqBody);
 
       setItemList((prevItems) =>
@@ -95,13 +95,13 @@ export default Inventory = () => {
             : item
         )
       );
+      setDisableButton(false);
     } catch (err) {
       //@todo: show toast message
       console.log("Error", err);
-      // setDisableButton(true);
+      setDisableButton(false);
     }
   };
-  console.log(itemList);
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       <View style={styles.container}>
