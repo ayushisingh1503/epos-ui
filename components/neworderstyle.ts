@@ -52,6 +52,9 @@ export const styles = StyleSheet.create({
   scrollview: {
     flex: 1,
   },
+  view: {
+    flex: 1,
+  },
   itemIcon: {
     marginVertical: 5,
     color: "white",
@@ -61,13 +64,14 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
   },
   rContainerHeader: {
-    flex: 0.25,
+    flex: 0.15,
+    borderBottomWidth: 0.6,
   },
   rContainerHeaderImage: {
     flexDirection: "row",
     paddingLeft: 15,
     paddingTop: 8,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   rContainerHeaderText: {
     paddingTop: 10,
@@ -80,44 +84,38 @@ export const styles = StyleSheet.create({
     backgroundColor: "red",
   },
   orderDetails: {
-    flex: 0.3,
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    flexWrap: "wrap",
+    flex: 0.7,
+    flexDirection: "column",
     padding: 10,
-    borderColor: "#000000",
-    borderBottomWidth: 1.3,
+    marginTop: 20,
+    marginBottom: 20,
   },
-  orderDetail1: {
+  line: {
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+    marginBottom: 20,
+  },
+  orderItemRow: {
+    flex: 1,
     flexDirection: "row",
-    justifyContent: "flex-start",
-    marginRight: 20,
-    marginLeft: 17,
+    justifyContent: "space-between",
+    padding: 5,
+  },
+  orderItemText: {
+    fontWeight: "400",
+    fontSize: 14,
+  },
+  orderTotal: {
+    flex: 0.3,
+    flexDirection: "column",
+    padding: 10,
+    marginBottom: 20,
+    backgroundColor: "yellow",
   },
   orderNumber: {
-    // paddingTop: 10,
+    paddingLeft: 20,
     fontWeight: "400",
     fontSize: 14,
-  },
-  orderDetail2: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-  },
-  orderDetail3: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    marginBottom: 10,
-    marginRight: 30,
-  },
-  orderStatus: {
-    // paddingTop: 10,
-    fontWeight: "400",
-    fontSize: 14,
-  },
-  orderDetail4: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    marginLeft: 17,
   },
   createdAt: {
     fontWeight: "400",

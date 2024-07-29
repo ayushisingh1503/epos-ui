@@ -17,7 +17,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 
-export default AddUser = ({
+const AddUser = ({
   modalVisible,
   setModalVisible,
   selectedUser,
@@ -227,3 +227,4 @@ export default AddUser = ({
     </Modal>
   );
 };
+export default AddUser;

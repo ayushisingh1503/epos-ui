@@ -25,8 +25,9 @@ import { customAlphabet } from "nanoid";
 import { orderStatuses } from "../helpers/constants";
 import AddNote from "../Modal/AddNote";
 import { MenuList } from "./MenuList";
+import { format, date } from "date-fns";
 
-export const NewOrder = () => {
+export const NewOrder = ({ navigation }) => {
   const [refresh, setRefresh] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
   const [categoryType, setCategoryType] = useState("Kitchen");
@@ -34,6 +35,7 @@ export const NewOrder = () => {
   const [order, setOrder] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [inventoryItemList, setInventoryItemList] = useState([]);
+  const [message, setMessage] = useState("");
 
   const refreshComponent = () => {
     setRefresh((currentValue) => !currentValue);
@@ -57,59 +59,6 @@ export const NewOrder = () => {
       }
     })();
   }, [refresh, categoryType]);
-
-  const nanoidNumbers = customAlphabet("1234567890", 5);
-  const getFormattedDateTime = () => {
-    const currentDate = new Date();
-
-    const days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    const day = days[currentDate.getDay()];
-    const date = ("0" + currentDate.getDate()).slice(-2);
-    const month = months[currentDate.getMonth()];
-    const year = currentDate.getFullYear().toString().slice(-2);
-    const hours = ("0" + currentDate.getHours()).slice(-2);
-    const minutes = ("0" + currentDate.getMinutes()).slice(-2);
-    const seconds = ("0" + currentDate.getSeconds()).slice(-2);
-
-    return `${day}, ${date}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-  };
-
-  useEffect(() => {
-    if (!order.order_number) {
-      setOrder((currentOrder) => {
-        const newOrderNumber = nanoidNumbers();
-        return {
-          ...order,
-          order_number: newOrderNumber,
-          status: orderStatuses.open,
-          dateTime: getFormattedDateTime(),
-        };
-      });
-    }
-  }, [nanoidNumbers, order]);
 
   useEffect(() => {
     (async () => {
@@ -139,7 +88,6 @@ export const NewOrder = () => {
         const filteredList = list.filter(
           (item) => item.category === selectedCategory
         );
-
         setInventoryItemList(filteredList);
       } catch (err) {
         console.error("User fetch error", err);
@@ -148,8 +96,21 @@ export const NewOrder = () => {
     })();
   }, [refresh, selectedCategory]);
 
-  // const create = useCallback(() => {
-  // }, []);
+  const nanoidNumbers = customAlphabet("1234567890", 5);
+
+  useEffect(() => {
+    if (!order.order_number) {
+      setOrder((currentOrder) => {
+        const newOrderNumber = nanoidNumbers();
+        return {
+          ...order,
+          order_number: newOrderNumber,
+          status: orderStatuses.open,
+          // dateTime: format(new date(), "EEEE, yyyy-MM-dd HH:mm:ss"),
+        };
+      });
+    }
+  }, [nanoidNumbers, order]);
 
   const incrementQuantity = useCallback(
     async ({ itemId }) => {
@@ -290,6 +251,24 @@ export const NewOrder = () => {
     [inventoryItemList, order.items]
   );
 
+  const createOrder = useCallback(async () => {
+    try {
+      const instance = await axiosWrapper();
+      const { store_id, name } = await getLoggedInUser();
+      const reqBody = {
+        items: order.items,
+        order_number: order.order_number,
+        staff_name: name,
+      };
+      await instance.post(`/order/${store_id}`, reqBody);
+      refreshComponent();
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  }, [order]);
+
   const Categories = ({ item }) => {
     return <Text style={styles.categoryList}>{item.name}</Text>;
   };
@@ -387,27 +366,14 @@ export const NewOrder = () => {
               <Image source={require("../assets/User..png")} />
               <Text style={styles.rContainerHeaderText}> Hi User,</Text>
             </View>
-            <FlatList
-              data={[order]}
-              keyExtractor={(item) => item.order_number}
-              renderItem={({ item }) => (
-                <View style={styles.orderDetails}>
-                  {/* <View style={styles.orderDetail1}>
-                    <Text style={styles.orderNumber}>
-                      Order No: {item.order_number}
-                    </Text>
-                  </View>
-                  <View style={styles.orderDetail3}>
-                    <Text style={styles.orderStatus}>
-                      Status: {item.status}
-                    </Text>
-                  </View>
-                  <View style={styles.orderDetail4}>
-                    <Text style={styles.createdAt}>Date : {item.dateTime}</Text>
-                  </View> */}
-                </View>
-              )}
-            />
+            <View style={styles.view}>
+              <Text style={styles.orderNumber}>
+                Order Number : {order.order_number}
+              </Text>
+              <Text style={styles.orderNumber}>
+                Order Status : {order.status}
+              </Text>
+            </View>
           </View>
           <View style={styles.rContainerBody}>
             <ScrollView style={styles.scrollview}>
@@ -416,21 +382,22 @@ export const NewOrder = () => {
                 keyExtractor={(item) => item.order_number}
                 renderItem={({ item }) => (
                   <View style={styles.orderDetails}>
-                    <View style={styles.orderDetail1}>
-                      <Text style={styles.orderNumber}>
-                        Order No: {item.order_number}
-                      </Text>
-                    </View>
-                    <View style={styles.orderDetail3}>
-                      <Text style={styles.orderStatus}>
-                        Status: {item.status}
-                      </Text>
-                    </View>
-                    <View style={styles.orderDetail4}>
-                      <Text style={styles.createdAt}>
-                        Date : {item.dateTime}
-                      </Text>
-                    </View>
+                    {item.items?.map((orderItem, index) => {
+                      return (
+                        <View key={index} style={styles.orderItemRow}>
+                          <View>
+                            <Text>
+                              {orderItem.quantity} x {orderItem.menuItem.name}
+                            </Text>
+                          </View>
+                          <View>
+                            <Text style={styles.orderItemText}>
+                              $ {orderItem.menuItem.price}
+                            </Text>
+                          </View>
+                        </View>
+                      );
+                    })}
                   </View>
                 )}
               />
@@ -448,7 +415,7 @@ export const NewOrder = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.rContainerFooter}>
-            <TouchableOpacity onPress={""}>
+            <TouchableOpacity onPress={createOrder}>
               <LinearGradient
                 colors={["#0B7415", "#60D95E"]}
                 style={styles.linearGradient}

@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, LogBox } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/modifyorderstyle";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
+import { format } from "date-fns";
 
-export default ModifyOrder = ({
+const ModifyOrder = ({
   refreshComponent,
   selectedOrder,
   setSelectedOrder,
   setModalVisible,
   modalVisible,
 }) => {
+  const [orderStatus, setOrderStatus] = useState("");
   useEffect(() => {
     (async () => {
       LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
@@ -23,7 +25,7 @@ export default ModifyOrder = ({
     try {
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
-
+      // const {} = orderReq,
       await instance.post(`/order/${store_id}/${order_id}`, orderReq);
       setSelectedOrder(undefined);
       setModalVisible(!modalVisible);
@@ -33,18 +35,6 @@ export default ModifyOrder = ({
       //@todo: show toast message
       console.log("Error", err);
     }
-  };
-
-  const convertTimestampToDate = (timestamp) => {
-    const date = new Date(timestamp * 1000); // Convert to milliseconds
-    const year = date.getFullYear();
-    const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based
-    const day = ("0" + date.getDate()).slice(-2);
-    const hours = ("0" + date.getHours()).slice(-2);
-    const minutes = ("0" + date.getMinutes()).slice(-2);
-    const seconds = ("0" + date.getSeconds()).slice(-2);
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
   return (
@@ -69,7 +59,7 @@ export default ModifyOrder = ({
             <View style={styles.orderRow}>
               <Text style={styles.orderNum}>{selectedOrder.order_number}</Text>
               <Text style={styles.orderDate}>
-                {convertTimestampToDate(selectedOrder.created_at_index)}
+                {format(selectedOrder.created_at, "EEEE, yyyy-MM-dd HH:mm:ss")}
               </Text>
               <Text style={styles.orderAmount}>${selectedOrder.amount}</Text>
               <Text style={styles.orderStaff}>{selectedOrder.staff_name}</Text>
@@ -104,32 +94,42 @@ export default ModifyOrder = ({
                 </View>
                 <View style={styles.itemVat}>
                   <Text style={styles.menuVat}>Total VAT: </Text>
-                  <Text style={styles.menuVat}>
-                    $ {selectedOrder.total_vat}
-                  </Text>
+                  <Text style={styles.menuVat}>$ {selectedOrder.totalVat}</Text>
                 </View>
               </View>
             </View>
             <View style={styles.footerbuttons}>
-              <TouchableOpacity style={styles.kitchenbutton} onPress={""}>
-                <LinearGradient
-                  colors={["#60D95E", "#0B7415"]}
-                  style={styles.kitchenbutton}
-                >
-                  <Text style={styles.buttonText}>Move to Kitchen</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.closebutton}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <LinearGradient
-                  colors={["#EE1414", "#880B0B"]}
+              <View style={styles.footerbuttonRow1}>
+                <TouchableOpacity style={styles.orderbutton} onPress={""}>
+                  <LinearGradient
+                    colors={["#CC91E7", "#8E12EF"]}
+                    style={styles.orderbutton}
+                  >
+                    <Text style={styles.buttonText}>Go To Order</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.footerbuttonRow2}>
+                <TouchableOpacity style={styles.kitchenbutton} onPress={""}>
+                  <LinearGradient
+                    colors={["#60D95E", "#0B7415"]}
+                    style={styles.kitchenbutton}
+                  >
+                    <Text style={styles.buttonText}>Move to Kitchen</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
                   style={styles.closebutton}
+                  onPress={() => setModalVisible(!modalVisible)}
                 >
-                  <Text style={styles.buttonText}>Close</Text>
-                </LinearGradient>
-              </TouchableOpacity>
+                  <LinearGradient
+                    colors={["#EE1414", "#880B0B"]}
+                    style={styles.closebutton}
+                  >
+                    <Text style={styles.buttonText}>Close</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </KeyboardAwareScrollView>
@@ -137,3 +137,5 @@ export default ModifyOrder = ({
     </Modal>
   );
 };
+
+export default ModifyOrder;

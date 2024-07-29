@@ -1,6 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
 import styled from "styled-components/native";
-import { LinearGradient } from "expo-linear-gradient";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -85,16 +84,15 @@ export const styles = StyleSheet.create({
     color: "black",
     fontSize: 16,
     fontWeight: "400",
-    paddingLeft: 100,
-    paddingRight: 200,
+    paddingLeft: 120,
+    paddingRight: 180,
   },
   orderDate: {
-    flex: 0.3,
+    flex: 0.4,
     color: "black",
     fontSize: 16,
     fontWeight: "300",
     alignSelf: "center",
-    paddingLeft: 10,
   },
   orderAmount: {
     flex: 0.3,
@@ -102,7 +100,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "300",
     justifyContent: "center",
-    paddingLeft: 130,
+    paddingLeft: 70,
   },
   orderStaff: {
     flex: 0.3,
@@ -110,7 +108,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "300",
     justifyContent: "center",
-    paddingLeft: 130,
+    paddingLeft: 100,
   },
   dropdown: {
     height: 25,

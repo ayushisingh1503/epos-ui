@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
-    paddingLeft: 60,
+    paddingLeft: 50,
     marginLeft: 30,
   },
   orderDateTime: {
@@ -67,35 +67,34 @@ export const styles = StyleSheet.create({
     padding: 5,
   },
   orderNum: {
-    flex: 0.5,
+    flex: 0.4,
     color: "black",
     fontSize: 16,
     fontWeight: "400",
-    paddingLeft: 90,
+    paddingLeft: 100,
     marginLeft: 30,
   },
   orderDate: {
     color: "black",
-    flex: 0.5,
+    flex: 0.8,
     flexDirection: "row",
     fontSize: 16,
     fontWeight: "400",
-    paddingLeft: 20,
+    paddingLeft: 10,
   },
   orderAmount: {
     flex: 0.5,
     color: "black",
     fontSize: 16,
     fontWeight: "400",
-    paddingLeft: 110,
-    marginLeft: 30,
+    paddingLeft: 60,
   },
   orderStaff: {
     flex: 0.5,
     color: "black",
     fontSize: 16,
     fontWeight: "400",
-    paddingLeft: 90,
+    paddingLeft: 80,
     marginLeft: 30,
   },
   modalBody: {
@@ -174,9 +173,17 @@ export const styles = StyleSheet.create({
   },
   footerbuttons: {
     flex: 0.6,
-    marginTop: 400,
-    flexDirection: "row",
+    marginTop: 200,
+    flexDirection: "column",
     marginRight: 20,
+  },
+  footerbuttonRow1: {
+    flex: 0.6,
+    marginTop: 150,
+  },
+  footerbuttonRow2: {
+    flex: 0.6,
+    flexDirection: "row",
   },
   closebutton: {
     alignItems: "flex-start",
@@ -192,7 +199,9 @@ export const styles = StyleSheet.create({
     borderRadius: 15,
   },
   orderbutton: {
-    flex: 0.6,
+    flex: 1,
+    padding: 10,
+    borderRadius: 15,
     alignItems: "flex-start",
   },
   gotoOrderButton: {

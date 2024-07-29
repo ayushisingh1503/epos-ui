@@ -8,7 +8,7 @@ import InKitchenOrder from "./InKitchenOrder";
 import CompleteOrder from "./CompleteOrder";
 import OpenOrder from "./OpenOrder";
 
-export default OrderList = ({ navigation }) => {
+export const OrderList = ({ navigation }) => {
   const logout = async () => {
     await AsyncStorage.clear();
     navigation.navigate("Login");
@@ -44,3 +44,4 @@ export default OrderList = ({ navigation }) => {
     </View>
   );
 };
+export default OrderList;

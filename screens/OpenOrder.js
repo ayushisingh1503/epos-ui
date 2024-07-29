@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
-import react, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { useState, useEffect } from "react";
 import { styles, ImageContainer } from "../components/openorderstyle";
 import { ScrollView } from "react-native-virtualized-view";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -8,15 +8,16 @@ import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import ModifyOrder from "../Modal/ModifyOrder";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
+import { format } from "date-fns";
 
 const OpenOrder = () => {
   const data = [
-    { label: "Last 1 week", value: "Last 1 week" },
-    { label: "Last 1 month", value: "Last 1 month" },
-    { label: "Last 6 months", value: "Last 6 months" },
+    { label: "Today", value: "today" },
+    { label: "Last 1 week", value: "last_7" },
+    { label: "Last 1 month", value: "last_30" },
   ];
 
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState("today");
   const [isFocus, setIsFocus] = useState(false);
   const [orderList, setOrderList] = useState([]);
   const [refresh, setRefresh] = useState(true);
@@ -32,7 +33,9 @@ const OpenOrder = () => {
       const { store_id } = await getLoggedInUser();
       try {
         const instance = await axiosWrapper();
-        const response = await instance.get(`/order/${store_id}`);
+        const response = await instance.get(`/order/${store_id}`, {
+          params: { timeSpan: value },
+        });
         const payload = response.data.payload;
         const orderList = payload.orders;
         setOrderList(orderList);
@@ -41,21 +44,10 @@ const OpenOrder = () => {
         //@todo: add error toast
       }
     })();
-  }, [refresh]);
+  }, [refresh, value]);
 
-  const filteredOrders = orderList.filter((order) => order.status == "open");
+  const filteredOrders = orderList.filter((order) => order.status === "open");
 
-  const convertTimestampToDate = (timestamp) => {
-    const date = new Date(timestamp * 1000); // Convert to milliseconds
-    const year = date.getFullYear();
-    const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based
-    const day = ("0" + date.getDate()).slice(-2);
-    const hours = ("0" + date.getHours()).slice(-2);
-    const minutes = ("0" + date.getMinutes()).slice(-2);
-    const seconds = ("0" + date.getSeconds()).slice(-2);
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
   const openModal = (order) => {
     setSelectedOrder(order);
     setModalVisible(true);
@@ -84,7 +76,6 @@ const OpenOrder = () => {
                 containerStyle={styles.dropdownContainer}
                 data={data}
                 value={value}
-                // search
                 maxHeight={200}
                 labelField="label"
                 valueField="value"
@@ -128,7 +119,7 @@ const OpenOrder = () => {
                     <Text style={styles.orderNum}>{item.order_number}</Text>
                   </TouchableOpacity>
                   <Text style={styles.orderDate}>
-                    {convertTimestampToDate(item.created_at_index)}
+                    {format(item.created_at, "EEEE, yyyy-MM-dd HH:mm:ss")}
                   </Text>
                   <Text style={styles.orderAmount}>${item.amount}</Text>
                   <Text style={styles.orderStaff}>{item.staff_name}</Text>

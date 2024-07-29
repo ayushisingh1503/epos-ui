@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, TextInput } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/addnotestyle";
 
-export default AddNote = ({ modalVisible, setModalVisible }) => {
+const AddNote = ({ modalVisible, setModalVisible }) => {
   const [note, setNote] = useState("");
 
   return (
@@ -43,3 +43,4 @@ export default AddNote = ({ modalVisible, setModalVisible }) => {
     </Modal>
   );
 };
+export default AddNote;
