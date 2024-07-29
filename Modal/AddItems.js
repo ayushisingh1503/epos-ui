@@ -19,7 +19,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 
-export default AddItems = ({
+const AddItems = ({
   modalVisible,
   setModalVisible,
   refreshComponent,
@@ -213,3 +213,5 @@ export default AddItems = ({
     </Modal>
   );
 };
+
+export default AddItems;

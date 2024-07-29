@@ -13,9 +13,6 @@ import {
   TouchableOpacity,
   Pressable,
   StatusBar,
-  Modal,
-  TextInput,
-  Button,
 } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,9 +22,10 @@ import { customAlphabet } from "nanoid";
 import { orderStatuses } from "../helpers/constants";
 import AddNote from "../Modal/AddNote";
 import { MenuList } from "./MenuList";
+import currency from "currency.js";
 import { format, date } from "date-fns";
 
-export const NewOrder = ({ navigation }) => {
+export const NewOrder = () => {
   const [refresh, setRefresh] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
   const [categoryType, setCategoryType] = useState("Kitchen");
@@ -35,7 +33,7 @@ export const NewOrder = ({ navigation }) => {
   const [order, setOrder] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [inventoryItemList, setInventoryItemList] = useState([]);
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
 
   const refreshComponent = () => {
     setRefresh((currentValue) => !currentValue);
@@ -72,19 +70,16 @@ export const NewOrder = ({ navigation }) => {
 
         const itemsPayload = items.data.payload;
         const inventoryPayload = inventory.data.payload;
-        const list = itemsPayload.items
-          .filter((i) =>
+        const list = itemsPayload.items.filter((i) => {
+          const inventoryItem = inventoryPayload.items.find(
+            (iItem) => i.item_id === iItem.item_id
+          );
+
+          return (
+            inventoryItem.quantity > 0 &&
             inventoryPayload.items.some((iItem) => i.item_id === iItem.item_id)
-          )
-          .map((item) => {
-            const inventoryItem = inventoryPayload.items.find(
-              (i) => i.item_id === item.item_id
-            );
-            return {
-              ...item,
-              // quantity: inventoryItem?.quantity ?? 0,
-            };
-          });
+          );
+        });
         const filteredList = list.filter(
           (item) => item.category === selectedCategory
         );
@@ -97,6 +92,22 @@ export const NewOrder = ({ navigation }) => {
   }, [refresh, selectedCategory]);
 
   const nanoidNumbers = customAlphabet("1234567890", 5);
+
+  const amount = order?.items?.reduce((acc, item) => {
+    acc = acc.add(currency(item.menuItem.price).multiply(item.quantity));
+
+    return acc;
+  }, currency(0)).value;
+
+  const totalVat = order?.items?.reduce((acc, item) => {
+    acc = acc.add(
+      currency(item.menuItem.tax_rate)
+        .divide(100)
+        .multiply(currency(item.menuItem.price).multiply(item.quantity))
+    );
+
+    return acc;
+  }, currency(0)).value;
 
   useEffect(() => {
     if (!order.order_number) {
@@ -239,7 +250,7 @@ export const NewOrder = ({ navigation }) => {
           setOrder((currentOrder) => {
             return {
               ...currentOrder,
-              items: orderItems,
+              items: orderItems.filter((item) => item.quantity > 0),
             };
           });
         }
@@ -251,6 +262,19 @@ export const NewOrder = ({ navigation }) => {
     [inventoryItemList, order.items]
   );
 
+  const setNote = useCallback((note) => {
+    try {
+      setOrder((currentOrder) => {
+        return {
+          ...currentOrder,
+          note: note,
+        };
+      });
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  }, []);
   const createOrder = useCallback(async () => {
     try {
       const instance = await axiosWrapper();
@@ -259,7 +283,9 @@ export const NewOrder = ({ navigation }) => {
         items: order.items,
         order_number: order.order_number,
         staff_name: name,
+        note: order.note,
       };
+      console.log(reqBody);
       await instance.post(`/order/${store_id}`, reqBody);
       refreshComponent();
       //@todo: show success toast message
@@ -279,6 +305,8 @@ export const NewOrder = ({ navigation }) => {
         <AddNote
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
+          setNote={setNote}
+          initialNote={order.note}
         />
       )}
       <StatusBar animated={true} backgroundColor="rgba(211, 130, 225, 0.75)" />
@@ -323,12 +351,14 @@ export const NewOrder = ({ navigation }) => {
             </View>
 
             <View style={styles.leftSidePanel2}>
-              <ScrollView style={styles.scrollview}>
+              <ScrollView style={styles.scrollview} nestedScrollEnabled={true}>
                 <FlatList
                   data={categoryList}
-                  keyExtractor={(item) => item.id}
+                  // keyExtractor={(item) => item.id}
+                  keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <TouchableOpacity
+                      key={item.id}
                       onPress={() => setSelectedCategory(item.name)}
                     >
                       <Categories item={item} />
@@ -337,6 +367,7 @@ export const NewOrder = ({ navigation }) => {
                 />
               </ScrollView>
             </View>
+
             <View style={styles.centerPanel}>
               <ScrollView style={styles.scrollview}>
                 <FlatList
@@ -376,12 +407,16 @@ export const NewOrder = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.rContainerBody}>
-            <ScrollView style={styles.scrollview}>
+            <ScrollView
+              style={styles.rightScrollView}
+              nestedScrollEnabled={true}
+            >
               <FlatList
                 data={[order]}
-                keyExtractor={(item) => item.order_number}
+                // keyExtractor={(item) => item.order_number}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                  <View style={styles.orderDetails}>
+                  <View style={styles.orderDetails} key={item.order_number}>
                     {item.items?.map((orderItem, index) => {
                       return (
                         <View key={index} style={styles.orderItemRow}>
@@ -392,7 +427,7 @@ export const NewOrder = ({ navigation }) => {
                           </View>
                           <View>
                             <Text style={styles.orderItemText}>
-                              $ {orderItem.menuItem.price}
+                              $ {orderItem.menuItem.price * orderItem.quantity}
                             </Text>
                           </View>
                         </View>
@@ -402,6 +437,24 @@ export const NewOrder = ({ navigation }) => {
                 )}
               />
             </ScrollView>
+            <View style={styles.orderAmountVat}>
+              <View style={styles.amount}>
+                <View>
+                  <Text style={styles.vat}>Total Amount :</Text>
+                </View>
+                <View>
+                  <Text style={styles.vat}>$ {amount}</Text>
+                </View>
+              </View>
+              <View style={styles.amount}>
+                <View>
+                  <Text style={styles.vat}>Total Vat :</Text>
+                </View>
+                <View>
+                  <Text style={styles.vat}>$ {totalVat}</Text>
+                </View>
+              </View>
+            </View>
             <TouchableOpacity onPress={() => setModalVisible(true)}>
               <LinearGradient
                 colors={["#180564", "#745B93"]}
@@ -423,7 +476,16 @@ export const NewOrder = ({ navigation }) => {
                 <Text style={styles.buttonText}>Place Order</Text>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity onPress={""}>
+            <TouchableOpacity
+              onPress={() => {
+                setOrder((currentOrder) => {
+                  return {
+                    ...currentOrder,
+                    items: [],
+                  };
+                });
+              }}
+            >
               <LinearGradient
                 colors={["#E93C3C", "#832222"]}
                 style={styles.linearGradient}

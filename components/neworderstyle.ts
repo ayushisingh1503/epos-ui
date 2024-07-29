@@ -52,6 +52,10 @@ export const styles = StyleSheet.create({
   scrollview: {
     flex: 1,
   },
+  rightScrollView: {
+    flex: 1,
+    borderBottomWidth: 1.6,
+  },
   view: {
     flex: 1,
   },
@@ -84,11 +88,12 @@ export const styles = StyleSheet.create({
     backgroundColor: "red",
   },
   orderDetails: {
-    flex: 0.7,
+    flex: 2,
     flexDirection: "column",
-    padding: 10,
-    marginTop: 20,
-    marginBottom: 20,
+    padding: 20,
+    marginTop: 10,
+    marginBottom: 10,
+    flexGrow: 1,
   },
   line: {
     borderBottomColor: "black",
@@ -266,5 +271,20 @@ export const styles = StyleSheet.create({
   },
   itemdetail: {
     flexDirection: "row",
+  },
+  orderAmountVat: {
+    flex: 0.3,
+    flexDirection: "column",
+    padding: 20,
+  },
+  amount: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 5,
+  },
+  vat: {
+    fontWeight: "400",
+    fontSize: 14,
   },
 });

@@ -3,9 +3,8 @@ import { View, Text, TouchableOpacity, Modal, TextInput } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/addnotestyle";
 
-const AddNote = ({ modalVisible, setModalVisible }) => {
-  const [note, setNote] = useState("");
-
+const AddNote = ({ modalVisible, setModalVisible, setNote, initialNote }) => {
+  const [modalNote, setModalNote] = useState(initialNote);
   return (
     <Modal
       animationType="fade"
@@ -18,24 +17,21 @@ const AddNote = ({ modalVisible, setModalVisible }) => {
         <TextInput
           style={styles.textInput}
           placeholder="Enter your note here"
-          value={note}
-          onChangeText={setNote}
+          value={modalNote}
+          onChangeText={setModalNote}
         />
         <View style={styles.noteButton}>
-          <TouchableOpacity onPress={""}>
+          <TouchableOpacity
+            onPress={() => {
+              setNote(modalNote);
+              setModalVisible(false);
+            }}
+          >
             <LinearGradient
               colors={["#180564", "#745B93"]}
               style={styles.linearGradient}
             >
               <Text style={styles.buttonText}>Save Note</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setModalVisible(false)}>
-            <LinearGradient
-              colors={["#180564", "#745B93"]}
-              style={styles.linearGradient}
-            >
-              <Text style={styles.buttonText}>Close</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
