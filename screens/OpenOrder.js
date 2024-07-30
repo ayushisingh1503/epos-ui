@@ -9,8 +9,9 @@ import { axiosWrapper } from "../helpers/axiosWrapper";
 import ModifyOrder from "../Modal/ModifyOrder";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 import { format } from "date-fns";
+import { orderStatuses } from "../helpers/constants";
 
-const OpenOrder = () => {
+const OpenOrder = ({ navigation }) => {
   const data = [
     { label: "Today", value: "today" },
     { label: "Last 1 week", value: "last_7" },
@@ -53,6 +54,8 @@ const OpenOrder = () => {
     setModalVisible(true);
   };
 
+  const parentScreen = orderStatuses.open;
+
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       {selectedOrder && (
@@ -62,6 +65,8 @@ const OpenOrder = () => {
           refreshComponent={refreshComponent}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
+          parentScreen={parentScreen}
+          navigation={navigation}
         />
       )}
       <View style={styles.container}>
@@ -121,7 +126,7 @@ const OpenOrder = () => {
                   <Text style={styles.orderDate}>
                     {format(item.created_at, "EEEE, yyyy-MM-dd HH:mm:ss")}
                   </Text>
-                  <Text style={styles.orderAmount}>${item.amount}</Text>
+                  <Text style={styles.orderAmount}>£{item.amount}.00</Text>
                   <Text style={styles.orderStaff}>{item.staff_name}</Text>
                 </View>
               )}

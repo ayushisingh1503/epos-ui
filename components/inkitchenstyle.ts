@@ -54,16 +54,6 @@ export const styles = StyleSheet.create({
   scrollview: {
     flex: 0.95,
   },
-  orderRow: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-    padding: 10,
-    borderRadius: 30,
-    width: "100%",
-    justifyContent: "center",
-  },
   orderStatus: {
     flex: 0.5,
     color: "white",
@@ -91,5 +81,41 @@ export const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 5,
+  },
+  orderRow: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
+    padding: 5,
+    borderRadius: 5,
+    width: "100%",
+    justifyContent: "center",
+    backgroundColor: "white",
+  },
+  orderNum: {
+    flex: 0.5,
+    justifyContent: "center",
+    color: "black",
+    fontSize: 16,
+    fontWeight: "400",
+    paddingLeft: 120,
+    paddingRight: 180,
+  },
+  orderDate: {
+    flex: 0.5,
+    color: "black",
+    fontSize: 16,
+    fontWeight: "300",
+    alignSelf: "center",
+    paddingLeft: 100,
+  },
+  orderStaff: {
+    flex: 0.5,
+    color: "black",
+    fontSize: 16,
+    fontWeight: "300",
+    justifyContent: "center",
+    paddingLeft: 150,
   },
 });

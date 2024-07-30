@@ -1,15 +1,9 @@
 import React from "react";
-import { TextInput, View, Keyboard, Button } from "react-native";
-import { Entypo } from "@expo/vector-icons";
+import { TextInput, View, Keyboard } from "react-native";
 import { styles } from "../components/searchBarstyle";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
-export default SearchBar = ({
-  clicked,
-  searchQuery,
-  setSearchQuery,
-  setClicked,
-}) => {
+const SearchBar = ({ clicked, searchQuery, setSearchQuery, setClicked }) => {
   return (
     <View style={styles.container}>
       <View
@@ -44,3 +38,4 @@ export default SearchBar = ({
     </View>
   );
 };
+export default SearchBar;

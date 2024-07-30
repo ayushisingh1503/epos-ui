@@ -25,15 +25,16 @@ import { MenuList } from "./MenuList";
 import currency from "currency.js";
 import { format, date } from "date-fns";
 
-export const NewOrder = () => {
+export const NewOrder = ({ route }) => {
+  const { selectedOrder } = route.params ?? {};
+
   const [refresh, setRefresh] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
   const [categoryType, setCategoryType] = useState("Kitchen");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [order, setOrder] = useState({});
+  const [order, setOrder] = useState(selectedOrder ?? {});
   const [modalVisible, setModalVisible] = useState(false);
   const [inventoryItemList, setInventoryItemList] = useState([]);
-  // const [message, setMessage] = useState("");
 
   const refreshComponent = () => {
     setRefresh((currentValue) => !currentValue);
@@ -285,7 +286,6 @@ export const NewOrder = () => {
         staff_name: name,
         note: order.note,
       };
-      console.log(reqBody);
       await instance.post(`/order/${store_id}`, reqBody);
       refreshComponent();
       //@todo: show success toast message
@@ -294,6 +294,33 @@ export const NewOrder = () => {
       console.log("Error", err);
     }
   }, [order]);
+
+  const updateOrder = useCallback(async () => {
+    try {
+      const instance = await axiosWrapper();
+      const { store_id, name } = await getLoggedInUser();
+      const order_id = selectedOrder?.order_id;
+      const reqBody = {
+        items: order.items,
+        order_number: order.order_number,
+        staff_name: name,
+        note: order.note,
+        status: selectedOrder.status,
+      };
+      await instance.put(`/order/${store_id}/${order_id}`, reqBody);
+      refreshComponent();
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  }, [
+    order.items,
+    order.note,
+    order.order_number,
+    selectedOrder?.order_id,
+    selectedOrder?.status,
+  ]);
 
   const Categories = ({ item }) => {
     return <Text style={styles.categoryList}>{item.name}</Text>;
@@ -354,7 +381,6 @@ export const NewOrder = () => {
               <ScrollView style={styles.scrollview} nestedScrollEnabled={true}>
                 <FlatList
                   data={categoryList}
-                  // keyExtractor={(item) => item.id}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <TouchableOpacity
@@ -427,7 +453,8 @@ export const NewOrder = () => {
                           </View>
                           <View>
                             <Text style={styles.orderItemText}>
-                              $ {orderItem.menuItem.price * orderItem.quantity}
+                              £ {orderItem.menuItem.price * orderItem.quantity}
+                              .00
                             </Text>
                           </View>
                         </View>
@@ -443,7 +470,7 @@ export const NewOrder = () => {
                   <Text style={styles.vat}>Total Amount :</Text>
                 </View>
                 <View>
-                  <Text style={styles.vat}>$ {amount}</Text>
+                  <Text style={styles.vat}>£ {amount}.00</Text>
                 </View>
               </View>
               <View style={styles.amount}>
@@ -451,7 +478,7 @@ export const NewOrder = () => {
                   <Text style={styles.vat}>Total Vat :</Text>
                 </View>
                 <View>
-                  <Text style={styles.vat}>$ {totalVat}</Text>
+                  <Text style={styles.vat}>£ {totalVat}</Text>
                 </View>
               </View>
             </View>
@@ -468,7 +495,15 @@ export const NewOrder = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.rContainerFooter}>
-            <TouchableOpacity onPress={createOrder}>
+            <TouchableOpacity
+              onPress={() => {
+                if (selectedOrder) {
+                  updateOrder();
+                } else {
+                  createOrder();
+                }
+              }}
+            >
               <LinearGradient
                 colors={["#0B7415", "#60D95E"]}
                 style={styles.linearGradient}

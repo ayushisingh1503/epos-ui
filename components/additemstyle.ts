@@ -46,30 +46,48 @@ export const styles = StyleSheet.create({
     marginLeft: 20,
     paddingBottom: 30,
   },
+
   outer: {
-    flex: 0.2,
+    flex: 1,
     flexDirection: "row",
   },
-  inner: {
-    flex: 0.2,
+  prieTaxCategory: {
+    flex: 0.5,
+    flexDirection: "column",
+  },
+  imageContainer: {
+    flex: 0.5,
+    flexDirection: "column",
+  },
+  image: {
+    flex: 0.5,
+    justifyContent: "flex-start",
+    marginLeft: 20,
+    paddingBottom: 30,
+  },
+
+  innerCategory: {
+    flex: 0.5,
+    flexDirection: "column",
   },
   tax: {
     flex: 0.5,
+    justifyContent: "flex-start",
+    marginLeft: 20,
+    paddingBottom: 30,
   },
   price: {
-    flex: 0.4,
+    flex: 0.5,
     justifyContent: "flex-start",
-    marginRight: 60,
     marginLeft: 20,
     paddingBottom: 30,
   },
   category: {
-    flex: 0.2,
-    flexDirection: "column",
+    flex: 0.5,
     justifyContent: "flex-start",
     marginLeft: 20,
     paddingBottom: 50,
-    paddingRight: 140,
+    paddingRight: 50,
     zIndex: 1000,
   },
   dropdown: {
@@ -78,12 +96,16 @@ export const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 9,
     borderColor: "white",
+    zIndex: 1000,
+    elevation: 1000,
   },
   dropdownContainer: {
     marginTop: 21,
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 8,
+    zIndex: 1000,
+    elevation: 1000,
   },
   textstyle: {
     color: "white",
@@ -111,7 +133,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingLeft: 50,
-    paddingTop: 70,
+    paddingTop: 50,
     paddingRight: 50,
   },
   closebutton: {

@@ -11,13 +11,13 @@ import {
   TouchableWithoutFeedback,
   LogBox,
 } from "react-native";
-import SafeAreaView from "react-native-safe-area-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/additemstyle";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DropDownPicker from "react-native-dropdown-picker";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 const AddItems = ({
   modalVisible,
@@ -136,42 +136,56 @@ const AddItems = ({
                 />
               </View>
               <View style={styles.outer}>
-                <View style={styles.price}>
-                  <Text style={styles.textstyle}>Price</Text>
-                  <TextInput
-                    placeholder="Enter Item Price"
-                    keyboardType="decimal-pad"
-                    style={styles.textInput}
-                    value={price}
-                    onChangeText={setPrice}
-                  />
+                <View style={styles.prieTaxCategory}>
+                  <View style={styles.price}>
+                    <Text style={styles.textstyle}>Price</Text>
+                    <TextInput
+                      placeholder="Enter Item Price"
+                      keyboardType="decimal-pad"
+                      style={styles.textInput}
+                      value={price}
+                      onChangeText={setPrice}
+                    />
+                  </View>
+                  <View style={styles.tax}>
+                    <Text style={styles.textstyle}>Tax Rate</Text>
+                    <TextInput
+                      placeholder="Enter Tax Rate"
+                      keyboardType="number-pad"
+                      style={styles.textInput}
+                      onChangeText={setTaxRate}
+                      value={taxRate}
+                    />
+                  </View>
                 </View>
-                <View style={styles.tax}>
-                  <Text style={styles.textstyle}>Tax Rate</Text>
-                  <TextInput
-                    placeholder="Enter Tax Rate"
-                    keyboardType="number-pad"
-                    style={styles.textInput}
-                    onChangeText={setTaxRate}
-                    value={taxRate}
-                  />
+                <View style={styles.imageContainer}>
+                  <View style={styles.image}>
+                    <Text style={styles.textstyle}>Image</Text>
+                    <TextInput
+                      placeholder="Upload an image"
+                      keyboardType="decimal-pad"
+                      style={styles.textInput}
+                      value={""}
+                      onChangeText={""}
+                    />
+                  </View>
+                  <View style={styles.innerCategory}>
+                    <View style={styles.category}>
+                      <Text style={styles.textstyle}>Category</Text>
+                      <DropDownPicker
+                        open={open}
+                        value={selectedCategory}
+                        items={category}
+                        setOpen={setOpen}
+                        setValue={setSelectedCategory}
+                        setItems={setCategory}
+                        style={styles.dropdown}
+                        dropDownContainerStyle={styles.dropdownContainer}
+                      />
+                    </View>
+                  </View>
                 </View>
               </View>
-              <SafeAreaView style={styles.inner}>
-                <View style={styles.category}>
-                  <Text style={styles.textstyle}>Category</Text>
-                  <DropDownPicker
-                    open={open}
-                    value={selectedCategory}
-                    items={category}
-                    setOpen={setOpen}
-                    setValue={setSelectedCategory}
-                    setItems={setCategory}
-                    style={styles.dropdown}
-                    dropDownContainerStyle={styles.dropdownContainer}
-                  />
-                </View>
-              </SafeAreaView>
               <View style={styles.footerbuttons}>
                 <TouchableOpacity
                   style={styles.closebutton}

@@ -8,7 +8,7 @@ import { ImageContainer, styles } from "../components/menucategorystyle";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 
-export default ItemsScreen = () => {
+const ItemsScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [itemList, setItemList] = useState([]);
@@ -111,8 +111,8 @@ export default ItemsScreen = () => {
                       <Text style={styles.itemNameText}>{item.name}</Text>
                     </TouchableOpacity>
                     <Text style={styles.itemCategory}>{item.category}</Text>
-                    <Text style={styles.itemPrice}>${item.price}</Text>
-                    <Text style={styles.itemTax}>{item.tax_rate}</Text>
+                    <Text style={styles.itemPrice}>£{item.price}.00</Text>
+                    <Text style={styles.itemTax}>{item.tax_rate}.00</Text>
                     <Icon
                       name="delete"
                       size={30}
@@ -131,3 +131,4 @@ export default ItemsScreen = () => {
     </ImageContainer>
   );
 };
+export default ItemsScreen;

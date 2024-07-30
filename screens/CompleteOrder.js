@@ -9,8 +9,9 @@ import { axiosWrapper } from "../helpers/axiosWrapper";
 import ModifyOrder from "../Modal/ModifyOrder";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 import { format } from "date-fns";
+import { orderStatuses } from "../helpers/constants";
 
-const CompleteOrder = () => {
+const CompleteOrder = ({ navigation }) => {
   const [value, setValue] = useState("today");
   const [isFocus, setIsFocus] = useState(false);
   const [orderList, setOrderList] = useState([]);
@@ -64,6 +65,8 @@ const CompleteOrder = () => {
           refreshComponent={refreshComponent}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
+          parentScreen={orderStatuses.complete}
+          navigation={navigation}
         />
       )}
       <View style={styles.container}>
@@ -123,7 +126,7 @@ const CompleteOrder = () => {
                   <Text style={styles.orderDate}>
                     {format(item.created_at, "EEEE, yyyy-MM-dd HH:mm:ss")}
                   </Text>
-                  <Text style={styles.orderAmount}>${item.amount}</Text>
+                  <Text style={styles.orderAmount}>£{item.amount}.00</Text>
                   <Text style={styles.orderStaff}>{item.staff_name}</Text>
                 </View>
               )}

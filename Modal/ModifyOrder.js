@@ -6,6 +6,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { format } from "date-fns";
+import { orderStatuses } from "../helpers/constants";
+import { useNavigation } from "@react-navigation/native";
 
 const ModifyOrder = ({
   refreshComponent,
@@ -13,20 +15,25 @@ const ModifyOrder = ({
   setSelectedOrder,
   setModalVisible,
   modalVisible,
+  parentScreen,
 }) => {
-  const [orderStatus, setOrderStatus] = useState("");
+  const navigation = useNavigation();
+
   useEffect(() => {
     (async () => {
       LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     })();
   }, []);
 
-  const updateOrder = async () => {
+  const moveToKitchen = async () => {
     try {
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
-      // const {} = orderReq,
-      await instance.post(`/order/${store_id}/${order_id}`, orderReq);
+      const order_id = selectedOrder.order_id;
+      const reqBody = {
+        status: orderStatuses.inkitchen,
+      };
+      await instance.patch(`/order/${store_id}/${order_id}`, reqBody);
       setSelectedOrder(undefined);
       setModalVisible(!modalVisible);
       refreshComponent();
@@ -36,7 +43,7 @@ const ModifyOrder = ({
       console.log("Error", err);
     }
   };
-
+  console.log(parentScreen);
   return (
     <Modal
       animationType="fade"
@@ -99,36 +106,70 @@ const ModifyOrder = ({
               </View>
             </View>
             <View style={styles.footerbuttons}>
-              <View style={styles.footerbuttonRow1}>
-                <TouchableOpacity style={styles.orderbutton} onPress={""}>
-                  <LinearGradient
-                    colors={["#CC91E7", "#8E12EF"]}
-                    style={styles.orderbutton}
-                  >
-                    <Text style={styles.buttonText}>Go To Order</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
+              <View style={styles.Row1}>
+                <View style={styles.moveToKitchenButton}>
+                  {parentScreen === orderStatuses.open && (
+                    <TouchableOpacity
+                      style={styles.kitchenbutton}
+                      onPress={moveToKitchen}
+                    >
+                      <LinearGradient
+                        colors={["#60D95E", "#0B7415"]}
+                        style={styles.kitchenbutton}
+                      >
+                        <Text style={styles.buttonText}>Move to Kitchen</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  )}
+                </View>
+
+                <View style={styles.footerPayButton}>
+                  {parentScreen === orderStatuses.inkitchen && (
+                    <TouchableOpacity style={styles.paybutton} onPress={""}>
+                      <LinearGradient
+                        colors={["#60D95E", "#0B7415"]}
+                        style={styles.paybutton}
+                      >
+                        <Text style={styles.buttonText}>Pay</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
-              <View style={styles.footerbuttonRow2}>
-                <TouchableOpacity style={styles.kitchenbutton} onPress={""}>
-                  <LinearGradient
-                    colors={["#60D95E", "#0B7415"]}
-                    style={styles.kitchenbutton}
-                  >
-                    <Text style={styles.buttonText}>Move to Kitchen</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.closebutton}
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <LinearGradient
-                    colors={["#EE1414", "#880B0B"]}
+              <View style={styles.Row2}>
+                <View style={styles.gotoOrderButton}>
+                  {parentScreen !== orderStatuses.complete && (
+                    <TouchableOpacity
+                      style={styles.orderbutton}
+                      onPress={() => {
+                        setModalVisible(false);
+                        navigation.navigate("NewOrder", {
+                          selectedOrder,
+                        });
+                      }}
+                    >
+                      <LinearGradient
+                        colors={["#CC91E7", "#8E12EF"]}
+                        style={styles.orderbutton}
+                      >
+                        <Text style={styles.buttonText}> Go To Order </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  )}
+                </View>
+                <View style={styles.footerCloseButton}>
+                  <TouchableOpacity
                     style={styles.closebutton}
+                    onPress={() => setModalVisible(!modalVisible)}
                   >
-                    <Text style={styles.buttonText}>Close</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
+                    <LinearGradient
+                      colors={["#EE1414", "#880B0B"]}
+                      style={styles.closebutton}
+                    >
+                      <Text style={styles.buttonText}>Close</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>

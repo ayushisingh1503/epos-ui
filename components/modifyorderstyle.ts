@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: "#CC91E7",
     borderRadius: 10,
-    marginBottom: 50,
+    marginBottom: 20,
   },
   modalHeaderText: {
     flex: 0.1,
@@ -98,7 +98,7 @@ export const styles = StyleSheet.create({
     marginLeft: 30,
   },
   modalBody: {
-    flex: 0.7,
+    flex: 1,
     flexDirection: "row",
     justifyContent: "flex-start",
   },
@@ -173,44 +173,57 @@ export const styles = StyleSheet.create({
   },
   footerbuttons: {
     flex: 0.6,
-    marginTop: 200,
+    marginTop: 350,
     flexDirection: "column",
-    marginRight: 20,
+    justifyContent: "flex-end",
+    flexWrap: "wrap",
   },
-  footerbuttonRow1: {
-    flex: 0.6,
-    marginTop: 150,
-  },
-  footerbuttonRow2: {
-    flex: 0.6,
+  Row1: {
+    flex: 0.2,
     flexDirection: "row",
   },
-  closebutton: {
-    alignItems: "flex-start",
-    padding: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
+
+  moveToKitchenButton: {
     borderRadius: 15,
-    marginRight: 30,
+    justifyContent: "center",
   },
   kitchenbutton: {
-    alignItems: "flex-start",
     padding: 10,
     borderRadius: 15,
+    justifyContent: "flex-start",
   },
-  orderbutton: {
-    flex: 1,
+  footerPayButton: {
+    borderRadius: 15,
+    justifyContent: "center",
+  },
+  paybutton: {
     padding: 10,
     borderRadius: 15,
-    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
+  Row2: {
+    flex: 0.2,
+    flexDirection: "row",
   },
   gotoOrderButton: {
-    padding: 10,
-    paddingLeft: 61,
-    paddingRight: 61,
     borderRadius: 15,
-    marginLeft: 20,
-    backgroundColor: "#A281B1",
+    justifyContent: "center",
+  },
+  orderbutton: {
+    padding: 10,
+    borderRadius: 15,
+    justifyContent: "flex-start",
+  },
+  footerCloseButton: {
+    borderRadius: 15,
+    justifyContent: "center",
+  },
+  closebutton: {
+    padding: 10,
+    borderRadius: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
+    justifyContent: "flex-start",
   },
   buttonText: {
     color: "white",
