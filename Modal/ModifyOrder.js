@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useCallback } from "react";
 import { View, Text, TouchableOpacity, Modal, LogBox } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/modifyorderstyle";
@@ -8,6 +8,7 @@ import { axiosWrapper } from "../helpers/axiosWrapper";
 import { format } from "date-fns";
 import { orderStatuses } from "../helpers/constants";
 import { useNavigation } from "@react-navigation/native";
+import { ToastConfig } from "../helpers/toastMessage";
 
 const ModifyOrder = ({
   refreshComponent,
@@ -25,7 +26,7 @@ const ModifyOrder = ({
     })();
   }, []);
 
-  const moveToKitchen = async () => {
+  const moveToKitchen = useCallback(async () => {
     try {
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
@@ -42,8 +43,39 @@ const ModifyOrder = ({
       //@todo: show toast message
       console.log("Error", err);
     }
-  };
-  console.log(parentScreen);
+  }, [
+    modalVisible,
+    refreshComponent,
+    selectedOrder.order_id,
+    setModalVisible,
+    setSelectedOrder,
+  ]);
+
+  const payForOrder = useCallback(async () => {
+    try {
+      const instance = await axiosWrapper();
+      const { store_id } = await getLoggedInUser();
+      const order_id = selectedOrder.order_id;
+      const reqBody = {
+        status: orderStatuses.complete,
+      };
+      await instance.patch(`/order/${store_id}/${order_id}`, reqBody);
+      setSelectedOrder(undefined);
+      setModalVisible(!modalVisible);
+      refreshComponent();
+      //@todo: show success toast message
+    } catch (err) {
+      //@todo: show toast message
+      console.log("Error", err);
+    }
+  }, [
+    modalVisible,
+    refreshComponent,
+    selectedOrder.order_id,
+    setModalVisible,
+    setSelectedOrder,
+  ]);
+
   return (
     <Modal
       animationType="fade"
@@ -60,7 +92,7 @@ const ModifyOrder = ({
             <View style={styles.modalHeaderText}>
               <Text style={styles.orderNumber}>Order Number</Text>
               <Text style={styles.orderDateTime}>Date & Time</Text>
-              <Text style={styles.orderNumber}>Amount</Text>
+              <Text style={styles.orderAmountHeader}>Amount</Text>
               <Text style={styles.orderNumber}>Staff Name</Text>
             </View>
             <View style={styles.orderRow}>
@@ -68,7 +100,7 @@ const ModifyOrder = ({
               <Text style={styles.orderDate}>
                 {format(selectedOrder.created_at, "EEEE, yyyy-MM-dd HH:mm:ss")}
               </Text>
-              <Text style={styles.orderAmount}>${selectedOrder.amount}</Text>
+              <Text style={styles.orderAmount}>£{selectedOrder.amount}</Text>
               <Text style={styles.orderStaff}>{selectedOrder.staff_name}</Text>
             </View>
           </View>
@@ -86,7 +118,7 @@ const ModifyOrder = ({
                       </View>
                       <View style={styles.itemRow2}>
                         <Text style={styles.textItems}>
-                          $ {item.menuItem.price}
+                          £ {item.menuItem.price}
                         </Text>
                       </View>
                     </View>
@@ -96,12 +128,12 @@ const ModifyOrder = ({
                 <View style={styles.itemAmount}>
                   <Text style={styles.menuAmount}>Total Amount: </Text>
                   <Text style={styles.menuAmount}>
-                    $ {selectedOrder.amount}
+                    £ {selectedOrder.amount}
                   </Text>
                 </View>
                 <View style={styles.itemVat}>
                   <Text style={styles.menuVat}>Total VAT: </Text>
-                  <Text style={styles.menuVat}>$ {selectedOrder.totalVat}</Text>
+                  <Text style={styles.menuVat}>£ {selectedOrder.totalVat}</Text>
                 </View>
               </View>
             </View>
@@ -125,7 +157,10 @@ const ModifyOrder = ({
 
                 <View style={styles.footerPayButton}>
                   {parentScreen === orderStatuses.inkitchen && (
-                    <TouchableOpacity style={styles.paybutton} onPress={""}>
+                    <TouchableOpacity
+                      style={styles.paybutton}
+                      onPress={payForOrder}
+                    >
                       <LinearGradient
                         colors={["#60D95E", "#0B7415"]}
                         style={styles.paybutton}
@@ -175,6 +210,7 @@ const ModifyOrder = ({
           </View>
         </KeyboardAwareScrollView>
       </LinearGradient>
+      <ToastConfig />
     </Modal>
   );
 };

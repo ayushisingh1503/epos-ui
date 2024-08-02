@@ -100,6 +100,7 @@ export const styles = StyleSheet.create({
     elevation: 1000,
   },
   dropdownContainer: {
+    maxHeight: 150,
     marginTop: 21,
     borderColor: "gray",
     borderWidth: 1,

@@ -378,9 +378,10 @@ export const NewOrder = ({ route }) => {
             </View>
 
             <View style={styles.leftSidePanel2}>
-              <ScrollView style={styles.scrollview} nestedScrollEnabled={true}>
+              <ScrollView style={styles.scrollview}>
                 <FlatList
                   data={categoryList}
+                  // keyExtractor={(item) => item.order_id}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <TouchableOpacity

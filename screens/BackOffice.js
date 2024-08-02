@@ -12,75 +12,62 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles, ImageContainer } from "../components/backofficestyle";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-virtualized-view";
+import { useEffect } from "react";
+import { getLoggedInUser } from "../helpers/getLoggedInUser";
+import { axiosWrapper } from "../helpers/axiosWrapper";
+import {
+  colorStatusMap,
+  itemStatuses,
+  itemStatusesUI,
+} from "../helpers/constants";
 
-export default BackOffice = ({ navigation }) => {
+const BackOffice = ({ navigation }) => {
   const logout = async () => {
     await AsyncStorage.clear();
     navigation.navigate("Login");
   };
 
-  const orders = [
-    {
-      id: "1",
-      table: "Order 02",
-      header: "#f57c00",
-      items: [
-        { id: "1", name: "Crispy Squid" },
-        { id: "2", name: "Paddron Peppers" },
-        { id: "3", name: "Garlic Prawns" },
-      ],
-    },
-    {
-      id: "2",
-      table: "Order 05",
-      items: [
-        { id: "4", name: "Garlic Prawns" },
-        { id: "5", name: "Crispy Squid" },
-        { id: "6", name: "Beef Wellington" },
-        { id: "7", name: "Duck breast" },
-      ],
-    },
-    {
-      id: "3",
-      table: "Order 08",
-      items: [
-        { id: "8", name: "Prawn Cocktail" },
-        { id: "9", name: "Paddron Peppers" },
-        { id: "10", name: "Duck breast" },
-        { id: "11", name: "Spaghetti Carbonara" },
-      ],
-    },
-    {
-      id: "4",
-      table: "Order 03",
-      items: [
-        { id: "12", name: "Fish Stew" },
-        { id: "13", name: "Duck breast" },
-      ],
-    },
-    {
-      id: "5",
-      table: "Order 07",
-      items: [
-        { id: "14", name: "Dirty Fries" },
-        { id: "15", name: "Onion Rings" },
-      ],
-    },
-  ];
-  const OrderCard = ({ order }) => {
-    const [pressedItems, setPressedItems] = useState({});
+  const [orderList, setOrderList] = useState([]);
+  const [refresh, setRefresh] = useState(true);
 
+  const refreshComponent = () => {
+    setRefresh((currentValue) => !currentValue);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const { store_id } = await getLoggedInUser();
+      try {
+        const instance = await axiosWrapper();
+        const response = await instance.get(`/order/${store_id}`, {
+          params: { timeSpan: "today" },
+        });
+
+        const payload = response.data.payload;
+        const orderList = payload.orders.filter(
+          (order) => order.status === itemStatuses.inkitchen
+        );
+
+        setOrderList(orderList);
+      } catch (err) {
+        console.error("User fetch error", err);
+        //@todo: add error toast
+      }
+    })();
+  }, [refresh]);
+
+  const OrderCard = ({ order }) => {
     const handleItemPress = (itemId) => {
-      setPressedItems((prevState) => ({
-        ...prevState,
-        [itemId]: !prevState[itemId],
-      }));
+      /**
+       * 1. Call backend to change item's status - patch /item
+       * 2. Update the orderList state with the updated status
+       */
     };
 
     return (
       <LinearGradient colors={["#180564", "#745B93"]} style={styles.card}>
         <View style={styles.cardheader}>
-          <Text style={styles.orderNo}>{order.table}</Text>
+          <Text style={styles.orderNo}>Order No : {order.order_number}</Text>
           <View style={styles.cardHeaderIcons}>
             <Icon name="clipboard" size={16} color="#fff" />
             <Text style={styles.orderNo}>....</Text>
@@ -94,22 +81,39 @@ export default BackOffice = ({ navigation }) => {
         <View style={styles.itemsList}>
           {order.items.map((item) => (
             <Pressable
-              key={item.id}
-              onPress={() => handleItemPress(item.id)}
+              key={item.menuItem.item_id}
+              onPress={() => handleItemPress(item.menuItem.item_id)}
               style={() => [
                 styles.item,
                 {
-                  backgroundColor: pressedItems[item.id]
-                    ? "#60D95E"
-                    : "transparent",
+                  backgroundColor: colorStatusMap[item.menuItem.status],
                 },
               ]}
             >
-              <Text style={styles.itemText}>{item.name}</Text>
+              <View style={styles.cardItems}>
+                <Text style={styles.itemText}>{item.quantity} x </Text>
+                <Text style={styles.itemText}>
+                  {item.menuItem.name} - {itemStatusesUI[item.menuItem.status]}
+                </Text>
+                {item.menuItem.status === "complete" && (
+                  <Icon name="check" size={16} color="black" />
+                )}
+                {/* <DropDownPicker
+                  open={open}
+                  value={value}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={setValue}
+                  setItems={setItems}
+                  style={styles.dropdown}
+                  zIndex={9999}
+                  dropDownContainerStyle={styles.dropdownContainer}
+                /> */}
+              </View>
             </Pressable>
           ))}
         </View>
-        <TouchableOpacity style={styles.noteIcon}>
+        <TouchableOpacity style={styles.noteIcon} onPress={""}>
           <Icon name="pencil" size={24} color="#fff" />
         </TouchableOpacity>
       </LinearGradient>
@@ -122,7 +126,7 @@ export default BackOffice = ({ navigation }) => {
         <View style={styles.cardContainer}>
           <ScrollView>
             <FlatList
-              data={orders}
+              data={orderList}
               renderItem={({ item }) => <OrderCard order={item} />}
               keyExtractor={(item) => item.id}
               vertical={true}
@@ -140,13 +144,11 @@ export default BackOffice = ({ navigation }) => {
         <View style={styles.cardContainer}>
           <ScrollView>
             <FlatList
-              data={orders}
+              data={orderList}
               renderItem={({ item }) => <OrderCard order={item} />}
               keyExtractor={(item) => item.id}
               vertical={true}
               numColumns={5}
-              // columnWrapperStyle={styles.row}
-              // showsVerticalScrollIndicator={true}
             />
           </ScrollView>
         </View>
@@ -161,7 +163,7 @@ export default BackOffice = ({ navigation }) => {
       <View style={styles.header}>
         <Text style={styles.text}>Kitchen</Text>
 
-        <TouchableOpacity onPress={""}>
+        <TouchableOpacity onPress={logout}>
           <LinearGradient
             colors={["#180564", "#745B93"]}
             style={styles.linearGradient}
@@ -177,9 +179,18 @@ export default BackOffice = ({ navigation }) => {
           tabBarLabelStyle: styles.tabBarLabel,
         }}
       >
-        <Tab.Screen name="Open" component={OpenOrder} />
-        <Tab.Screen name="Complete" component={CompleteOrder} />
+        <Tab.Screen
+          name="Open"
+          component={OpenOrder}
+          refreshComponent={refreshComponent}
+        />
+        <Tab.Screen
+          name="Complete"
+          component={CompleteOrder}
+          refreshComponent={refreshComponent}
+        />
       </Tab.Navigator>
     </View>
   );
 };
+export default BackOffice;

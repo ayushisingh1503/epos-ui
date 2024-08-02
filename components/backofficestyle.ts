@@ -72,13 +72,20 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   card: {
-    width: 200,
+    width: 300,
     backgroundColor: "#6A4CA8",
     marginHorizontal: 20,
     justifyContent: "space-between",
-    overflow: "hidden",
+    // overflow: "hidden",
     borderRadius: 8,
     marginBottom: 10,
+    padding: 15,
+    marginVertical: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
   },
   cardheader: {
     flexDirection: "column",
@@ -96,12 +103,19 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     paddingBottom: 5,
+    marginBottom: 5,
+    marginTop: 5,
     justifyContent: "center",
   },
 
   itemsList: {
     flex: 1,
     marginTop: 5,
+  },
+  cardItems: {
+    flex: 0.1,
+    flexDirection: "row",
+    alignItems: "center",
   },
   itemText: {
     fontSize: 14,
@@ -116,5 +130,21 @@ export const styles = StyleSheet.create({
   item: {
     padding: 5,
     marginBottom: 1,
+  },
+  dropdown: {
+    width: "60%",
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 30,
+    marginLeft: 20,
+    zIndex: 9999,
+    height: 60,
+  },
+  dropdownContainer: {
+    width: "60%",
+    borderColor: "gray",
+    marginLeft: 20,
+    zIndex: 9999,
+    borderRadius: 30,
   },
 });

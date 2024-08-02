@@ -15,6 +15,9 @@ const UserList = ({ navigation }) => {
 
   const [userList, setUserList] = useState([]);
   const [refresh, setRefresh] = useState(true);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(undefined);
 
   const refreshComponent = () => {
     setRefresh((currentValue) => !currentValue);
@@ -49,10 +52,6 @@ const UserList = ({ navigation }) => {
     }
   };
 
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(undefined);
-
   return (
     <ImageContainer source={require("../assets/layout.png")}>
       {editModalVisible && selectedUser && (
@@ -73,6 +72,7 @@ const UserList = ({ navigation }) => {
           refreshComponent={refreshComponent}
         />
       )}
+
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.title}>

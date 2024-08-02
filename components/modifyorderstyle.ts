@@ -60,6 +60,14 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     paddingLeft: 60,
   },
+  orderAmountHeader: {
+    flex: 0.5,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+    paddingLeft: 80,
+    marginLeft: 30,
+  },
   orderRow: {
     flex: 0.1,
     flexDirection: "row",
@@ -71,7 +79,7 @@ export const styles = StyleSheet.create({
     color: "black",
     fontSize: 16,
     fontWeight: "400",
-    paddingLeft: 100,
+    paddingLeft: 80,
     marginLeft: 30,
   },
   orderDate: {
@@ -94,7 +102,7 @@ export const styles = StyleSheet.create({
     color: "black",
     fontSize: 16,
     fontWeight: "400",
-    paddingLeft: 80,
+    paddingLeft: 40,
     marginLeft: 30,
   },
   modalBody: {
@@ -159,7 +167,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 8,
     color: "white",
-    paddingRight: 200,
+    paddingRight: 210,
   },
   itemVat: {
     flex: 0.05,
@@ -169,7 +177,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 8,
     color: "white",
-    paddingRight: 235,
+    paddingRight: 245,
   },
   footerbuttons: {
     flex: 0.6,

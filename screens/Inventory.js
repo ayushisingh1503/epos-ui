@@ -1,5 +1,5 @@
 import { ImageContainer, styles } from "../components/inventorystyle";
-import react, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import SearchBar from "../helpers/searchBar";
@@ -7,7 +7,7 @@ import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { ScrollView } from "react-native-virtualized-view";
 
-export default Inventory = () => {
+const Inventory = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [clicked, setClicked] = useState("");
   const [itemList, setItemList] = useState([]);
@@ -54,7 +54,7 @@ export default Inventory = () => {
     });
 
     setSearchList(tempList);
-  }, [searchQuery, itemList]);
+  }, [searchQuery, itemList, searchList]);
 
   const incrementQuantity = async ({ itemId, quantity }) => {
     try {
@@ -186,3 +186,4 @@ export default Inventory = () => {
     </ImageContainer>
   );
 };
+export default Inventory;

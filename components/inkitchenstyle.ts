@@ -116,6 +116,6 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "300",
     justifyContent: "center",
-    paddingLeft: 150,
+    paddingLeft: 100,
   },
 });

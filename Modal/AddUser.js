@@ -16,6 +16,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import DropDownPicker from "react-native-dropdown-picker";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
+import { showToast } from "../helpers/toastMessage";
+import { ToastConfig } from "../helpers/toastMessage";
 
 const AddUser = ({
   modalVisible,
@@ -48,7 +50,7 @@ const AddUser = ({
   const [name, setName] = useState(selectedUser?.name);
 
   const [items, setItems] = useState([
-    { label: "Admin", value: "admin" },
+    { label: "Owner", value: "owner" },
     { label: "Staff", value: "staff" },
     { label: "Manager", value: "manager" },
     { label: "Kitchen", value: "Kitchen" },
@@ -63,9 +65,9 @@ const AddUser = ({
       setSelectedUser(undefined);
       setEditModalVisible(!editModalVisible);
       refreshComponent();
-      //@todo: show success toast message
+      showToast("success", "Success", "User data updated successfully!");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", "Error", "Failed to update user data.");
       console.log("Error", err);
     }
   };
@@ -75,12 +77,13 @@ const AddUser = ({
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
       const reqBody = { emailId: email, pin, accessRole: value, name };
-      await instance.post(`/user/${store_id}`, reqBody);
+      const response = await instance.post(`/user/${store_id}`, reqBody);
       setModalVisible(!modalVisible);
       refreshComponent();
-      //@todo: show success toast message
+      const result = await response.json();
+      showToast("success", result.status, result.message);
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", "Error", err.response.data.message);
       console.log("Error", err);
     }
   };
@@ -224,6 +227,7 @@ const AddUser = ({
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      <ToastConfig />
     </Modal>
   );
 };

@@ -31,7 +31,6 @@ const CategoryScreen = () => {
       }
     })();
   }, [refresh]);
-
   const deleteCategory = async ({ categoryId }) => {
     try {
       const instance = await axiosWrapper();

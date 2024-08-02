@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from "../components/menustyle";
 import { LinearGradient } from "expo-linear-gradient";
 import CategoryScreen from "./MenuCategory";

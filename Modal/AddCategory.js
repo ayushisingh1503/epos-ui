@@ -16,11 +16,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 
-export default AddCategory = ({
-  modalVisible,
-  setModalVisible,
-  refreshComponent,
-}) => {
+const AddCategory = ({ modalVisible, setModalVisible, refreshComponent }) => {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
 
@@ -107,3 +103,4 @@ export default AddCategory = ({
     </Modal>
   );
 };
+export default AddCategory;

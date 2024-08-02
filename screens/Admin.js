@@ -108,7 +108,7 @@ const Admin = ({ navigation }) => {
               <Text style={styles.buttonText}>Inventory</Text>
             </LinearGradient>
           </TouchableOpacity>
-          {(role === "manager" || role === "admin") && (
+          {(role === "manager" || role === "owner") && (
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate("MenuLayout")}
@@ -125,7 +125,7 @@ const Admin = ({ navigation }) => {
               </LinearGradient>
             </TouchableOpacity>
           )}
-          {role === "admin" && (
+          {role === "owner" && (
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate("UserList")}

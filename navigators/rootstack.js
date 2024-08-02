@@ -5,13 +5,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Login from "../screens/Login";
 import Admin from "../screens/Admin";
-import AddUser from "../Modal/AddUser";
 import UserList from "../screens/UserList";
 import Inventory from "../screens/Inventory";
 import OrderList from "../screens/OrderList";
 import NewOrder from "../screens/NewOrder";
 import MenuLayout from "../screens/MenuLayout";
 import BackOffice from "../screens/BackOffice";
+import { ToastConfig } from "../helpers/toastMessage";
 
 const Stack = createNativeStackNavigator();
 const RootStack = () => {
@@ -107,6 +107,7 @@ const RootStack = () => {
           {pages}
         </Stack.Navigator>
       )}
+      <ToastConfig />
     </NavigationContainer>
   );
 };

@@ -1,21 +1,22 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { styles, ImageContainer } from "../components/completeorderstyle";
 import { ScrollView } from "react-native-virtualized-view";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Dropdown } from "react-native-element-dropdown";
-import { getLoggedInUser } from "../helpers/getLoggedInUser";
-import { axiosWrapper } from "../helpers/axiosWrapper";
 import ModifyOrder from "../Modal/ModifyOrder";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 import { format } from "date-fns";
 import { orderStatuses } from "../helpers/constants";
 
-const CompleteOrder = ({ navigation }) => {
-  const [value, setValue] = useState("today");
+const CompleteOrder = ({
+  navigation,
+  orderList,
+  value,
+  setValue,
+  setRefresh,
+}) => {
   const [isFocus, setIsFocus] = useState(false);
-  const [orderList, setOrderList] = useState([]);
-  const [refresh, setRefresh] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(undefined);
 
@@ -25,27 +26,13 @@ const CompleteOrder = ({ navigation }) => {
     { label: "Last 1 month", value: "last_30" },
   ];
 
-  const refreshComponent = () => {
+  const refreshComponent = useCallback(() => {
     setRefresh((currentValue) => !currentValue);
-  };
+  }, [setRefresh]);
 
   useEffect(() => {
-    (async () => {
-      const { store_id } = await getLoggedInUser();
-      try {
-        const instance = await axiosWrapper();
-        const response = await instance.get(`/order/${store_id}`, {
-          params: { timeSpan: value },
-        });
-        const payload = response.data.payload;
-        const orderList = payload.orders;
-        setOrderList(orderList);
-      } catch (err) {
-        console.error("User fetch error", err);
-        //@todo: add error toast
-      }
-    })();
-  }, [refresh, value]);
+    return () => refreshComponent();
+  }, [refreshComponent]);
 
   const filteredOrders = orderList.filter(
     (order) => order.status === "complete"
