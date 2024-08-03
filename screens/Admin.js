@@ -1,12 +1,27 @@
 import { Container, ImageContainer, styles } from "../components/adminstyle";
-import { View, Image, TouchableOpacity, Alert, Text } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+  Text,
+  StatusBar,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
+import { MessagesContext } from "../helpers/context";
+import MessageModal from "../Modal/MessageModal";
 
 const Admin = ({ navigation }) => {
   const [role, setRole] = useState("");
+  const [refresh, setRefresh] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const messages = useContext(MessagesContext);
+  const refreshComponent = () => {
+    setRefresh((currentValue) => !currentValue);
+  };
 
   useEffect(() => {
     (async () => {
@@ -17,7 +32,7 @@ const Admin = ({ navigation }) => {
     return () => {
       setRole("");
     };
-  }, []);
+  }, [refresh]);
 
   const handlePress = () => {
     Alert.alert("Image Pressed!", "You pressed the image.");
@@ -30,6 +45,15 @@ const Admin = ({ navigation }) => {
 
   return (
     <ImageContainer source={require("../assets/layout.png")}>
+      {modalVisible && (
+        <MessageModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          refreshComponent={refreshComponent}
+          messages={messages}
+        />
+      )}
+
       <Container>
         <View style={styles.containerOne}>
           <TouchableOpacity style={styles.button} onPress={logout}>
@@ -147,6 +171,16 @@ const Admin = ({ navigation }) => {
           <TouchableOpacity onPress={handlePress}>
             <Image
               source={require("../assets/Help.png")}
+              style={styles.imageStyle}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          >
+            <Image
+              source={require("../assets/Letter.png")}
               style={styles.imageStyle}
             />
           </TouchableOpacity>

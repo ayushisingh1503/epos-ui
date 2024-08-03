@@ -6,6 +6,7 @@ import SearchBar from "../helpers/searchBar";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { ScrollView } from "react-native-virtualized-view";
+import { showToast } from "../helpers/toastMessage";
 
 const Inventory = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,8 +39,8 @@ const Inventory = () => {
           });
         setItemList(list);
       } catch (err) {
+        showToast("error", err.response?.data?.message);
         console.error("User fetch error", err);
-        //@todo: add error toast
       }
     })();
   }, []);
@@ -69,9 +70,8 @@ const Inventory = () => {
         )
       );
       setDisableButton(false);
-      //@todo: show success toast message
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
       setDisableButton(false);
     }
@@ -93,7 +93,7 @@ const Inventory = () => {
       );
       setDisableButton(false);
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
       setDisableButton(false);
     }

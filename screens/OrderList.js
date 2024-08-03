@@ -9,6 +9,7 @@ import InKitchenOrder from "./InKitchenOrder";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import CompleteOrder from "./CompleteOrder";
 import OpenOrder from "./OpenOrder";
+import { showToast } from "../helpers/toastMessage";
 
 export const OrderList = ({ navigation }) => {
   const logout = async () => {
@@ -32,8 +33,8 @@ export const OrderList = ({ navigation }) => {
         const orderList = payload.orders;
         setOrderList(orderList);
       } catch (err) {
+        showToast("error", err.response?.data?.message);
         console.error("User fetch error", err);
-        //@todo: add error toast
       }
     })();
   }, [refresh, value]);

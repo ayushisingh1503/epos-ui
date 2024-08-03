@@ -17,7 +17,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import DropDownPicker from "react-native-dropdown-picker";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
-import Icon from "react-native-vector-icons/FontAwesome5";
+import { showToast } from "../helpers/toastMessage";
 
 const AddItems = ({
   modalVisible,
@@ -81,9 +81,9 @@ const AddItems = ({
 
       setModalVisible(!modalVisible);
       refreshComponent();
-      //@todo: show success toast message
+      showToast("success", "Item has been added");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   };
@@ -98,9 +98,9 @@ const AddItems = ({
       setSelectedItem(undefined);
       setEditModalVisible(!editModalVisible);
       refreshComponent();
-      //@todo: show success toast message
+      showToast("success", "Item has been updated");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   };

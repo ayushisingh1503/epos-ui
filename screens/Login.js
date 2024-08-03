@@ -16,6 +16,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { setCreds } from "../helpers/setCreds";
 import { axiosWrapper } from "../helpers/axiosWrapper";
+import { showToast } from "../helpers/toastMessage";
 
 const Login = ({ navigation }) => {
   const handleLogin = async ({ email, password }, { setSubmitting }) => {
@@ -32,7 +33,7 @@ const Login = ({ navigation }) => {
       setSubmitting(false);
       navigation.navigate("Admin");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   };

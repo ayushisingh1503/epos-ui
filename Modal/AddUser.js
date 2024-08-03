@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  LogBox,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/adduserstyle";
@@ -17,7 +18,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { showToast } from "../helpers/toastMessage";
-import { ToastConfig } from "../helpers/toastMessage";
+import Toast from "react-native-toast-message";
 
 const AddUser = ({
   modalVisible,
@@ -65,7 +66,7 @@ const AddUser = ({
       setSelectedUser(undefined);
       setEditModalVisible(!editModalVisible);
       refreshComponent();
-      showToast("success", "Success", "User data updated successfully!");
+      showToast("success", "User data updated successfully!");
     } catch (err) {
       showToast("error", "Error", "Failed to update user data.");
       console.log("Error", err);
@@ -77,16 +78,20 @@ const AddUser = ({
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
       const reqBody = { emailId: email, pin, accessRole: value, name };
-      const response = await instance.post(`/user/${store_id}`, reqBody);
+      await instance.post(`/user/${store_id}`, reqBody);
       setModalVisible(!modalVisible);
       refreshComponent();
-      const result = await response.json();
-      showToast("success", result.status, result.message);
+      showToast("success", "User created successfully");
     } catch (err) {
-      showToast("error", "Error", err.response.data.message);
-      console.log("Error", err);
+      showToast("error", err.response?.data?.message);
+      console.log("Error", JSON.stringify(err.response));
     }
   };
+  useEffect(() => {
+    (async () => {
+      LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    })();
+  }, []);
 
   const onPress = (value) => {
     if (value === "<--") {
@@ -227,7 +232,7 @@ const AddUser = ({
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-      <ToastConfig />
+      <Toast />
     </Modal>
   );
 };

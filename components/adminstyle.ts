@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     // paddingBottom : 150,
   },
   containerFour: {
-    flex: 0.13,
+    flex: 0.14,
     backgroundColor: "rgba(211, 130, 225, 0.75)",
     flexDirection: "row",
     width: "100%",

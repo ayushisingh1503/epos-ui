@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,8 @@ import { styles } from "../components/addcategorystyle";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
+import { showToast } from "../helpers/toastMessage";
+import Toast from "react-native-toast-message";
 
 const AddCategory = ({ modalVisible, setModalVisible, refreshComponent }) => {
   const [name, setName] = useState("");
@@ -28,9 +30,9 @@ const AddCategory = ({ modalVisible, setModalVisible, refreshComponent }) => {
       await instance.post(`/menu/category/${store_id}`, reqBody);
       setModalVisible(!modalVisible);
       refreshComponent();
-      //@todo: show success toast message
+      showToast("success", "New category has been added");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   };
@@ -100,6 +102,7 @@ const AddCategory = ({ modalVisible, setModalVisible, refreshComponent }) => {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      <Toast />
     </Modal>
   );
 };

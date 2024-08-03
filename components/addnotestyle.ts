@@ -40,4 +40,45 @@ export const styles = StyleSheet.create({
     fontWeight: "400",
     alignItems: "center",
   },
+  messageModal: {
+    marginLeft: 220,
+    marginTop: 150,
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    borderRadius: 20,
+    padding: 35,
+    width: "65%",
+  },
+  allMessages: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
+  },
+  messageList: {
+    flexDirection: "column",
+  },
+  closeButton: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    paddingTop: 60,
+  },
+  notificationIcon: {
+    marginLeft: 10,
+    marginTop: 5,
+    marginRight: 15,
+  },
+  messages: {
+    padding: 5,
+    flex: 0.1,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  messageText: {
+    fontSize: 16,
+    color: "white",
+    fontWeight: "400",
+    alignItems: "center",
+  },
 });

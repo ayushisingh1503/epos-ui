@@ -23,6 +23,8 @@ import { orderStatuses } from "../helpers/constants";
 import AddNote from "../Modal/AddNote";
 import { MenuList } from "./MenuList";
 import currency from "currency.js";
+import { showToast } from "../helpers/toastMessage";
+import Toast from "react-native-toast-message";
 import { format, date } from "date-fns";
 
 export const NewOrder = ({ route }) => {
@@ -53,6 +55,7 @@ export const NewOrder = ({ route }) => {
         );
         setCategoryList(filteredCategories);
       } catch (err) {
+        showToast("error", err.response?.data?.message);
         console.error("User fetch error", err);
         //@todo: add error toast
       }
@@ -127,7 +130,6 @@ export const NewOrder = ({ route }) => {
   const incrementQuantity = useCallback(
     async ({ itemId }) => {
       try {
-        //@todo: show success toast message
         /**
          * Check if order already has items.
          * Then we want to find the item with the correct itemId from inventory.
@@ -142,7 +144,7 @@ export const NewOrder = ({ route }) => {
         );
 
         if (!currentItemInInventory) {
-          //show toast message
+          showToast("Error", " Current item is not in inventory");
           return;
         }
 
@@ -194,7 +196,7 @@ export const NewOrder = ({ route }) => {
           });
         }
       } catch (err) {
-        //@todo: show toast message
+        showToast("error", err.response?.data?.message);
         console.log("Error", err);
       }
     },
@@ -256,7 +258,7 @@ export const NewOrder = ({ route }) => {
           });
         }
       } catch (err) {
-        //@todo: show toast message
+        showToast("error", err.response?.data?.message);
         console.log("Error", err);
       }
     },
@@ -271,8 +273,9 @@ export const NewOrder = ({ route }) => {
           note: note,
         };
       });
+      showToast("success", "Note has been saved");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.message);
       console.log("Error", err);
     }
   }, []);
@@ -288,10 +291,9 @@ export const NewOrder = ({ route }) => {
       };
       await instance.post(`/order/${store_id}`, reqBody);
       refreshComponent();
-      //@todo: show success toast message
+      showToast("success", "Order has been placed");
     } catch (err) {
-      //@todo: show toast message
-      console.log("Error", err);
+      showToast("error", err.response?.data?.message);
     }
   }, [order]);
 
@@ -309,9 +311,9 @@ export const NewOrder = ({ route }) => {
       };
       await instance.put(`/order/${store_id}/${order_id}`, reqBody);
       refreshComponent();
-      //@todo: show success toast message
+      showToast("success", "Order has been updated");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   }, [
@@ -361,13 +363,6 @@ export const NewOrder = ({ route }) => {
                 />
                 <Text style={styles.menuText}>Bar Order</Text>
               </Pressable>
-              <Pressable style={styles.messageIcon}>
-                <Image
-                  source={require("../assets/Letter.png")}
-                  style={styles.image}
-                />
-                <Text style={styles.menuText}>Message</Text>
-              </Pressable>
               <Pressable style={styles.logoutIcon}>
                 <Image
                   source={require("../assets/Sports Mode.png")}
@@ -381,7 +376,6 @@ export const NewOrder = ({ route }) => {
               <ScrollView style={styles.scrollview}>
                 <FlatList
                   data={categoryList}
-                  // keyExtractor={(item) => item.order_id}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <TouchableOpacity
@@ -532,6 +526,7 @@ export const NewOrder = ({ route }) => {
           </View>
         </View>
       </View>
+      <Toast />
     </ImageContainer>
   );
 };

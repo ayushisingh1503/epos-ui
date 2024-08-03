@@ -7,6 +7,7 @@ import AddItems from "../Modal/AddItems";
 import { ImageContainer, styles } from "../components/menucategorystyle";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
+import { showToast } from "../helpers/toastMessage";
 
 const ItemsScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -28,8 +29,8 @@ const ItemsScreen = () => {
         const payload = response.data.payload;
         setItemList(payload.items);
       } catch (err) {
+        showToast("error", err.response?.data?.message);
         console.error("User fetch error", err);
-        //@todo: add error toast
       }
     })();
   }, [refresh]);
@@ -45,9 +46,9 @@ const ItemsScreen = () => {
       );
       setItemList(filteredCategories);
 
-      //@todo: show success toast message
+      showToast("success", "Item has been deleted");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   };

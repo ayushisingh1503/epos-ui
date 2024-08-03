@@ -21,15 +21,15 @@ import {
   itemStatusesUI,
   statusTransitions,
 } from "../helpers/constants";
+import { showToast } from "../helpers/toastMessage";
 
 const BackOffice = ({ navigation }) => {
+  const [orderList, setOrderList] = useState([]);
+  const [refresh, setRefresh] = useState(true);
   const logout = async () => {
     await AsyncStorage.clear();
     navigation.navigate("Login");
   };
-
-  const [orderList, setOrderList] = useState([]);
-  const [refresh, setRefresh] = useState(true);
 
   const refreshComponent = () => {
     setRefresh((currentValue) => !currentValue);
@@ -73,7 +73,7 @@ const BackOffice = ({ navigation }) => {
           (item) => itemId === item.menuItem.item_id
         );
         if (!item) {
-          //@todo: toast "No item found"
+          showToast("success", "No item found");
           return;
         }
         const item_status = statusTransitions[item.menuItem?.status];
@@ -85,11 +85,10 @@ const BackOffice = ({ navigation }) => {
           `/order/${store_id}/${order_id}/itemStatus`,
           reqBody
         );
-
         refreshComponent();
-        //@todo: show success toast message
+        showToast("success", "Item status changed");
       } catch (err) {
-        //@todo: show toast message
+        showToast("error", err.response?.data?.message);
         console.log("Error", err);
       }
     };
@@ -161,24 +160,6 @@ const BackOffice = ({ navigation }) => {
       </ImageContainer>
     );
   };
-
-  // const CompleteOrder = () => {
-  //   return (
-  //     <ImageContainer source={require("../assets/layout.png")}>
-  //       <View style={styles.cardContainer}>
-  //         <ScrollView>
-  //           <FlatList
-  //             data={orderList}
-  //             renderItem={({ item }) => <OrderCard order={item} />}
-  //             keyExtractor={(item) => item.id}
-  //             vertical={true}
-  //             numColumns={5}
-  //           />
-  //         </ScrollView>
-  //       </View>
-  //     </ImageContainer>
-  //   );
-  // };
 
   const Tab = createMaterialTopTabNavigator();
 

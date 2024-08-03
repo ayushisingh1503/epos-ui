@@ -8,6 +8,7 @@ import { ScrollView } from "react-native-virtualized-view";
 import AddUser from "../Modal/AddUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
+import { showToast } from "../helpers/toastMessage";
 
 const UserList = ({ navigation }) => {
   // const navigation = Props.navigation
@@ -31,8 +32,8 @@ const UserList = ({ navigation }) => {
         const payload = response.data.payload;
         setUserList(payload.users);
       } catch (err) {
+        showToast("error", err.response?.data?.message);
         console.error("User fetch error", err);
-        //@todo: add error toast
       }
     })();
   }, [refresh]);
@@ -45,9 +46,9 @@ const UserList = ({ navigation }) => {
       const filteredUsers = userList.filter((user) => user.user_id !== userId);
       setUserList(filteredUsers);
 
-      //@todo: show success toast message
+      showToast("success", "User has been deleted");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   };

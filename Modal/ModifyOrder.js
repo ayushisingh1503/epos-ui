@@ -6,9 +6,10 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { format } from "date-fns";
-import { itemStatuses, orderStatuses } from "../helpers/constants";
+import { orderStatuses } from "../helpers/constants";
 import { useNavigation } from "@react-navigation/native";
-import { ToastConfig } from "../helpers/toastMessage";
+import { showToast } from "../helpers/toastMessage";
+import Toast from "react-native-toast-message";
 
 const ModifyOrder = ({
   refreshComponent,
@@ -38,9 +39,9 @@ const ModifyOrder = ({
       setSelectedOrder(undefined);
       setModalVisible(!modalVisible);
       refreshComponent();
-      //@todo: show success toast message
+      showToast("success", "Order has been moved to kitchen");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   }, [
@@ -63,9 +64,9 @@ const ModifyOrder = ({
       setSelectedOrder(undefined);
       setModalVisible(!modalVisible);
       refreshComponent();
-      //@todo: show success toast message
+      showToast("success", "Order has been paid");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   }, [
@@ -210,7 +211,7 @@ const ModifyOrder = ({
           </View>
         </KeyboardAwareScrollView>
       </LinearGradient>
-      <ToastConfig />
+      <Toast />
     </Modal>
   );
 };

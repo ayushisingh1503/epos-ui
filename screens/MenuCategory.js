@@ -7,6 +7,7 @@ import AddCategory from "../Modal/AddCategory";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { showToast } from "../helpers/toastMessage";
 
 const CategoryScreen = () => {
   const [categoryList, setCategoryList] = useState([]);
@@ -27,7 +28,7 @@ const CategoryScreen = () => {
         setCategoryList(payload.categories);
       } catch (err) {
         console.error("User fetch error", err);
-        //@todo: add error toast
+        showToast("error", err.response?.data?.message);
       }
     })();
   }, [refresh]);
@@ -42,9 +43,9 @@ const CategoryScreen = () => {
       );
       setCategoryList(filteredCategories);
 
-      //@todo: show success toast message
+      showToast("success", "Category has been deleted");
     } catch (err) {
-      //@todo: show toast message
+      showToast("error", err.response?.data?.message);
       console.log("Error", err);
     }
   };
