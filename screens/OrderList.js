@@ -45,7 +45,7 @@ export const OrderList = ({ navigation }) => {
       <View style={styles.header}>
         <Text style={styles.text}>Order List</Text>
 
-        <TouchableOpacity onPress={""}>
+        <TouchableOpacity onPress={logout}>
           <LinearGradient
             colors={["#180564", "#745B93"]}
             style={styles.linearGradient}

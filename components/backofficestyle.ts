@@ -147,4 +147,7 @@ export const styles = StyleSheet.create({
     zIndex: 9999,
     borderRadius: 30,
   },
+  icon: {
+    paddingLeft: 40,
+  },
 });

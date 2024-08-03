@@ -10,6 +10,12 @@ export const itemStatuses = {
   complete: "complete",
 };
 
+export const statusTransitions = {
+  not_started: "in_kitchen",
+  in_kitchen: "complete",
+  complete: "not_started",
+};
+
 export const itemStatusesUI = {
   not_started: "Not Started",
   in_kitchen: "In Kitchen",

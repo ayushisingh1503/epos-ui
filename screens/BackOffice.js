@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -16,9 +16,10 @@ import { useEffect } from "react";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import {
+  orderStatuses,
   colorStatusMap,
-  itemStatuses,
   itemStatusesUI,
+  statusTransitions,
 } from "../helpers/constants";
 
 const BackOffice = ({ navigation }) => {
@@ -34,34 +35,63 @@ const BackOffice = ({ navigation }) => {
     setRefresh((currentValue) => !currentValue);
   };
 
+  const fetchOrders = useCallback(async () => {
+    const { store_id } = await getLoggedInUser();
+
+    try {
+      const instance = await axiosWrapper();
+      const response = await instance.get(`/order/${store_id}`, {
+        params: { timeSpan: "today" },
+      });
+
+      const payload = response.data.payload;
+      const orderList = payload.orders.filter(
+        (order) => order.status === orderStatuses.inkitchen
+      );
+
+      setOrderList(orderList);
+    } catch (err) {
+      console.error("User fetch error", err);
+      //@todo: add error toast
+    }
+  }, []);
+
   useEffect(() => {
-    (async () => {
-      const { store_id } = await getLoggedInUser();
-      try {
-        const instance = await axiosWrapper();
-        const response = await instance.get(`/order/${store_id}`, {
-          params: { timeSpan: "today" },
-        });
+    (async () => await fetchOrders())();
+    const interval = setInterval(fetchOrders, 20 * 1000);
 
-        const payload = response.data.payload;
-        const orderList = payload.orders.filter(
-          (order) => order.status === itemStatuses.inkitchen
-        );
-
-        setOrderList(orderList);
-      } catch (err) {
-        console.error("User fetch error", err);
-        //@todo: add error toast
-      }
-    })();
-  }, [refresh]);
+    return () => clearInterval(interval);
+  }, [fetchOrders, refresh]);
 
   const OrderCard = ({ order }) => {
-    const handleItemPress = (itemId) => {
-      /**
-       * 1. Call backend to change item's status - patch /item
-       * 2. Update the orderList state with the updated status
-       */
+    const handleItemPress = async (itemId) => {
+      try {
+        const { store_id } = await getLoggedInUser();
+        const instance = await axiosWrapper();
+        const order_id = order.order_id;
+        const item = order.items.find(
+          (item) => itemId === item.menuItem.item_id
+        );
+        if (!item) {
+          //@todo: toast "No item found"
+          return;
+        }
+        const item_status = statusTransitions[item.menuItem?.status];
+        const reqBody = {
+          item_id: item.menuItem.item_id,
+          status: item_status,
+        };
+        await instance.patch(
+          `/order/${store_id}/${order_id}/itemStatus`,
+          reqBody
+        );
+
+        refreshComponent();
+        //@todo: show success toast message
+      } catch (err) {
+        //@todo: show toast message
+        console.log("Error", err);
+      }
     };
 
     return (
@@ -96,19 +126,13 @@ const BackOffice = ({ navigation }) => {
                   {item.menuItem.name} - {itemStatusesUI[item.menuItem.status]}
                 </Text>
                 {item.menuItem.status === "complete" && (
-                  <Icon name="check" size={16} color="black" />
+                  <Icon
+                    name="check"
+                    size={16}
+                    color="black"
+                    style={styles.icon}
+                  />
                 )}
-                {/* <DropDownPicker
-                  open={open}
-                  value={value}
-                  items={items}
-                  setOpen={setOpen}
-                  setValue={setValue}
-                  setItems={setItems}
-                  style={styles.dropdown}
-                  zIndex={9999}
-                  dropDownContainerStyle={styles.dropdownContainer}
-                /> */}
               </View>
             </Pressable>
           ))}
@@ -138,23 +162,23 @@ const BackOffice = ({ navigation }) => {
     );
   };
 
-  const CompleteOrder = () => {
-    return (
-      <ImageContainer source={require("../assets/layout.png")}>
-        <View style={styles.cardContainer}>
-          <ScrollView>
-            <FlatList
-              data={orderList}
-              renderItem={({ item }) => <OrderCard order={item} />}
-              keyExtractor={(item) => item.id}
-              vertical={true}
-              numColumns={5}
-            />
-          </ScrollView>
-        </View>
-      </ImageContainer>
-    );
-  };
+  // const CompleteOrder = () => {
+  //   return (
+  //     <ImageContainer source={require("../assets/layout.png")}>
+  //       <View style={styles.cardContainer}>
+  //         <ScrollView>
+  //           <FlatList
+  //             data={orderList}
+  //             renderItem={({ item }) => <OrderCard order={item} />}
+  //             keyExtractor={(item) => item.id}
+  //             vertical={true}
+  //             numColumns={5}
+  //           />
+  //         </ScrollView>
+  //       </View>
+  //     </ImageContainer>
+  //   );
+  // };
 
   const Tab = createMaterialTopTabNavigator();
 
@@ -180,15 +204,15 @@ const BackOffice = ({ navigation }) => {
         }}
       >
         <Tab.Screen
-          name="Open"
+          name="Open Orders"
           component={OpenOrder}
           refreshComponent={refreshComponent}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Complete"
           component={CompleteOrder}
           refreshComponent={refreshComponent}
-        />
+        /> */}
       </Tab.Navigator>
     </View>
   );

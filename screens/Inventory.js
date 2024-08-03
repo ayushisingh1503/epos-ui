@@ -45,16 +45,12 @@ const Inventory = () => {
   }, []);
 
   useEffect(() => {
-    if (searchList === "") {
-      setSearchList([]);
-    }
-
     const tempList = itemList.filter((item) => {
       return item.name.startsWith(searchQuery);
     });
 
     setSearchList(tempList);
-  }, [searchQuery, itemList, searchList]);
+  }, [searchQuery, itemList]);
 
   const incrementQuantity = async ({ itemId, quantity }) => {
     try {

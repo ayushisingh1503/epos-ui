@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { format } from "date-fns";
-import { orderStatuses } from "../helpers/constants";
+import { itemStatuses, orderStatuses } from "../helpers/constants";
 import { useNavigation } from "@react-navigation/native";
 import { ToastConfig } from "../helpers/toastMessage";
 
