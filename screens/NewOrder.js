@@ -12,7 +12,6 @@ import {
   FlatList,
   TouchableOpacity,
   Pressable,
-  StatusBar,
 } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,9 +24,9 @@ import { MenuList } from "./MenuList";
 import currency from "currency.js";
 import { showToast } from "../helpers/toastMessage";
 import Toast from "react-native-toast-message";
-import { format, date } from "date-fns";
+import { setVisibilityAsync } from "expo-navigation-bar";
 
-export const NewOrder = ({ route }) => {
+export const NewOrder = ({ route, navigation }) => {
   const { selectedOrder } = route.params ?? {};
 
   const [refresh, setRefresh] = useState(true);
@@ -37,6 +36,7 @@ export const NewOrder = ({ route }) => {
   const [order, setOrder] = useState(selectedOrder ?? {});
   const [modalVisible, setModalVisible] = useState(false);
   const [inventoryItemList, setInventoryItemList] = useState([]);
+  const [locked, setLocked] = useState(false);
 
   const refreshComponent = () => {
     setRefresh((currentValue) => !currentValue);
@@ -95,6 +95,18 @@ export const NewOrder = ({ route }) => {
     })();
   }, [refresh, selectedCategory]);
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerBackVisible: !locked,
+    });
+
+    if (locked) {
+      (async () => setVisibilityAsync("hidden"))();
+    } else {
+      (async () => setVisibilityAsync("visible"))();
+    }
+  }, [locked, navigation]);
+
   const nanoidNumbers = customAlphabet("1234567890", 5);
 
   const amount = order?.items?.reduce((acc, item) => {
@@ -115,7 +127,7 @@ export const NewOrder = ({ route }) => {
 
   useEffect(() => {
     if (!order.order_number) {
-      setOrder((currentOrder) => {
+      setOrder(() => {
         const newOrderNumber = nanoidNumbers();
         return {
           ...order,
@@ -338,7 +350,7 @@ export const NewOrder = ({ route }) => {
           initialNote={order.note}
         />
       )}
-      <StatusBar animated={true} backgroundColor="rgba(211, 130, 225, 0.75)" />
+
       <View style={styles.container}>
         <GradientBackground>
           <View style={styles.leftContainer}>
@@ -363,6 +375,28 @@ export const NewOrder = ({ route }) => {
                 />
                 <Text style={styles.menuText}>Bar Order</Text>
               </Pressable>
+              {!locked && (
+                <Pressable
+                  style={styles.lockIcon}
+                  onPress={() => setLocked(true)}
+                >
+                  <Image
+                    source={require("../assets/Lock.png")}
+                    style={styles.image}
+                  />
+                </Pressable>
+              )}
+              {locked && (
+                <Pressable
+                  style={styles.lockIcon}
+                  onPress={() => setLocked(false)}
+                >
+                  <Image
+                    source={require("../assets/Unlock.png")}
+                    style={styles.image}
+                  />
+                </Pressable>
+              )}
               <Pressable style={styles.logoutIcon}>
                 <Image
                   source={require("../assets/Sports Mode.png")}
@@ -465,7 +499,7 @@ export const NewOrder = ({ route }) => {
                   <Text style={styles.vat}>Total Amount :</Text>
                 </View>
                 <View>
-                  <Text style={styles.vat}>£ {amount}.00</Text>
+                  <Text style={styles.vat}>£ {amount}</Text>
                 </View>
               </View>
               <View style={styles.amount}>

@@ -70,6 +70,7 @@ const Inventory = () => {
         )
       );
       setDisableButton(false);
+      showToast("success", "Increment successful ");
     } catch (err) {
       showToast("error", err.response?.data?.message);
       console.log("Error", err);
@@ -78,9 +79,13 @@ const Inventory = () => {
   };
   const decrementQuantity = async ({ itemId, quantity }) => {
     try {
-      setDisableButton(true);
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
+      if (quantity <= 0) {
+        showToast("info", "Item cannot be decremented");
+        return;
+      }
+      setDisableButton(true);
       const reqBody = { item_id: itemId, quantity: quantity - 1 };
       await instance.patch(`/inventory/${store_id}`, reqBody);
 
@@ -92,6 +97,7 @@ const Inventory = () => {
         )
       );
       setDisableButton(false);
+      showToast("success", "Decrement successful ");
     } catch (err) {
       showToast("error", err.response?.data?.message);
       console.log("Error", err);

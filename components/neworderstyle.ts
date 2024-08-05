@@ -36,7 +36,17 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(252, 252, 252, 0.19)",
     marginRight: 10,
     marginVertical: 10,
-    marginBottom: 30,
+    marginBottom: 10,
+  },
+  leftSidePanel2: {
+    flex: 0.16,
+    flexDirection: "column",
+    backgroundColor: "rgba(252, 252, 252, 0.19)",
+    marginVertical: 10,
+    marginBottom: 10,
+    paddingTop: 40,
+    paddingLeft: 20,
+    paddingBottom: 40,
   },
   centerPanel: {
     flex: 0.95,
@@ -156,16 +166,7 @@ export const styles = StyleSheet.create({
     fontWeight: "400",
     alignItems: "center",
   },
-  leftSidePanel2: {
-    flex: 0.16,
-    flexDirection: "column",
-    backgroundColor: "rgba(252, 252, 252, 0.19)",
-    marginVertical: 10,
-    marginBottom: 30,
-    paddingTop: 40,
-    paddingLeft: 20,
-    paddingBottom: 40,
-  },
+
   categoryList: {
     fontSize: 16,
     fontWeight: "400",
@@ -187,7 +188,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingLeft: 10,
   },
-  messageIcon: {
+  lockIcon: {
     flex: 0.9,
     justifyContent: "flex-end",
     paddingBottom: 20,

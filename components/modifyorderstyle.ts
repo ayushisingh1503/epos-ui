@@ -190,15 +190,20 @@ export const styles = StyleSheet.create({
     flex: 0.2,
     flexDirection: "row",
   },
-
   moveToKitchenButton: {
     borderRadius: 15,
     justifyContent: "center",
+    flexDirection: "row",
   },
   kitchenbutton: {
     padding: 10,
     borderRadius: 15,
     justifyContent: "flex-start",
+  },
+  emailbutton: {
+    padding: 10,
+    borderRadius: 15,
+    textAlign: "center",
   },
   footerPayButton: {
     borderRadius: 15,

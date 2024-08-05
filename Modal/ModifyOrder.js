@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, LogBox } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../components/modifyorderstyle";
@@ -10,6 +10,7 @@ import { orderStatuses } from "../helpers/constants";
 import { useNavigation } from "@react-navigation/native";
 import { showToast } from "../helpers/toastMessage";
 import Toast from "react-native-toast-message";
+import EmailReceipt from "../Modal/EmailReceipt";
 
 const ModifyOrder = ({
   refreshComponent,
@@ -20,6 +21,7 @@ const ModifyOrder = ({
   parentScreen,
 }) => {
   const navigation = useNavigation();
+  const [emailModal, setEmailModal] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -84,6 +86,13 @@ const ModifyOrder = ({
       visible={modalVisible}
       onRequestClose={() => setModalVisible(!modalVisible)}
     >
+      {emailModal && (
+        <EmailReceipt
+          emailModal={emailModal}
+          setEmailModal={setEmailModal}
+          orderId={selectedOrder.order_id}
+        />
+      )}
       <LinearGradient
         colors={["#745B93", "#180564"]}
         style={styles.itemModalOverlay}
@@ -151,6 +160,19 @@ const ModifyOrder = ({
                         style={styles.kitchenbutton}
                       >
                         <Text style={styles.buttonText}>Move to Kitchen</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  )}
+                  {parentScreen === orderStatuses.complete && (
+                    <TouchableOpacity
+                      style={styles.emailbutton}
+                      onPress={() => setEmailModal(true)}
+                    >
+                      <LinearGradient
+                        colors={["#CC91E7", "#8E12EF"]}
+                        style={styles.emailbutton}
+                      >
+                        <Text style={styles.buttonText}>Email Receipt</Text>
                       </LinearGradient>
                     </TouchableOpacity>
                   )}

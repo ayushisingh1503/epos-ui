@@ -107,7 +107,7 @@ const OpenOrder = ({ navigation, orderList, value, setValue, setRefresh }) => {
                   <Text style={styles.orderDate}>
                     {format(item.created_at, "EEEE, yyyy-MM-dd HH:mm:ss")}
                   </Text>
-                  <Text style={styles.orderAmount}>£{item.amount}.00</Text>
+                  <Text style={styles.orderAmount}>£{item.amount}</Text>
                   <Text style={styles.orderStaff}>{item.staff_name}</Text>
                 </View>
               )}

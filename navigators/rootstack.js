@@ -13,6 +13,7 @@ import MenuLayout from "../screens/MenuLayout";
 import BackOffice from "../screens/BackOffice";
 import { showToast } from "../helpers/toastMessage";
 import { MessagesContext } from "../helpers/context";
+import { StatusBar } from "react-native";
 
 import Scaledrone from "scaledrone-react-native";
 import Toast from "react-native-toast-message";
@@ -88,6 +89,7 @@ const RootStack = () => {
 
   return (
     <NavigationContainer>
+      <StatusBar hidden={true} />
       <MessagesContext.Provider value={messages}>
         {!isLoggedIn && (
           <Stack.Navigator
