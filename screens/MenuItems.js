@@ -104,7 +104,6 @@ const ItemsScreen = () => {
                     <TouchableOpacity
                       style={styles.itemName}
                       onPress={() => {
-                        // console.log("itemlist:", item);
                         setSelectedItem(item);
                         setEditModalVisible(true);
                       }}
@@ -112,8 +111,8 @@ const ItemsScreen = () => {
                       <Text style={styles.itemNameText}>{item.name}</Text>
                     </TouchableOpacity>
                     <Text style={styles.itemCategory}>{item.category}</Text>
-                    <Text style={styles.itemPrice}>£{item.price}.00</Text>
-                    <Text style={styles.itemTax}>{item.tax_rate}.00</Text>
+                    <Text style={styles.itemPrice}>£{item.price}</Text>
+                    <Text style={styles.itemTax}>{item.tax_rate}</Text>
                     <Icon
                       name="delete"
                       size={30}

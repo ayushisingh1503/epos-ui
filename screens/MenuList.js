@@ -19,8 +19,8 @@ export const MenuList = ({
         style={styles.foodImage}
       ></Image>
       <View style={styles.imagedescription}>
-        <Text style={styles.itemDetails}>{item.name}</Text>
-        <Text style={styles.itemDetails}>£ {item.price}.00</Text>
+        <Text style={styles.itemNameDetails}>{item.name}</Text>
+        <Text style={styles.itemPriceDetails}>£ {item.price}</Text>
       </View>
       <View style={styles.quantityContainer}>
         <TouchableOpacity

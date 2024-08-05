@@ -209,20 +209,20 @@ const AddUser = ({
                     </View>
                     <View style={styles.pad}>
                       {buttons.map((button, index) => (
-                        <LinearGradient
-                          colors={["#180564", "#745B93"]}
-                          style={styles.numberbutton}
+                        <TouchableOpacity
                           key={index}
+                          onPress={() => onPress(button.value)}
+                          style={styles.touchable}
                         >
-                          <TouchableOpacity
-                            key={index}
-                            onPress={() => onPress(button.value)}
+                          <LinearGradient
+                            colors={["#180564", "#745B93"]}
+                            style={styles.numberButton}
                           >
                             <Text style={styles.numberbuttonText}>
                               {button.value}
                             </Text>
-                          </TouchableOpacity>
-                        </LinearGradient>
+                          </LinearGradient>
+                        </TouchableOpacity>
                       ))}
                     </View>
                   </View>

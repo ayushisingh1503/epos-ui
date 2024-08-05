@@ -166,7 +166,6 @@ export const styles = StyleSheet.create({
     fontWeight: "400",
     alignItems: "center",
   },
-
   categoryList: {
     fontSize: 16,
     fontWeight: "400",
@@ -178,10 +177,22 @@ export const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingLeft: 10,
   },
-  itemDetails: {
+  itemNameDetails: {
+    // flex: 0.5,
     fontSize: 14,
     fontWeight: "300",
     color: "white",
+    marginRight: 10,
+    textAlign: "center",
+    justifyContent: "center",
+  },
+  itemPriceDetails: {
+    // flex: 0.5,
+    fontSize: 14,
+    fontWeight: "300",
+    color: "white",
+    marginRight: 10,
+    textAlign: "center",
   },
   barIcon: {
     paddingTop: 20,
@@ -233,14 +244,16 @@ export const styles = StyleSheet.create({
   imagedescription: {
     flex: 0.3,
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     marginBottom: 5,
     marginTop: 5,
+    marginLeft: 5,
   },
   quantityContainer: {
     flexDirection: "row",
     padding: 5,
     backgroundColor: "#DBAEFF",
+    justifyContent: "center",
   },
   itemQuantity: {
     fontSize: 16,

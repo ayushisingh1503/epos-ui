@@ -129,17 +129,17 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "center",
     width: "80%",
-    marginBottom: 120,
+    marginBottom: 20,
   },
-  numberbutton: {
-    backgroundColor: "#555",
-    padding: 10,
+  touchable: {
     margin: 5,
-    borderRadius: 15,
-    width: "25%",
-    alignItems: "center",
+  },
+  numberButton: {
+    width: 75,
+    height: 75,
     justifyContent: "center",
-    height: "30%",
+    alignItems: "center",
+    borderRadius: 10,
   },
   numberbuttonText: {
     color: "white",

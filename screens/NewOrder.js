@@ -468,7 +468,6 @@ export const NewOrder = ({ route, navigation }) => {
             >
               <FlatList
                 data={[order]}
-                // keyExtractor={(item) => item.order_number}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <View style={styles.orderDetails} key={item.order_number}>
@@ -483,7 +482,6 @@ export const NewOrder = ({ route, navigation }) => {
                           <View>
                             <Text style={styles.orderItemText}>
                               £ {orderItem.menuItem.price * orderItem.quantity}
-                              .00
                             </Text>
                           </View>
                         </View>
