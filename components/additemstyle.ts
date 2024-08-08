@@ -40,13 +40,11 @@ export const styles = StyleSheet.create({
     color: "white",
   },
   itemname: {
-    flex: 0.2,
+    flex: 0.5,
     justifyContent: "flex-start",
-    marginRight: 90,
     marginLeft: 20,
     paddingBottom: 30,
   },
-
   outer: {
     flex: 1,
     flexDirection: "row",
@@ -68,8 +66,9 @@ export const styles = StyleSheet.create({
 
   innerCategory: {
     flex: 0.5,
-    flexDirection: "column",
+    flexDirection: "row",
   },
+
   tax: {
     flex: 0.5,
     justifyContent: "flex-start",
@@ -87,7 +86,7 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-start",
     marginLeft: 20,
     paddingBottom: 50,
-    paddingRight: 50,
+    paddingRight: 20,
     zIndex: 1000,
   },
   dropdown: {

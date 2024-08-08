@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,7 +19,6 @@ import Scaledrone from "scaledrone-react-native";
 import Toast from "react-native-toast-message";
 
 const Stack = createNativeStackNavigator();
-// export const MessagesContext = createContext([]);
 
 const RootStack = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);

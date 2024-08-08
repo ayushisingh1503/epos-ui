@@ -18,6 +18,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { getLoggedInUser } from "../helpers/getLoggedInUser";
 import { axiosWrapper } from "../helpers/axiosWrapper";
 import { showToast } from "../helpers/toastMessage";
+import ImageInput from "../helpers/imageInput";
+import Toast from "react-native-toast-message";
 
 const AddItems = ({
   modalVisible,
@@ -37,6 +39,7 @@ const AddItems = ({
     selectedItem?.category
   );
   const [category, setCategory] = useState([]);
+  const [imageKey, setImageKey] = useState(selectedItem?.image_key);
 
   const fetchCategories = async () => {
     try {
@@ -73,6 +76,7 @@ const AddItems = ({
         price,
         taxRate,
         category: selectedCategory,
+        imageKey,
       };
       const response = await instance.post(`/menu/item/${store_id}`, reqBody);
       const { payload } = response.data;
@@ -93,7 +97,13 @@ const AddItems = ({
       const instance = await axiosWrapper();
       const { store_id } = await getLoggedInUser();
       const itemId = selectedItem.item_id;
-      const reqBody = { category: selectedCategory, name, taxRate, price };
+      const reqBody = {
+        category: selectedCategory,
+        name,
+        taxRate,
+        price,
+        imageKey,
+      };
       await instance.put(`/menu/${store_id}/item/${itemId}`, reqBody);
       setSelectedItem(undefined);
       setEditModalVisible(!editModalVisible);
@@ -126,17 +136,17 @@ const AddItems = ({
               <View style={styles.heading}>
                 <Text style={styles.titleText}>Item Management</Text>
               </View>
-              <View style={styles.itemname}>
-                <Text style={styles.textstyle}>Item Name</Text>
-                <TextInput
-                  placeholder="Enter Item Name"
-                  style={styles.textInput}
-                  onChangeText={setName}
-                  value={name}
-                />
-              </View>
               <View style={styles.outer}>
                 <View style={styles.prieTaxCategory}>
+                  <View style={styles.itemname}>
+                    <Text style={styles.textstyle}>Item Name</Text>
+                    <TextInput
+                      placeholder="Enter Item Name"
+                      style={styles.textInput}
+                      onChangeText={setName}
+                      value={name}
+                    />
+                  </View>
                   <View style={styles.price}>
                     <Text style={styles.textstyle}>Price</Text>
                     <TextInput
@@ -161,28 +171,20 @@ const AddItems = ({
                 <View style={styles.imageContainer}>
                   <View style={styles.image}>
                     <Text style={styles.textstyle}>Image</Text>
-                    <TextInput
-                      placeholder="Upload an image"
-                      keyboardType="decimal-pad"
-                      style={styles.textInput}
-                      value={""}
-                      onChangeText={""}
-                    />
+                    <ImageInput setImageKey={setImageKey} imageKey={imageKey} />
                   </View>
-                  <View style={styles.innerCategory}>
-                    <View style={styles.category}>
-                      <Text style={styles.textstyle}>Category</Text>
-                      <DropDownPicker
-                        open={open}
-                        value={selectedCategory}
-                        items={category}
-                        setOpen={setOpen}
-                        setValue={setSelectedCategory}
-                        setItems={setCategory}
-                        style={styles.dropdown}
-                        dropDownContainerStyle={styles.dropdownContainer}
-                      />
-                    </View>
+                  <View style={styles.category}>
+                    <Text style={styles.textstyle}>Category</Text>
+                    <DropDownPicker
+                      open={open}
+                      value={selectedCategory}
+                      items={category}
+                      setOpen={setOpen}
+                      setValue={setSelectedCategory}
+                      setItems={setCategory}
+                      style={styles.dropdown}
+                      dropDownContainerStyle={styles.dropdownContainer}
+                    />
                   </View>
                 </View>
               </View>
@@ -224,6 +226,7 @@ const AddItems = ({
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      <Toast />
     </Modal>
   );
 };

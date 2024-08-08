@@ -1,6 +1,8 @@
 import { styles } from "../components/neworderstyle";
 import { Image, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useEffect, useState } from "react";
+import { axiosWrapper } from "../helpers/axiosWrapper";
 
 export const MenuList = ({
   item,
@@ -8,16 +10,29 @@ export const MenuList = ({
   decrementQuantity,
   incrementQuantity,
 }) => {
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    if (!item.image_key) {
+      return;
+    }
+
+    (async () => {
+      const instance = await axiosWrapper();
+      const response = await instance.get(`/menu/image/${item.image_key}`);
+      const imageUrl = response?.data?.url;
+
+      setImageUrl(imageUrl);
+    })();
+  }, [item.image_key]);
+
   const orderItem = order.items?.find(
     (orderItem) => orderItem.menuItem.item_id === item.item_id
   );
 
   return (
     <View style={styles.card}>
-      <Image
-        source={require("../assets/Screenshot 2024-07-25 041950.png")}
-        style={styles.foodImage}
-      ></Image>
+      <Image style={styles.foodImage} src={imageUrl}></Image>
       <View style={styles.imagedescription}>
         <Text style={styles.itemNameDetails}>{item.name}</Text>
         <Text style={styles.itemPriceDetails}>£ {item.price}</Text>
