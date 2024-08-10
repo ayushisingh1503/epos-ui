@@ -159,7 +159,7 @@ const Admin = ({ navigation }) => {
                 style={styles.button}
               >
                 <Image
-                  source={require("../assets/User.png")}
+                  source={require("../assets/Users.png")}
                   style={styles.buttonImage}
                 />
                 <Text style={styles.buttonText}>Users</Text>
